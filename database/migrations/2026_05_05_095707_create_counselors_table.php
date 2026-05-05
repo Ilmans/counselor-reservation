@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum("pricing_type",["paid","free"])->default("free");
             $table->decimal("price_per_hour")->nullable();
             $table->integer("session_duration_minutes");
-            $table->enum("status",["available","unavailable"]);
+            $table->enum("status",["active","inactive"]);
             $table->timestamps();
         });
     }

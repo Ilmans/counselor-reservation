@@ -1,0 +1,127 @@
+@import 'tailwindcss';
+@import "@radix-ui/themes/styles.css";
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* ─── Typography ─────────────────────────────────── */
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+
+    --font-serif:
+        'Instrument Serif', ui-serif, Georgia, Cambria,
+        'Times New Roman', Times, serif;
+
+    --font-mono:
+        'Geist Mono', ui-monospace, SFMono-Regular, Menlo,
+        Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    /* ─── Radius ─────────────────────────────────────── */
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+
+    /* ─── Semantic color aliases ─────────────────────── */
+    --color-background:         var(--background);
+    --color-foreground:         var(--foreground);
+
+    --color-card:               var(--card);
+    --color-card-foreground:    var(--card-foreground);
+
+    --color-primary:            var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary:              var(--secondary);
+    --color-secondary-foreground:   var(--secondary-foreground);
+
+    --color-muted:              var(--muted);
+    --color-muted-foreground:   var(--muted-foreground);
+
+    --color-border: var(--border);
+    --color-input:  var(--input);
+    --color-ring:   var(--ring);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT MODE
+═══════════════════════════════════════════════════════ */
+:root {
+    --radius: 0.625rem;
+
+    --background:           oklch(1 0 0);
+    --foreground:           oklch(0.145 0 0);
+
+    --card:                 oklch(0.97 0 0);
+    --card-foreground:      oklch(0.145 0 0);
+
+    --primary:              oklch(0.205 0 0);
+    --primary-foreground:   oklch(0.985 0 0);
+
+    --secondary:            oklch(0.94 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+
+    --muted:                oklch(0.94 0 0);
+    --muted-foreground:     oklch(0.45 0 0);
+
+    --border:               oklch(0.88 0 0);
+    --input:                oklch(0.88 0 0);
+    --ring:                 oklch(0.7 0 0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DARK MODE  — class="dark" on <html>
+═══════════════════════════════════════════════════════ */
+.dark {
+    --background:           oklch(0.13 0 0);
+    --foreground:           oklch(0.95 0 0);
+
+    --card:                 oklch(0.17 0 0);
+    --card-foreground:      oklch(0.95 0 0);
+
+    --primary:              oklch(0.95 0 0);
+    --primary-foreground:   oklch(0.13 0 0);
+
+    --secondary:            oklch(0.22 0 0);
+    --secondary-foreground: oklch(0.95 0 0);
+
+    --muted:                oklch(0.22 0 0);
+    --muted-foreground:     oklch(0.72 0 0);  /* dinaikkan dari 0.55 → 0.72 */
+
+    --border:               oklch(0.28 0 0);  /* sedikit dinaikkan biar keliatan */
+    --input:                oklch(0.28 0 0);
+    --ring:                 oklch(0.4 0 0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BASE LAYER
+═══════════════════════════════════════════════════════ */
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    html {
+        @apply scroll-smooth;
+    }
+
+    body {
+        @apply bg-background text-foreground font-sans antialiased;
+    }
+}
+
+
+@layer utilities {
+  @keyframes draw-wave {
+    from { stroke-dashoffset: 1200; }
+    to   { stroke-dashoffset: 0; }
+  }
+  .animate-draw-wave {
+    stroke-dasharray: 1200;
+    animation: draw-wave 3s ease forwards;
+  }
+}

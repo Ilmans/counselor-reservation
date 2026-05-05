@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('speciallizations', function (Blueprint $table) {
+        Schema::create('consultation_feedback', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string("specialization");
-            //$table->timestamps();
+            $table->foreignId("consultation_id")->constrained("consultations")->cascadeOnDelete();
+            $table->integer("rating");
+            $table->string("comment");
+            $table->boolean("is_anonymous");
+            $table->timestamps();
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('speciallizations');
+        Schema::dropIfExists('consultation_feedback');
     }
 };

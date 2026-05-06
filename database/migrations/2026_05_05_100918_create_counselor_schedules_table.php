@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('counselor_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("counselor_id")->constrained("counselors")->cascadeOnDelete();
-            $table->enum("day_of_week",[1,2,3,4,5,6,7]);
-            $table->time("open_time");
-            $table->time("close_time");
-            $table->boolean("is_active");
+            $table->foreignId('counselor_id')->constrained('counselors')->cascadeOnDelete();
+            $table->integer("day_of_week")->max(7);
+            $table->time('open_time');
+            $table->time('close_time');
+            $table->enum('method', ['online', 'offline', 'both'])->default('both');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

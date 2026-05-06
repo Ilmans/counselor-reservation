@@ -10,15 +10,18 @@ export type Counselor = {
 
     status: 'active' | 'inactive';
 
-    schedules: Schedule[];
+    next_schedule: Schedule | null;
+    schedules: Schedule[] | null;
     categories: Category[];
     specialization: Specialization | null;
 };
 export type Schedule = {
     close_time: string;
     open_time: string;
-    day_of_week: string;
+    day_of_week: number;
     is_active: boolean;
+    method: 'online' | 'offline' | 'both';
+    date: string;
 };
 export type Category = {
     id: number;

@@ -1,4 +1,4 @@
-import { InfiniteScroll, router } from '@inertiajs/react';
+import { InfiniteScroll } from '@inertiajs/react';
 import React, { useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -42,14 +42,15 @@ function CounselorList({ counselors }: Props) {
 
                 {/* tombol luar */}
                 <div className="mt-8 flex justify-center">
-                    {counselors.current_page < counselors.last_page && (
-                        <Button
-                            onClick={() => infiniteRef.current?.fetchNext()}
-                            className="rounded-lg"
-                        >
-                            Tampilkan lebih banyak ↓
-                        </Button>
-                    )}
+                    <Button
+                        disabled={
+                            counselors.current_page >= counselors.last_page
+                        }
+                        onClick={() => infiniteRef.current?.fetchNext()}
+                        className="cursor-pointer rounded-lg"
+                    >
+                        Tampilkan lebih banyak ↓
+                    </Button>
                 </div>
             </main>
         </>

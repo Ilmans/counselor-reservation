@@ -9,8 +9,8 @@ class CounselorService
 
     public function __construct(protected CounselorRepository $repo) {}
 
-    public function getCounselors()
+    public function getCounselors(?string $category)
     {
-        return $this->repo->getAllCounselors();
+        return $this->repo->getAllCounselors($category);
     }
 }

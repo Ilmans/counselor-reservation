@@ -5,4 +5,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
 
-Route::get('/', [CounselorController::class, 'index']);
+Route::get('/{category?}', [CounselorController::class, 'index']);

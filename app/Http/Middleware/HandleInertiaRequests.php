@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\CounselorRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache as FacadesCache;
 use Inertia\Middleware;
+use Pest\Plugins\Cache;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,12 +38,19 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $repo = app(CounselorRepository::class);
+
+        $categories = $repo->getAllCategories();
+
+
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'categories' => $categories,
         ];
     }
 }

@@ -1,4 +1,7 @@
-import React from 'react';
+import { InfiniteScroll, router } from '@inertiajs/react';
+import React, { useRef } from 'react';
+
+import { Button } from '@/components/ui/button';
 import type { Counselor, Paginated } from '@/types/counselor';
 import CounselorCard from './counselor-card';
 
@@ -6,6 +9,8 @@ type Props = {
     counselors: Paginated<Counselor>;
 };
 function CounselorList({ counselors }: Props) {
+    const infiniteRef = useRef<any>(null);
+
     return (
         <>
             <main className="mx-auto max-w-5xl px-6 pb-20">
@@ -20,18 +25,31 @@ function CounselorList({ counselors }: Props) {
                     </select>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    {/* ── CARD 1 ── */}
+                <InfiniteScroll
+                    ref={infiniteRef}
+                    data="counselors"
+                    manual={true}
+                    preserveUrl={true}
+                    className="grid grid-cols-1 gap-3 md:grid-cols-2"
+                >
                     {counselors.data.map((counselor: Counselor) => (
-                        <CounselorCard counselor={counselor} />
+                        <CounselorCard
+                            key={counselor.id}
+                            counselor={counselor}
+                        />
                     ))}
-                </div>
+                </InfiniteScroll>
 
-                {/* Load More */}
+                {/* tombol luar */}
                 <div className="mt-8 flex justify-center">
-                    <button className="rounded-lg border border-zinc-200 px-5 py-2.5 text-xs font-medium tracking-[0.02em] text-zinc-500 transition-colors hover:border-zinc-400 hover:text-zinc-700 dark:border-zinc-800 dark:text-zinc-500 dark:hover:border-zinc-600 dark:hover:text-zinc-300">
-                        Tampilkan lebih banyak ↓
-                    </button>
+                    {counselors.current_page < counselors.last_page && (
+                        <Button
+                            onClick={() => infiniteRef.current?.fetchNext()}
+                            className="rounded-lg"
+                        >
+                            Tampilkan lebih banyak ↓
+                        </Button>
+                    )}
                 </div>
             </main>
         </>

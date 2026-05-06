@@ -1,5 +1,5 @@
-import Wrapper from '@/layouts/wrapper';
 import { Head } from '@inertiajs/react';
+import Wrapper from '@/layouts/wrapper';
 
 export default function Welcome() {
     return (

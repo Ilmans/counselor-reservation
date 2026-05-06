@@ -1,15 +1,12 @@
-import { Theme, ThemePanel } from '@radix-ui/themes';
 import Footer from './footer';
 import Header from './header';
 
-const Wrapper = ({ main }) => {
+const Wrapper = ({ main }: any) => {
     return (
         <>
-            <Theme>
-                <Header />
-                {main}
-                <Footer />
-            </Theme>
+            <Header />
+            {main}
+            <Footer />
         </>
     );
 };

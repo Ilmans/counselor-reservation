@@ -10,6 +10,7 @@ class CounselorController extends Controller
     public function __construct(protected CounselorService $service) {}
     public function index()
     {
-        return $this->service->getCounselors();
+        $counselors = $this->service->getCounselors();
+        return inertia("counselors/index", compact('counselors'));
     }
 }

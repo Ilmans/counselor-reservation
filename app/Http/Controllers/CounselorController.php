@@ -8,10 +8,10 @@ use Inertia\Inertia;
 class CounselorController extends Controller
 {
     public function __construct(protected CounselorService $service) {}
-    public function index(?string $category )
+    public function index(?string $category = null)
     {
         $counselors = Inertia::scroll(fn() => $this->service->getCounselors($category));
         $filters = compact("category");
-        return inertia("counselors/index", compact('counselors','filters'));
+        return inertia("counselors/index", compact('counselors', 'filters'));
     }
 }

@@ -1,9 +1,14 @@
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import SearchIcon from '@/components/icons/search';
 import { Button } from '@/components/ui/button';
 import type { Category } from '@/types/counselor';
+import type { COUNSELOR_FILTER } from '@/types/filter';
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 
-function Filter() {
+type Props = {
+    filters: COUNSELOR_FILTER;
+};
+function Filter({ filters }: Props) {
     const { categories } = usePage().props;
 
     return (
@@ -24,10 +29,37 @@ function Filter() {
                     </div>
 
                     {/* Filter pills */}
+                    {/* Filter pills */}
                     <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {/* Tombol Semua */}
+                        <Button
+                            as="button"
+                            onClick={() =>
+                                router.get(
+                                    CounselorController.index().url + `/`,
+                                )
+                            }
+                            mode={!filters?.category ? 'filled' : 'outlined'}
+                            className="shrink-0 cursor-pointer rounded-full"
+                        >
+                            Semua
+                        </Button>
+
                         {categories.map((cat: Category) => (
                             <Button
+                                as="button"
+                                onClick={() => {
+                                    router.get(
+                                        CounselorController.index().url +
+                                            `/${cat.slug}`,
+                                    );
+                                }}
                                 key={cat.id}
+                                mode={
+                                    filters?.category === cat.slug
+                                        ? 'filled'
+                                        : 'outlined'
+                                }
                                 className="shrink-0 cursor-pointer rounded-full"
                             >
                                 {cat.name}

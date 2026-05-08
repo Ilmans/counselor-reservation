@@ -8,6 +8,10 @@ declare module '@inertiajs/core' {
             auth: Auth;
             sidebarOpen: boolean;
             categories: Category[]; // 🔥 tambahin ini
+            alert: {
+                type: 'error' | 'success' | 'warning' | 'info';
+                message: string;
+            };
             [key: string]: unknown;
         };
     }

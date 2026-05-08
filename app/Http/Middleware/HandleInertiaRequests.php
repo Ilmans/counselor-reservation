@@ -51,6 +51,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'categories' => $categories,
+            'alert' => fn() => $request->session()->get('alert'),
         ];
     }
 }

@@ -8,6 +8,8 @@ interface ButtonProps extends React.HTMLAttributes<HTMLElement> {
     hoverable?: boolean;
     disabled?: boolean;
     className?: string;
+    type?:"button" | "submit"|"reset"|undefined;
+
 }
 
 export function Button({
@@ -17,12 +19,13 @@ export function Button({
     size = 'md',
     hoverable = true,
     disabled = false,
+    type ,
     className,
     children,
     ...props
 }: ButtonProps) {
     return (
-        <Tag
+        <Tag type={type}
             className={cn(
                 'inline-flex items-center font-medium transition-colors border rounded-lg',
 

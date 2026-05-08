@@ -17,6 +17,7 @@ return new class extends Migration
                 ->constrained("specializations")
                 ->restrictOnDelete();
             $table->string("name");
+            $table->string('slug');
             $table->string("email");
             $table->string("whatsapp");
             $table->string("bio");

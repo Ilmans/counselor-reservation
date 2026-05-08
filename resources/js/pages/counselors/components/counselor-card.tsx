@@ -7,6 +7,7 @@ import {
     METHOD_LABEL,
     METHOD_VARIANT,
 } from '@/utils/schedule';
+import Rating from '@/components/rating';
 
 type Props = {
     counselor: Counselor;
@@ -48,15 +49,10 @@ function CounselorCard({ counselor }: Props) {
             </div>
 
             {/* Baris 2: Rating */}
-            <div className="mt-3 flex items-center gap-1">
-                <span className="text-xs text-amber-400">★★★★★</span>
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    4.9
-                </span>
-                <span className="text-xs text-zinc-400 dark:text-zinc-600">
-                    &nbsp;· 127 sesi
-                </span>
-            </div>
+            <Rating
+                totalSessions={counselor.consultations_count}
+                rating={counselor.feedbacks_avg_rating}
+            />
 
             {/* Baris 3: Kategori */}
             <div className="mt-2.5 flex flex-wrap gap-1.5">

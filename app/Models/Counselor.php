@@ -29,6 +29,18 @@ class Counselor extends Model
         return $this->hasMany(Consultation::class);
     }
 
+    public function feedbacks()
+    {
+        return $this->hasManyThrough(
+            ConsultationFeedback::class,
+            Consultation::class,
+            'counselor_id',
+            'consultation_id',
+            'id',
+            'id'
+        );
+    }
+
 
     protected function nextSchedule(): Attribute
     {

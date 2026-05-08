@@ -1,20 +1,23 @@
-export type Counselor = {
+export type BaseCounselor = {
     id: number;
+    slug: string;
     name: string;
     email: string;
     whatsapp: string;
     photo_url: string;
-
+    experience_years: number;
     pricing_type: 'paid' | 'free'; // bisa ditambah kalau ada varian lain
     price_per_hour: string; // dari backend masih string "150000.00"
-
     status: 'active' | 'inactive';
-
-    next_schedule: Schedule | null;
-    schedules: Schedule[] | null;
-    categories: Category[];
-    specialization: Specialization | null;
+    next_schedule: Schedule;
+    consultations_count: number;
+    feedbacks_avg_rating: number;
 };
+export type Counselor = BaseCounselor & {
+    categories: Category[];
+    specialization: Specialization;
+};
+
 export type Schedule = {
     close_time: string;
     open_time: string;
@@ -23,6 +26,16 @@ export type Schedule = {
     method: 'online' | 'offline' | 'both';
     date: string;
 };
+
+export type CounselorAddress = {
+    id: number;
+    address: string;
+    city: string;
+    province: string | null;
+    postal_code: string | null;
+    maps_url: string | null;
+};
+
 export type Category = {
     id: number;
     name: string;

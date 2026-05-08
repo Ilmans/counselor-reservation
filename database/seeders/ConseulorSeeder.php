@@ -4,182 +4,330 @@ namespace Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class ConseulorSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $now = Carbon::now();
-        // specialization
+
         DB::table('specializations')->insert([
-            ['id' => 1, 'name' => 'Psikolog Klinis',        'description' => 'Menangani gangguan mental dan perilaku secara klinis.',],
-            ['id' => 2, 'name' => 'Konselor Umum',    'description' => 'Membantu pasangan mengatasi konflik dan komunikasi.',],
-            ['id' => 3, 'name' => 'Konselor Remaja',        'description' => 'Pendampingan psikologis khusus usia remaja.',],
-            ['id' => 4, 'name' => 'Psikolog Pendidikan',    'description' => 'Fokus pada isu belajar, motivasi, dan pengembangan akademik.',],
-            ['id' => 5, 'name' => 'Konselor Karier',        'description' => 'Membantu individu menemukan arah karier yang sesuai.',],
-            ['id' => 6, 'name' => 'Psikolog Industri',      'description' => 'Menangani isu psikologis di lingkungan kerja dan organisasi.',],
+            ['id' => 1, 'name' => 'Psikolog Klinis',        'description' => 'Menangani gangguan mental dan perilaku secara klinis.'],
+            ['id' => 2, 'name' => 'Konselor Umum',          'description' => 'Membantu pasangan mengatasi konflik dan komunikasi.'],
+            ['id' => 3, 'name' => 'Konselor Remaja',        'description' => 'Pendampingan psikologis khusus usia remaja.'],
+            ['id' => 4, 'name' => 'Psikolog Pendidikan',    'description' => 'Fokus pada isu belajar, motivasi, dan pengembangan akademik.'],
+            ['id' => 5, 'name' => 'Konselor Karier',        'description' => 'Membantu individu menemukan arah karier yang sesuai.'],
+            ['id' => 6, 'name' => 'Psikolog Industri',      'description' => 'Menangani isu psikologis di lingkungan kerja dan organisasi.'],
         ]);
-        // categories
+
         DB::table('categories')->insert([
-            ['id' => 1,  'name' => 'Kecemasan',               'slug' => 'kecemasan',],
-            ['id' => 2,  'name' => 'Depresi',                 'slug' => 'depresi',],
-            ['id' => 3,  'name' => 'Hubungan',                'slug' => 'hubungan',],
-            ['id' => 4,  'name' => 'Trauma & PTSD',           'slug' => 'trauma-ptsd',],
-            ['id' => 5,  'name' => 'Stres Kerja',             'slug' => 'stres-kerja',],
-            ['id' => 6,  'name' => 'Pengembangan Diri',       'slug' => 'pengembangan-diri',],
-            ['id' => 7,  'name' => 'Masalah Keluarga',        'slug' => 'masalah-keluarga',],
-            ['id' => 8,  'name' => 'Remaja & Tumbuh Kembang', 'slug' => 'remaja-tumbuh-kembang',],
-            ['id' => 9,  'name' => 'Karier & Akademik',       'slug' => 'karier-akademik',],
-            ['id' => 10, 'name' => 'Kesehatan Mental Umum',   'slug' => 'kesehatan-mental-umum',],
+            ['id' => 1,  'name' => 'Kecemasan',               'slug' => 'kecemasan'],
+            ['id' => 2,  'name' => 'Depresi',                 'slug' => 'depresi'],
+            ['id' => 3,  'name' => 'Hubungan',                'slug' => 'hubungan'],
+            ['id' => 4,  'name' => 'Trauma & PTSD',           'slug' => 'trauma-ptsd'],
+            ['id' => 5,  'name' => 'Stres Kerja',             'slug' => 'stres-kerja'],
+            ['id' => 6,  'name' => 'Pengembangan Diri',       'slug' => 'pengembangan-diri'],
+            ['id' => 7,  'name' => 'Masalah Keluarga',        'slug' => 'masalah-keluarga'],
+            ['id' => 8,  'name' => 'Remaja & Tumbuh Kembang', 'slug' => 'remaja-tumbuh-kembang'],
+            ['id' => 9,  'name' => 'Karier & Akademik',       'slug' => 'karier-akademik'],
+            ['id' => 10, 'name' => 'Kesehatan Mental Umum',   'slug' => 'kesehatan-mental-umum'],
         ]);
 
-        //conselor
-        DB::table('counselors')->insert([
-            ['id' => 1,  'specialization_id' => 1, 'name' => 'Billie Eilish, M.Psi.', 'slug' => Str::slug('Billie Eilish, M.Psi.'), 'email' => 'delon.fahry@konselor.com', 'whatsapp' => '082100000001', 'bio' => 'Psikolog klinis berpengalaman dengan fokus pada gangguan kecemasan dan trauma.', 'photo_url' => 'https://ui-avatars.com/api/?name=Delon+Fahry+Gunawan', 'pricing_type' => 'paid', 'price_per_hour' => 150000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-            ['id' => 2,  'specialization_id' => 3, 'name' => 'Nurlaelatunnisa, S.Psi.', 'slug' => Str::slug('Nurlaelatunnisa, S.Psi.'), 'email' => 'nurlaelatunnisa@konselor.com', 'whatsapp' => '082100000002', 'bio' => 'Konselor remaja yang berdedikasi membantu generasi muda menavigasi tantangan hidup.', 'photo_url' => 'https://ui-avatars.com/api/?name=Nurlaelatunnisa', 'pricing_type' => 'free', 'price_per_hour' => 0, 'session_duration_minutes' => 45, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-            ['id' => 3,  'specialization_id' => 6, 'name' => 'Muhammad Pahrisal, M.Psi.', 'slug' => Str::slug('Muhammad Pahrisal, M.Psi.'), 'email' => 'muhammad.pahrisal@konselor.com', 'whatsapp' => '082100000003', 'bio' => 'Psikolog industri dengan pengalaman di berbagai perusahaan multinasional.', 'photo_url' => 'https://ui-avatars.com/api/?name=Muhammad+Pahrisal', 'pricing_type' => 'paid', 'price_per_hour' => 200000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
+        $counselors = [
+            [
+                'id' => 1,
+                'specialization_id' => 1,
+                'name' => 'Billie Eilish, M.Psi.',
+                'slug' => Str::slug('Billie Eilish M.Psi'),
+                'email' => 'delon.fahry@konselor.com',
+                'whatsapp' => '082100000001',
+                'experience_years' => 8,
+                'bio' => '<p>Saya adalah psikolog klinis dengan lebih dari <strong>8 tahun pengalaman</strong> dalam menangani berbagai gangguan kecemasan dan trauma psikologis. Latar belakang pendidikan saya di bidang psikologi klinis memberikan fondasi kuat untuk memahami kompleksitas kondisi mental klien.</p><p>Pendekatan yang saya gunakan bersifat <em>integratif</em> — menggabungkan terapi kognitif-perilaku (CBT), mindfulness, dan teknik somatic experiencing untuk membantu klien memproses pengalaman traumatis secara menyeluruh. Saya percaya bahwa setiap individu memiliki kekuatan bawaan untuk pulih dan berkembang.</p><p>Selama karier saya, saya telah mendampingi lebih dari 300 klien dari berbagai latar belakang, mulai dari profesional muda hingga lansia. Saya juga aktif sebagai pembicara dalam seminar kesehatan mental di berbagai institusi.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Delon+Fahry',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 150000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Sudirman No. 45', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
+            ],
+            [
+                'id' => 2,
+                'specialization_id' => 3,
+                'name' => 'Nurlaelatunnisa, S.Psi.',
+                'slug' => Str::slug('Nurlaelatunnisa S.Psi'),
+                'email' => 'nurlaelatunnisa@konselor.com',
+                'whatsapp' => '082100000002',
+                'experience_years' => 5,
+                'bio' => '<p>Sebagai konselor remaja, saya mendedikasikan diri untuk mendampingi generasi muda menavigasi tantangan hidup yang semakin kompleks di era digital ini. Dengan pengalaman <strong>5 tahun</strong> bersama ratusan remaja, saya memahami betul tekanan yang mereka hadapi.</p><p>Saya menggunakan pendekatan <em>person-centered</em> yang hangat dan tidak menghakimi, menciptakan ruang aman di mana remaja merasa nyaman untuk berbagi. Selain itu, saya mengintegrasikan teknik narrative therapy untuk membantu klien muda merekonstruksi cerita hidup mereka secara positif.</p><p>Saya juga aktif berkolaborasi dengan sekolah-sekolah di Bandung untuk program kesehatan mental preventif, dan menjadi fasilitator pelatihan kesadaran diri untuk siswa SMA.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Nurlaelatunnisa',
+                'pricing_type' => 'free',
+                'price_per_hour' => 0,
+                'session_duration_minutes' => 45,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Dipatiukur No. 12', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40132', 'maps_url' => null],
+            ],
+            [
+                'id' => 3,
+                'specialization_id' => 6,
+                'name' => 'Muhammad Pahrisal, M.Psi.',
+                'slug' => Str::slug('Muhammad Pahrisal M.Psi'),
+                'email' => 'muhammad.pahrisal@konselor.com',
+                'whatsapp' => '082100000003',
+                'experience_years' => 10,
+                'bio' => '<p>Dengan <strong>10 tahun pengalaman</strong> sebagai psikolog industri, saya telah mendampingi individu dan organisasi dari berbagai sektor — mulai dari startup teknologi hingga perusahaan multinasional Fortune 500. Keahlian saya mencakup manajemen stres kerja, burnout recovery, dan pengembangan karier profesional.</p><p>Saya menggunakan pendekatan berbasis <em>evidence-based psychology</em> yang disesuaikan dengan konteks dunia kerja Indonesia. Pemahaman mendalam tentang budaya kerja lokal memungkinkan saya memberikan solusi yang relevan dan aplikatif.</p><p>Di luar praktik konseling, saya aktif sebagai konsultan HR untuk beberapa perusahaan dan menjadi dosen tamu di program Psikologi Industri Universitas Indonesia.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Muhammad+Pahrisal',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 200000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Gatot Subroto Kav. 18', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12930', 'maps_url' => null],
+            ],
+            [
+                'id' => 4,
+                'specialization_id' => 2,
+                'name' => 'Hendricus Gatot Ariwidayanto, M.Psi.',
+                'slug' => Str::slug('Hendricus Gatot Ariwidayanto M.Psi'),
+                'email' => 'hendricus.gatot@konselor.com',
+                'whatsapp' => '082100000004',
+                'experience_years' => 12,
+                'bio' => '<p>Selama <strong>12 tahun</strong> berpraktik sebagai konselor pernikahan dan keluarga, saya telah mendampingi lebih dari 500 pasangan dan keluarga dalam menavigasi dinamika hubungan yang penuh tantangan. Saya percaya bahwa komunikasi yang sehat adalah fondasi dari setiap hubungan yang bermakna.</p><p>Pendekatan saya menggabungkan <em>Emotionally Focused Therapy (EFT)</em> dengan prinsip-prinsip komunikasi empatik yang saya kembangkan berdasarkan pengalaman klinis bertahun-tahun. Setiap sesi dirancang untuk menciptakan pemahaman bersama dan membangun kembali kepercayaan.</p><p>Saya juga menulis kolom konsultasi keluarga di beberapa media online terkemuka dan menjadi narasumber tetap di program talkshow radio tentang hubungan dan keluarga.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Hendricus+Gatot',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 175000,
+                'session_duration_minutes' => 90,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Pemuda No. 78', 'city' => 'Semarang', 'province' => 'Jawa Tengah', 'postal_code' => '50132', 'maps_url' => null],
+            ],
+            [
+                'id' => 5,
+                'specialization_id' => 4,
+                'name' => 'Enris, S.Pd.',
+                'slug' => Str::slug('Enris S.Pd'),
+                'email' => 'enris@konselor.com',
+                'whatsapp' => '082100000005',
+                'experience_years' => 6,
+                'bio' => '<p>Sebagai psikolog pendidikan dengan <strong>6 tahun pengalaman</strong>, passion saya adalah membantu siswa dan mahasiswa menemukan potensi terbaik mereka. Saya percaya setiap anak memiliki gaya belajar unik yang, jika dipahami dengan benar, bisa menjadi kunci kesuksesan akademik mereka.</p><p>Metode saya berfokus pada identifikasi <em>learning style</em> dan pengembangan strategi belajar yang personal. Saya juga menangani isu motivasi, prokrastinasi akademik, dan kecemasan ujian yang kerap menghambat prestasi siswa.</p><p>Saya bermitra dengan lebih dari 15 sekolah dan universitas di Yogyakarta untuk program bimbingan konseling, dan aktif mengembangkan modul pembelajaran berbasis psikologi positif.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Enris',
+                'pricing_type' => 'free',
+                'price_per_hour' => 0,
+                'session_duration_minutes' => 45,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Colombo No. 1', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55281', 'maps_url' => null],
+            ],
+            [
+                'id' => 6,
+                'specialization_id' => 1,
+                'name' => 'Ririn Kayla Putri, M.Psi.',
+                'slug' => Str::slug('Ririn Kayla Putri M.Psi'),
+                'email' => 'ririn.kayla@konselor.com',
+                'whatsapp' => '082100000006',
+                'experience_years' => 7,
+                'bio' => '<p>Saya adalah psikolog klinis yang berspesialisasi dalam penanganan depresi dan kesehatan mental perempuan. Dengan <strong>7 tahun pengalaman</strong>, saya telah mendampingi ratusan perempuan dari berbagai usia dalam perjalanan mereka menuju kesehatan mental yang optimal.</p><p>Saya menggunakan kombinasi <em>Cognitive Behavioral Therapy (CBT)</em> dan pendekatan feminis yang sensitif gender untuk memastikan klien merasa dipahami dalam konteks kehidupan mereka yang sesungguhnya. Isu seperti postpartum depression, burnout ibu rumah tangga, dan tekanan sosial pada perempuan adalah area keahlian utama saya.</p><p>Selain praktik klinis, saya aktif dalam gerakan destigmatisasi kesehatan mental melalui media sosial dan telah menulis dua buku tentang kesehatan mental perempuan Indonesia.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Ririn+Kayla+Putri',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 160000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Raya Darmo No. 23', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60241', 'maps_url' => null],
+            ],
+            [
+                'id' => 7,
+                'specialization_id' => 5,
+                'name' => 'Ali Alan Wari, S.Psi.',
+                'slug' => Str::slug('Ali Alan Wari S.Psi'),
+                'email' => 'ali.alan@konselor.com',
+                'whatsapp' => '082100000007',
+                'experience_years' => 4,
+                'bio' => '<p>Sebagai konselor karier dengan <strong>4 tahun pengalaman</strong>, saya bersemangat membantu individu menemukan jalur karier yang tidak hanya menguntungkan secara finansial, tetapi juga bermakna secara personal. Saya percaya pekerjaan terbaik adalah yang selaras dengan nilai-nilai dan kekuatan bawaan seseorang.</p><p>Proses konseling saya dimulai dengan asesmen komprehensif menggunakan tools seperti <em>MBTI, StrengthsFinder, dan Holland Code</em> untuk membangun pemahaman mendalam tentang profil klien. Dari sana, kami merancang roadmap karier yang konkret dan realistis.</p><p>Klien saya mulai dari fresh graduate yang bingung memilih jalur pertama, hingga profesional senior yang ingin melakukan career pivot. Saya juga aktif sebagai mentor di beberapa program inkubator startup di Makassar.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Ali+Alan+Wari',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 125000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. AP Pettarani No. 55', 'city' => 'Makassar', 'province' => 'Sulawesi Selatan', 'postal_code' => '90222', 'maps_url' => null],
+            ],
+            [
+                'id' => 8,
+                'specialization_id' => 1,
+                'name' => 'Justin Bieber, M.Psi.',
+                'slug' => Str::slug('Justin Bieber M.Psi'),
+                'email' => 'zulfikri.nurhasan@konselor.com',
+                'whatsapp' => '082100000008',
+                'experience_years' => 9,
+                'bio' => '<p>Dengan <strong>9 tahun pengalaman klinis</strong>, spesialisasi utama saya adalah penanganan trauma kompleks dan PTSD menggunakan pendekatan <em>Trauma-Focused CBT (TF-CBT)</em> dan EMDR (Eye Movement Desensitization and Reprocessing). Saya terlatih untuk bekerja dengan korban berbagai jenis trauma, dari kekerasan hingga kecelakaan.</p><p>Saya percaya bahwa pemulihan dari trauma bukan sekadar menghilangkan gejala, melainkan membantu klien membangun kembali rasa aman, kepercayaan diri, dan koneksi dengan dunia di sekitar mereka. Proses ini membutuhkan kesabaran, kepercayaan, dan keahlian terapi yang terstruktur.</p><p>Saya merupakan anggota aktif Asosiasi Psikolog Indonesia dan telah mempresentasikan riset tentang trauma recovery di beberapa konferensi internasional di Asia Tenggara.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=M+Zulfikri+Nurhasan',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 180000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Sudirman No. 102', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
+            ],
+            [
+                'id' => 9,
+                'specialization_id' => 3,
+                'name' => 'Meisita Khaniza, S.Psi.',
+                'slug' => Str::slug('Meisita Khaniza S.Psi'),
+                'email' => 'meisita.khaniza@konselor.com',
+                'whatsapp' => '082100000009',
+                'experience_years' => 3,
+                'bio' => '<p>Saya adalah konselor muda dengan <strong>3 tahun pengalaman</strong> yang berdedikasi mendampingi generasi Z dalam menghadapi tantangan unik era digital. Sebagai generasi yang tumbuh bersama media sosial, saya memahami secara langsung tekanan yang dirasakan remaja masa kini.</p><p>Fokus utama saya adalah isu <em>identitas diri, body image, cyberbullying, dan kesehatan mental di era media sosial</em>. Saya menggunakan bahasa dan pendekatan yang relatable bagi remaja, menciptakan koneksi yang autentik dalam setiap sesi konseling.</p><p>Saya aktif mengelola komunitas online kesehatan mental remaja dengan lebih dari 10.000 anggota, dan rutin mengadakan webinar gratis tentang self-care dan kesadaran kesehatan mental untuk pelajar.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Meisita+Khaniza',
+                'pricing_type' => 'free',
+                'price_per_hour' => 0,
+                'session_duration_minutes' => 45,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Setiabudhi No. 34', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40143', 'maps_url' => null],
+            ],
+            [
+                'id' => 10,
+                'specialization_id' => 6,
+                'name' => 'Reihan Zulfan Nurjaman, M.Psi.',
+                'slug' => Str::slug('Reihan Zulfan Nurjaman M.Psi'),
+                'email' => 'reihan.zulfan@konselor.com',
+                'whatsapp' => '082100000010',
+                'experience_years' => 11,
+                'bio' => '<p>Sebagai psikolog industri senior dengan <strong>11 tahun pengalaman</strong>, saya telah membantu puluhan organisasi dan ratusan individu dalam mengoptimalkan kesejahteraan psikologis di lingkungan kerja. Keahlian saya mencakup manajemen konflik organisasi, pengembangan kepemimpinan, dan program wellness korporat.</p><p>Pendekatan saya bersifat <em>sistemik</em> — tidak hanya melihat individu secara terpisah, tetapi memahami bagaimana dinamika organisasi membentuk kesehatan mental karyawan. Saya percaya organisasi yang sehat dimulai dari individu yang sehat.</p><p>Saya telah merancang dan mengimplementasikan program Employee Assistance Program (EAP) untuk lebih dari 20 perusahaan, dan saat ini menjabat sebagai advisor kesehatan mental di beberapa perusahaan teknologi terkemuka Indonesia.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Reihan+Zulfan',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 190000,
+                'session_duration_minutes' => 60,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. HR Rasuna Said Kav. 62', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12940', 'maps_url' => null],
+            ],
+            [
+                'id' => 11,
+                'specialization_id' => 2,
+                'name' => 'Ilman Sunanuddin, S.Psi.',
+                'slug' => Str::slug('Ilman Sunanuddin S.Psi'),
+                'email' => 'ilman.sunanuddin@konselor.com',
+                'whatsapp' => '082100000011',
+                'experience_years' => 7,
+                'bio' => '<p>Dengan <strong>7 tahun pengalaman</strong> sebagai konselor pernikahan, saya telah menyaksikan bagaimana komunikasi yang tulus dan pemahaman mendalam dapat mengubah dinamika hubungan secara luar biasa. Pendekatan saya berakar pada nilai-nilai keluarga Indonesia yang kuat, diselaraskan dengan prinsip psikologi modern.</p><p>Saya menggunakan metode <em>holistik</em> yang mempertimbangkan aspek emosional, spiritual, dan kultural dalam setiap proses konseling. Setiap pasangan dan keluarga memiliki cerita uniknya, dan saya berkomitmen untuk hadir sepenuhnya dalam perjalanan pemulihan mereka.</p><p>Selain konseling individual dan pasangan, saya juga menyelenggarakan retreat keluarga bulanan dan program pra-nikah yang telah diikuti oleh lebih dari 200 pasangan di Surabaya dan sekitarnya.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Ilman+Sunanuddin',
+                'pricing_type' => 'paid',
+                'price_per_hour' => 155000,
+                'session_duration_minutes' => 90,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Basuki Rahmat No. 89', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60271', 'maps_url' => null],
+            ],
+            [
+                'id' => 12,
+                'specialization_id' => 4,
+                'name' => 'Karnadi, S.Pd.',
+                'slug' => Str::slug('Karnadi S.Pd'),
+                'email' => 'karnadi@konselor.com',
+                'whatsapp' => '082100000012',
+                'experience_years' => 15,
+                'bio' => '<p>Sebagai psikolog pendidikan dengan <strong>15 tahun pengalaman</strong>, saya adalah salah satu praktisi tertua dan paling berpengalaman di bidang bimbingan belajar dan konseling pendidikan di Indonesia. Perjalanan panjang saya dimulai dari menjadi guru BK di SMA, hingga mendirikan lembaga bimbingan konseling pendidikan sendiri.</p><p>Keahlian utama saya meliputi <em>diagnostik kesulitan belajar, perencanaan akademik jangka panjang, dan konseling pemilihan jurusan perguruan tinggi</em>. Saya menggunakan asesmen psikometri yang komprehensif untuk memberikan rekomendasi yang tepat dan berbasis data.</p><p>Hingga saat ini saya telah mendampingi lebih dari 1.000 siswa dari seluruh Indonesia, banyak di antaranya berhasil masuk universitas impian mereka baik di dalam maupun luar negeri. Saya juga aktif menulis buku panduan belajar yang digunakan di berbagai sekolah menengah.</p>',
+                'photo_url' => 'https://ui-avatars.com/api/?name=Karnadi',
+                'pricing_type' => 'free',
+                'price_per_hour' => 0,
+                'session_duration_minutes' => 45,
+                'status' => 'active',
+                'address' => ['address' => 'Jl. Malioboro No. 56', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55213', 'maps_url' => null],
+            ],
+        ];
 
-            ['id' => 4,  'specialization_id' => 2, 'name' => 'Hendricus Gatot Ariwidayanto, M.Psi.', 'slug' => Str::slug('Hendricus Gatot Ariwidayanto, M.Psi.'), 'email' => 'hendricus.gatot@konselor.com', 'whatsapp' => '082100000004', 'bio' => 'Konselor pernikahan dan keluarga dengan pendekatan berbasis komunikasi empatik.', 'photo_url' => 'https://ui-avatars.com/api/?name=Hendricus+Gatot', 'pricing_type' => 'paid', 'price_per_hour' => 175000, 'session_duration_minutes' => 90, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
+        $addressIds = [];
+        foreach ($counselors as $counselor) {
+            $addressData = $counselor['address'];
 
-            ['id' => 5,  'specialization_id' => 4, 'name' => 'Enris, S.Pd.', 'slug' => Str::slug('Enris, S.Pd.'), 'email' => 'enris@konselor.com', 'whatsapp' => '082100000005', 'bio' => 'Psikolog pendidikan yang membantu siswa dan mahasiswa meraih potensi akademik terbaik.', 'photo_url' => 'https://ui-avatars.com/api/?name=Enris', 'pricing_type' => 'free', 'price_per_hour' => 0, 'session_duration_minutes' => 45, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
+            DB::table('counselor_addresses')->insert([
+                'address' => $addressData['address'],
+                'city' => $addressData['city'],
+                'province' => $addressData['province'],
+                'postal_code' => $addressData['postal_code'],
+                'maps_url' => $addressData['maps_url'],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
 
-            ['id' => 6,  'specialization_id' => 1, 'name' => 'Ririn Kayla Putri, M.Psi.', 'slug' => Str::slug('Ririn Kayla Putri, M.Psi.'), 'email' => 'ririn.kayla@konselor.com', 'whatsapp' => '082100000006', 'bio' => 'Psikolog klinis dengan spesialisasi depresi dan kesehatan mental perempuan.', 'photo_url' => 'https://ui-avatars.com/api/?name=Ririn+Kayla+Putri', 'pricing_type' => 'paid', 'price_per_hour' => 160000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
+            // Ambil address_id terakhir yang diinsert
+            $addressIds[$counselor['id']] = DB::table('counselor_addresses')->max('id');
+        }
 
-            ['id' => 7,  'specialization_id' => 5, 'name' => 'Ali Alan Wari, S.Psi.', 'slug' => Str::slug('Ali Alan Wari, S.Psi.'), 'email' => 'ali.alan@konselor.com', 'whatsapp' => '082100000007', 'bio' => 'Konselor karier yang membantu individu menemukan passion dan jalur karier yang tepat.', 'photo_url' => 'https://ui-avatars.com/api/?name=Ali+Alan+Wari', 'pricing_type' => 'paid', 'price_per_hour' => 125000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
+        // Insert counselors dengan address_id
+        foreach ($counselors as $counselor) {
+            unset($counselor['address']);
 
-            ['id' => 8,  'specialization_id' => 1, 'name' => 'Justin Bieber, M.Psi.', 'slug' => Str::slug('Justin Bieber, M.Psi.'), 'email' => 'zulfikri.nurhasan@konselor.com', 'whatsapp' => '082100000008', 'bio' => 'Psikolog klinis dengan pendekatan CBT untuk penanganan trauma dan PTSD.', 'photo_url' => 'https://ui-avatars.com/api/?name=M+Zulfikri+Nurhasan', 'pricing_type' => 'paid', 'price_per_hour' => 180000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-
-            ['id' => 9,  'specialization_id' => 3, 'name' => 'Meisita Khaniza, S.Psi.', 'slug' => Str::slug('Meisita Khaniza, S.Psi.'), 'email' => 'meisita.khaniza@konselor.com', 'whatsapp' => '082100000009', 'bio' => 'Konselor remaja yang berfokus pada isu identitas diri dan kesehatan mental generasi Z.', 'photo_url' => 'https://ui-avatars.com/api/?name=Meisita+Khaniza', 'pricing_type' => 'free', 'price_per_hour' => 0, 'session_duration_minutes' => 45, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-
-            ['id' => 10, 'specialization_id' => 6, 'name' => 'Reihan Zulfan Nurjaman, M.Psi.', 'slug' => Str::slug('Reihan Zulfan Nurjaman, M.Psi.'), 'email' => 'reihan.zulfan@konselor.com', 'whatsapp' => '082100000010', 'bio' => 'Psikolog industri dengan keahlian manajemen stres dan pengembangan organisasi.', 'photo_url' => 'https://ui-avatars.com/api/?name=Reihan+Zulfan', 'pricing_type' => 'paid', 'price_per_hour' => 190000, 'session_duration_minutes' => 60, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-
-            ['id' => 11, 'specialization_id' => 2, 'name' => 'Ilman Sunanuddin, S.Psi.', 'slug' => Str::slug('Ilman Sunanuddin, S.Psi.'), 'email' => 'ilman.sunanuddin@konselor.com', 'whatsapp' => '082100000011', 'bio' => 'Konselor pernikahan dengan pendekatan holistik dan berbasis nilai keluarga.', 'photo_url' => 'https://ui-avatars.com/api/?name=Ilman+Sunanuddin', 'pricing_type' => 'paid', 'price_per_hour' => 155000, 'session_duration_minutes' => 90, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-
-            ['id' => 12, 'specialization_id' => 4, 'name' => 'Karnadi, S.Pd.', 'slug' => Str::slug('Karnadi, S.Pd.'), 'email' => 'karnadi@konselor.com', 'whatsapp' => '082100000012', 'bio' => 'Psikolog pendidikan berpengalaman dalam bimbingan belajar dan pemilihan jurusan.', 'photo_url' => 'https://ui-avatars.com/api/?name=Karnadi', 'pricing_type' => 'free', 'price_per_hour' => 0, 'session_duration_minutes' => 45, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now],
-        ]);
+            DB::table('counselors')->insert(array_merge($counselor, [
+                'address_id' => $addressIds[$counselor['id']],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]));
+        }
 
 
         DB::table('counselor_categories')->insert([
-            // Delon Fahry Gunawan — kecemasan, trauma, kesehatan mental umum
-            ['counselor_id' => 1, 'category_id' => 1],
-            ['counselor_id' => 1, 'category_id' => 4],
-            ['counselor_id' => 1, 'category_id' => 10],
-
-            // Nurlaelatunnisa — remaja, pengembangan diri, keluarga
-            ['counselor_id' => 2, 'category_id' => 8],
-            ['counselor_id' => 2, 'category_id' => 6],
-            ['counselor_id' => 2, 'category_id' => 7],
-
-            // Muhammad Pahrisal — stres kerja, pengembangan diri
-            ['counselor_id' => 3, 'category_id' => 5],
-            ['counselor_id' => 3, 'category_id' => 6],
-
-            // Hendricus Gatot Ariwidayanto — hubungan, keluarga, kecemasan
-            ['counselor_id' => 4, 'category_id' => 3],
-            ['counselor_id' => 4, 'category_id' => 7],
-            ['counselor_id' => 4, 'category_id' => 1],
-
-            // Enris — karier akademik, pengembangan diri, remaja
-            ['counselor_id' => 5, 'category_id' => 9],
-            ['counselor_id' => 5, 'category_id' => 6],
-            ['counselor_id' => 5, 'category_id' => 8],
-
-            // Ririn Kayla Putri — depresi, kecemasan, kesehatan mental umum
-            ['counselor_id' => 6, 'category_id' => 2],
-            ['counselor_id' => 6, 'category_id' => 1],
-            ['counselor_id' => 6, 'category_id' => 10],
-
-            // Ali Alan Wari — karier, pengembangan diri, stres kerja
-            ['counselor_id' => 7, 'category_id' => 9],
-            ['counselor_id' => 7, 'category_id' => 6],
-            ['counselor_id' => 7, 'category_id' => 5],
-
-            // M Zulfikri Nurhasan — trauma, depresi, kecemasan
-            ['counselor_id' => 8, 'category_id' => 4],
-            ['counselor_id' => 8, 'category_id' => 2],
-            ['counselor_id' => 8, 'category_id' => 1],
-
-            // Meisita Khaniza — remaja, hubungan, pengembangan diri
-            ['counselor_id' => 9, 'category_id' => 8],
-            ['counselor_id' => 9, 'category_id' => 3],
-            ['counselor_id' => 9, 'category_id' => 6],
-
-            // Reihan Zulfan Nurjaman — stres kerja, pengembangan diri, hubungan
+            ['counselor_id' => 1,  'category_id' => 1],
+            ['counselor_id' => 1,  'category_id' => 4],
+            ['counselor_id' => 1,  'category_id' => 10],
+            ['counselor_id' => 2,  'category_id' => 8],
+            ['counselor_id' => 2,  'category_id' => 6],
+            ['counselor_id' => 2,  'category_id' => 7],
+            ['counselor_id' => 3,  'category_id' => 5],
+            ['counselor_id' => 3,  'category_id' => 6],
+            ['counselor_id' => 4,  'category_id' => 3],
+            ['counselor_id' => 4,  'category_id' => 7],
+            ['counselor_id' => 4,  'category_id' => 1],
+            ['counselor_id' => 5,  'category_id' => 9],
+            ['counselor_id' => 5,  'category_id' => 6],
+            ['counselor_id' => 5,  'category_id' => 8],
+            ['counselor_id' => 6,  'category_id' => 2],
+            ['counselor_id' => 6,  'category_id' => 1],
+            ['counselor_id' => 6,  'category_id' => 10],
+            ['counselor_id' => 7,  'category_id' => 9],
+            ['counselor_id' => 7,  'category_id' => 6],
+            ['counselor_id' => 7,  'category_id' => 5],
+            ['counselor_id' => 8,  'category_id' => 4],
+            ['counselor_id' => 8,  'category_id' => 2],
+            ['counselor_id' => 8,  'category_id' => 1],
+            ['counselor_id' => 9,  'category_id' => 8],
+            ['counselor_id' => 9,  'category_id' => 3],
+            ['counselor_id' => 9,  'category_id' => 6],
             ['counselor_id' => 10, 'category_id' => 5],
             ['counselor_id' => 10, 'category_id' => 6],
             ['counselor_id' => 10, 'category_id' => 3],
-
-            // Ilman Sunanuddin — hubungan, keluarga, trauma
             ['counselor_id' => 11, 'category_id' => 3],
             ['counselor_id' => 11, 'category_id' => 7],
             ['counselor_id' => 11, 'category_id' => 4],
-
-            // Karnadi — karier akademik, remaja, pengembangan diri
             ['counselor_id' => 12, 'category_id' => 9],
             ['counselor_id' => 12, 'category_id' => 8],
             ['counselor_id' => 12, 'category_id' => 6],
         ]);
 
-
         DB::table('counselor_schedules')->insert([
-            // Delon Fahry Gunawan — Senin, Rabu, Jumat
             ['counselor_id' => 1,  'day_of_week' => 1, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 1,  'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 1,  'day_of_week' => 5, 'open_time' => '10:00', 'close_time' => '13:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Nurlaelatunnisa — Selasa, Kamis, Sabtu
             ['counselor_id' => 2,  'day_of_week' => 2, 'open_time' => '14:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 2,  'day_of_week' => 4, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 2,  'day_of_week' => 6, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Muhammad Pahrisal — Senin, Selasa, Kamis
             ['counselor_id' => 3,  'day_of_week' => 1, 'open_time' => '13:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 3,  'day_of_week' => 2, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 3,  'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Hendricus Gatot Ariwidayanto — Rabu, Jumat
             ['counselor_id' => 4,  'day_of_week' => 3, 'open_time' => '09:00', 'close_time' => '15:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 4,  'day_of_week' => 5, 'open_time' => '13:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Enris — Senin, Rabu, Sabtu
             ['counselor_id' => 5,  'day_of_week' => 1, 'open_time' => '08:00', 'close_time' => '11:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 5,  'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '16:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 5,  'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Ririn Kayla Putri — Selasa, Kamis, Minggu
             ['counselor_id' => 6,  'day_of_week' => 2, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 6,  'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 6,  'day_of_week' => 7, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Ali Alan Wari — Senin, Jumat
             ['counselor_id' => 7,  'day_of_week' => 1, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 7,  'day_of_week' => 5, 'open_time' => '09:00', 'close_time' => '14:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // M Zulfikri Nurhasan — Selasa, Rabu, Kamis
             ['counselor_id' => 8,  'day_of_week' => 2, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 8,  'day_of_week' => 3, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 8,  'day_of_week' => 4, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Meisita Khaniza — Rabu, Sabtu
             ['counselor_id' => 9,  'day_of_week' => 3, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 9,  'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Reihan Zulfan Nurjaman — Senin, Kamis, Jumat
             ['counselor_id' => 10, 'day_of_week' => 1, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 10, 'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '17:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 10, 'day_of_week' => 5, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Ilman Sunanuddin — Selasa, Sabtu
             ['counselor_id' => 11, 'day_of_week' => 2, 'open_time' => '13:00', 'close_time' => '18:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 11, 'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '15:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-
-            // Karnadi — Senin, Rabu, Jumat
             ['counselor_id' => 12, 'day_of_week' => 1, 'open_time' => '08:00', 'close_time' => '11:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 12, 'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '16:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
             ['counselor_id' => 12, 'day_of_week' => 5, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],

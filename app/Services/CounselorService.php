@@ -13,4 +13,11 @@ class CounselorService
     {
         return $this->repo->getAllCounselors($category);
     }
+
+
+    public function getCounselor(string $counselor)
+    {
+
+        return $this->repo->getCounselorBySlug($counselor);
+    }
 }

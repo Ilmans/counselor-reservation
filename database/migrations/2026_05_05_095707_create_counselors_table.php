@@ -16,16 +16,20 @@ return new class extends Migration
             $table->foreignId("specialization_id")
                 ->constrained("specializations")
                 ->restrictOnDelete();
+            $table->foreignId('address_id')
+                ->constrained('counselor_addresses')
+                ->restrictOnDelete();
             $table->string("name");
             $table->string('slug');
+            $table->integer('experience_years');
             $table->string("email");
             $table->string("whatsapp");
-            $table->string("bio");
+            $table->longText("bio");
             $table->string("photo_url");
-            $table->enum("pricing_type",["paid","free"])->default("free");
+            $table->enum("pricing_type", ["paid", "free"])->default("free");
             $table->decimal("price_per_hour")->nullable();
             $table->integer("session_duration_minutes");
-            $table->enum("status",["active","inactive"]);
+            $table->enum("status", ["active", "inactive"]);
             $table->timestamps();
         });
     }

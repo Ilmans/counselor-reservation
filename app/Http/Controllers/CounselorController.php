@@ -20,7 +20,9 @@ class CounselorController extends Controller
     /* Detail Counselor page - show details conselor */
     public function details(string $counselor)
     {
-        abort(404);
 
+        $counselor = $this->service->getCounselor($counselor);
+
+        return inertia('counselors/details', compact('counselor'));
     }
 }

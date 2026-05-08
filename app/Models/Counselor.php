@@ -9,9 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 class Counselor extends Model
 {
     protected $appends = ['next_schedule'];
+
     public function specialization()
     {
         return $this->belongsTo(Specialization::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(CounselorAddress::class);
     }
 
     public function categories()

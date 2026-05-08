@@ -235,6 +235,7 @@ class ConseulorSeeder extends Seeder
             $addressData = $counselor['address'];
 
             DB::table('counselor_addresses')->insert([
+                'name' => "Klinik " . $counselor['name'],
                 'address' => $addressData['address'],
                 'city' => $addressData['city'],
                 'province' => $addressData['province'],

@@ -18,7 +18,7 @@ class CounselorRepository
 
     public function getAllCounselors(?string $category)
     {
-        return Counselor::select('id', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_url', 'pricing_type', 'price_per_hour', 'status')
+        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_url', 'pricing_type', 'price_per_hour', 'status')
             ->with(['categories', 'specialization'])
             ->withCount('consultations')
             ->withAvg('feedbacks', 'rating')
@@ -34,7 +34,7 @@ class CounselorRepository
     public function getCounselorBySlug(string $slug)
     {
 
-        return Counselor::with(['categories', 'specialization'])
+        return Counselor::with(['categories', 'specialization', 'address'])
             ->whereSlug($slug)->first();
     }
 }

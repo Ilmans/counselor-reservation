@@ -18,6 +18,11 @@ export type Counselor = BaseCounselor & {
     specialization: Specialization;
 };
 
+export type CounselorDetailPage = BaseCounselor &
+    Counselor & {
+        bio: string;
+        address: CounselorAddress;
+    };
 export type Schedule = {
     close_time: string;
     open_time: string;
@@ -29,6 +34,7 @@ export type Schedule = {
 
 export type CounselorAddress = {
     id: number;
+    name : string;
     address: string;
     city: string;
     province: string | null;

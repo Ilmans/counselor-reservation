@@ -1,25 +1,25 @@
 import { Link } from '@inertiajs/react';
+import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import type { Category, Counselor } from '@/types/counselor';
+import { counselorPricingLabel } from '@/utils/helper';
 import {
     formatTimeRange,
     getScheduleLabel,
     METHOD_LABEL,
     METHOD_VARIANT,
 } from '@/utils/schedule';
-import Rating from '@/components/rating';
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 
 type Props = {
     counselor: Counselor;
 };
 
 function CounselorCard({ counselor }: Props) {
-    const priceLabel =
-        counselor.pricing_type === 'free'
-            ? 'Gratis'
-            : 'Rp ' +
-              parseInt(counselor.price_per_hour, 10).toLocaleString('id-ID') +
-              '/jam';
+    const priceLabel = counselorPricingLabel(
+        counselor.pricing_type,
+        counselor.price_per_hour,
+    );
 
     return (
         <div className="rounded-xl border border-zinc-200 bg-white p-5 transition-[border-color,background] duration-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800/80 dark:bg-[#111113] dark:hover:border-zinc-700/40 dark:hover:bg-zinc-800/70">
@@ -41,8 +41,13 @@ function CounselorCard({ counselor }: Props) {
                         {counselor.specialization?.name ?? '—'}
                     </p>
                 </div>
-                <Link className="flex-shrink-0">
-                    <Button size="sm" mode="outlined" as="span">
+                <Link
+                    href={
+                        CounselorController.details().url + `/${counselor.slug}`
+                    }
+                    className="flex-shrink-0"
+                >
+                    <Button as="link" size="sm" mode="outlined" as="span">
                         Lihat Profil
                     </Button>
                 </Link>

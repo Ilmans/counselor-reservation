@@ -12,6 +12,7 @@ type Props = {
     filters: COUNSELOR_FILTER;
 };
 export default function Index({ counselors, filters }: Props) {
+   
     return (
         <>
             <Hero />

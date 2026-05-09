@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Helpers;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
-class ScheduleHelpers {
+class ScheduleHelpers
+{
 
 
     // to get next nearest schedule from all schedules
@@ -13,7 +16,7 @@ class ScheduleHelpers {
         foreach ($schedules as $schedule) {
             $dayDiff = $schedule->day_of_week - $now->isoWeekDay();
             // still on this week
-            if($dayDiff > 0){
+            if ($dayDiff > 0) {
                 return array_merge($schedule->toArray(), [
                     'date' => $now->copy()->addDays($dayDiff)->toDateString(),
                 ]);
@@ -43,5 +46,23 @@ class ScheduleHelpers {
         return array_merge($first->toArray(), [
             'date' => $now->copy()->addDays($daysUntil)->toDateString(),
         ]);
+    }
+
+
+
+
+    public static function findNearestScheduleDate(array $availableDaysOfWeek): ?Carbon
+    {
+        if (empty($availableDaysOfWeek)) return null;
+
+        for ($i = 0; $i < 7; $i++) {
+            $date = Carbon::now()->startOfDay()->addDays($i);
+
+            if (in_array((int) $date->format('N'), $availableDaysOfWeek)) {
+                return $date;
+            }
+        }
+
+        return null;
     }
 }

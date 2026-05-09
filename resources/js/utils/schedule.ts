@@ -1,6 +1,8 @@
 // utils/schedule.ts
 import type { Schedule } from '@/types/counselor';
 
+
+
 export const METHOD_VARIANT = {
     online: 'blue',
     offline: 'red',

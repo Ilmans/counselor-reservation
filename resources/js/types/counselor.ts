@@ -22,6 +22,7 @@ export type CounselorDetailPage = BaseCounselor &
     Counselor & {
         bio: string;
         address: CounselorAddress;
+        schedules : Schedule[]
     };
 export type Schedule = {
     close_time: string;

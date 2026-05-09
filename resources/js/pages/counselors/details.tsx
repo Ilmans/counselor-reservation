@@ -73,45 +73,32 @@ export default function Details({ counselor }: CounselorProps) {
                         <section>
                             <SectionLabel>Jadwal Tersedia</SectionLabel>
                             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                                {[
-                                    {
-                                        day: 'Sen',
-                                        slots: ['09:00', '11:00', '14:00'],
-                                    },
-                                    { day: 'Sel', slots: ['10:00', '13:00'] },
-                                    { day: 'Rab', slots: [] },
-                                    {
-                                        day: 'Kam',
-                                        slots: ['09:00', '15:00', '16:00'],
-                                    },
-                                    { day: 'Jum', slots: ['10:00', '11:00'] },
-                                    { day: 'Sab', slots: ['09:00'] },
-                                ].map((d) => (
-                                    <div
-                                        key={d.day}
-                                        className="rounded-lg border border-zinc-200 p-2.5 dark:border-zinc-800"
-                                    >
-                                        <p className="mb-1.5 text-center text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
-                                            {d.day}
-                                        </p>
-                                        {d.slots.length === 0 ? (
-                                            <p className="text-center text-[11px] text-zinc-300 dark:text-zinc-700">
-                                                —
+                                {counselor.schedules
+                                    .filter((s) => s.is_active)
+                                    .map((s) => (
+                                        <div
+                                            key={s.day_of_week}
+                                            className="rounded-lg border border-zinc-200 p-2.5 dark:border-zinc-800"
+                                        >
+                                            <p className="mb-1.5 text-center text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
+                                                {
+                                                    [
+                                                        'Minggu',
+                                                        'Senin',
+                                                        'Selasa',
+                                                        'Rabu',
+                                                        'Kamis',
+                                                        'Jumat',
+                                                        'Sabtu',
+                                                    ][s.day_of_week]
+                                                }
                                             </p>
-                                        ) : (
-                                            <div className="flex flex-col gap-1">
-                                                {d.slots.map((s) => (
-                                                    <button
-                                                        key={s}
-                                                        className="w-full rounded bg-zinc-100 py-1 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                                                    >
-                                                        {s}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                            <p className="text-center text-[11px] text-zinc-500 dark:text-zinc-400">
+                                                {s.open_time.slice(0, 5)}–
+                                                {s.close_time.slice(0, 5)}
+                                            </p>
+                                        </div>
+                                    ))}
                             </div>
                         </section>
 

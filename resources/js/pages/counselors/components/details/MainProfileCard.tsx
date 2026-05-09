@@ -1,8 +1,10 @@
+import ReservationController from '@/actions/App/Http/Controllers/ReservationController';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import type { CounselorDetailPage } from '@/types/counselor';
 import { counselorPricingLabel } from '@/utils/helper';
 import { getScheduleLabel } from '@/utils/schedule';
+import { Link } from '@inertiajs/react';
 
 function StatBox({ value, label }: { value: string; label: string }) {
     return (
@@ -20,6 +22,7 @@ type Props = {
     counselor: CounselorDetailPage;
 };
 function MainProfileCard({ counselor }: Props) {
+    
     return (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/80 dark:bg-[#111113]">
             {/* Avatar */}
@@ -53,8 +56,14 @@ function MainProfileCard({ counselor }: Props) {
 
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-2">
-                <StatBox value="127" label="Sesi" />
-                <StatBox value="5th" label="Tahun" />
+                <StatBox
+                    value={`${counselor.consultations_count}`}
+                    label="Sesi"
+                />
+                <StatBox
+                    value={counselor.experience_years + `th`}
+                    label="Tahun"
+                />
                 <StatBox value="98%" label="Respons" />
             </div>
 
@@ -125,9 +134,13 @@ function MainProfileCard({ counselor }: Props) {
             <div className="my-4 h-px bg-zinc-100 dark:bg-zinc-800" />
 
             {/* CTA */}
-            <button className="w-full rounded-lg bg-zinc-900 py-2.5 text-[13px] font-medium text-zinc-100 transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
-                Reservasi Sesi
-            </button>
+            <Link
+                href={ReservationController.create().url + `/${counselor.slug}`}
+            >
+                <button className="w-full cursor-pointer rounded-lg bg-zinc-900 py-2.5 text-[13px] font-medium text-zinc-100 transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
+                    Reservasi Sesi
+                </button>
+            </Link>
         </div>
     );
 }

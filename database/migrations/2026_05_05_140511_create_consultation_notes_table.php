@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('consultation_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("consultation_id")->constrained("consultations")->cascadeOnDelete();
+
+            $table->foreignId("consultation_id")
+                ->constrained("consultations")
+                ->cascadeOnDelete();
+            $table->enum("type",['client_pre_sesi','progress','pasca_sesi']);
             $table->longText("content")->nullable();
+
             $table->timestamps();
         });
     }

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('whatsapp')->nullable();
             $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->integer('age')->default(20);
+            $table->enum('gender',['L','P']);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

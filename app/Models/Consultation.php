@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Consultation extends Model
 {
+
+    protected $guarded = ['id'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -14,9 +16,9 @@ class Consultation extends Model
     {
         return $this->belongsTo(Counselor::class);
     }
-    public function note()
+    public function notes()
     {
-        return $this->hasOne(ConsultationNote::class);
+        return $this->hasMany(ConsultationNote::class);
     }
     public function feedback()
     {

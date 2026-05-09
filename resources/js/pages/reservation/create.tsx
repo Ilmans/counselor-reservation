@@ -5,6 +5,7 @@ import type { CounselorDetailPage } from '@/types/counselor';
 import type { AvaibilityItem } from '@/types/schedule';
 import CalendarPicker from './components/calendar-picker';
 import CounselorCard from './components/cunselor-card';
+import Form from './components/form';
 import SessionModePicker from './components/session-mode-picker';
 import StatusInformation from './components/status-information';
 import TimeSlotPicker from './components/time-slot-picker';
@@ -21,7 +22,6 @@ export default function Create({ counselor, availability }: Props) {
         null,
     );
     const current = selectedDate ? availability[selectedDate] : null;
-    const canProceed = !!(selectedDate && sessionMode && selectedSlot);
 
     function handleSelectDate(date: string) {
         const item = availability[date];
@@ -50,6 +50,15 @@ export default function Create({ counselor, availability }: Props) {
                             selectedDate={selectedDate}
                             onSelect={handleSelectDate}
                         />
+                        {selectedDate && current && (
+                            <TimeSlotPicker
+                                date={selectedDate}
+                                slots={current.slots}
+                                bookedTimes={current.booked_times}
+                                selected={selectedSlot}
+                                onSelect={setSelectedSlot}
+                            />
+                        )}
 
                         {selectedDate && current && (
                             <SessionModePicker
@@ -60,32 +69,12 @@ export default function Create({ counselor, availability }: Props) {
                             />
                         )}
 
-                        {selectedDate && sessionMode && current && (
-                            <TimeSlotPicker
-                                date={selectedDate}
-                                slots={current.slots}
-                                bookedTimes={current.booked_times}
-                                selected={selectedSlot}
-                                onSelect={setSelectedSlot}
-                            />
-                        )}
-
-                        {/* CTA */}
-                        <div className="flex items-center justify-between">
-                            <button className="rounded-lg border border-zinc-200 px-5 py-2.5 text-[13px] font-medium text-zinc-500 hover:border-zinc-400 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500">
-                                ← Kembali
-                            </button>
-                            <button
-                                disabled={!canProceed}
-                                className={`rounded-lg px-7 py-2.5 text-[13px] font-medium transition-colors ${
-                                    canProceed
-                                        ? 'bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white'
-                                        : 'cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600'
-                                }`}
-                            >
-                                Lanjut ke Data Diri →
-                            </button>
-                        </div>
+                        <Form
+                            counselor={counselor}
+                            selectedDate={selectedDate}
+                            selectedSlot={selectedSlot}
+                            sessionMode={sessionMode}
+                        />
                     </main>
                 </div>
             </div>

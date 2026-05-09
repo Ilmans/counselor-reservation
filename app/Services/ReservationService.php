@@ -5,14 +5,19 @@ namespace App\Services;
 use App\Helpers\ScheduleHelpers;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\CounselorRepository;
+use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class ReservationService
 {
     public function __construct(
         protected CounselorRepository $counselorRepository,
-        protected ConsultationRepository $consultationRepository
+        protected ConsultationRepository $consultationRepository,
+        protected UserRepository $userRepo
     ) {}
 
     public function getCounselorScheduleOverview(string $slug): array
@@ -20,8 +25,7 @@ class ReservationService
         $counselor = $this->counselorRepository->getCounselorBySlug($slug);
         $schedules = $counselor->schedules()->where('is_active', true)->get();
         // nearest date
-        $availableDaysOfWeek = $schedules->pluck('day_of_week')->unique()->toArray();
-        $startDate           = ScheduleHelpers::findNearestScheduleDate($availableDaysOfWeek);
+        $startDate           = $startDate = ScheduleHelpers::findNearestScheduleDate($schedules);
 
         if (!$startDate) {
             return [
@@ -29,20 +33,57 @@ class ReservationService
                 'overview'  => [],
             ];
         }
-
         $endDate = $startDate->copy()->addWeeks(3);
-
         $consultations = $this->consultationRepository
             ->getCounselorConsultationsBetween($counselor->id, $startDate, $endDate)
             ->groupBy(fn($item) => Carbon::parse($item->consultation_date)->toDateString());
 
         $overview = $this->buildOverview($schedules, $consultations, $startDate, $endDate);
-
         return [
             'counselor' => $counselor,
             'overview'  => $overview,
         ];
     }
+
+    public function store(array $data, bool $isLoggedIn)
+    {
+        if ($isLoggedIn) {
+            $user = Auth::user();
+        } else {
+            $isBooked = $this->consultationRepository->isSlotBooked($data['counselor'], $data['date'], $data['time']);
+            if ($isBooked) {
+                throw ValidationException::withMessages([
+                    'time' => 'Slot waktu ini sudah penuh, silakan pilih jam lain.',
+                ]);
+            }
+
+            $user = $this->userRepo->createAndLogin($data['full_name'], $data['email'], $data['whatsapp'], $data['age'], $data['gender'], bcrypt(Str::random(12)));
+
+            $queuePosition = $this->consultationRepository->countQueueForDate($data['counselor'], $data['date'], $data['time']) + 1;
+            $consultation = $this->consultationRepository->create([
+                'user_id'                 => $user->id,
+                'counselor_id'            => $data['counselor'],
+                'categories'              => $data['concerns'],
+                'consultation_date'       => $data['date'],
+                'estimated_time'          => $data['time'],
+                'method'                  => $data['method'],
+                'client_first_experience' => $data['is_first'],
+                'queue_position'          => $queuePosition,
+                'status'                  => 'pending',
+                'meeting_link'            => null,
+            ]);
+
+            if (!empty($data['notes'])) {
+                $consultation->notes()->create([
+                    'type'    => 'client_pre_sesi',
+                    'content' => $data['notes'],
+                ]);
+            }
+
+            return ['consultation' => $consultation];
+        }
+    }
+
 
 
 
@@ -98,5 +139,4 @@ class ReservationService
 
         return $slots;
     }
-
 }

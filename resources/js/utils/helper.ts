@@ -1,4 +1,4 @@
-import { MONTH_NAMES } from "./constant";
+import { MONTH_NAMES } from './constant';
 
 export const counselorPricingLabel = (
     pricing_type: 'free' | 'paid',
@@ -10,7 +10,11 @@ export const counselorPricingLabel = (
 };
 
 export function toDateStr(date: Date): string {
-    return date.toISOString().split('T')[0];
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+
+    return `${y}-${m}-${d}`;
 }
 
 export function formatDateLabel(dateStr: string): string {

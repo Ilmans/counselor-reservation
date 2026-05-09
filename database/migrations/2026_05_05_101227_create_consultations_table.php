@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
             $table->foreignId("counselor_id")->constrained("counselors")->cascadeOnDelete();
+            $table->string('categories');
             $table->date("consultation_date");
             $table->time("estimated_time");
             $table->integer("queue_position");
             $table->string("meeting_link")->nullable();
             $table->enum('method', ["offline", "online"])->default("online");
+            $table->boolean('client_first_experience');
             $table->enum("status", ["pending", "confirmed", "in_queue", "in_progress", "completed", "cancelled", "rejected"]);
             $table->timestamps();
         });

@@ -85,6 +85,8 @@ export default function CalendarPicker({
                             const dateStr = toDateStr(date);
                             const percentage =
                                 availability[dateStr]?.percentage;
+                            const pct = Number(percentage);
+
                             const inRange =
                                 rangeStart &&
                                 rangeEnd &&
@@ -123,12 +125,13 @@ export default function CalendarPicker({
                                     >
                                         {date.getDate()}
                                     </span>
+
                                     {isAvail && !isSelected && (
                                         <span
                                             className={`absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full ${
-                                                percentage >= 100
+                                                pct >= 100
                                                     ? 'bg-red-400'
-                                                    : percentage >= 80
+                                                    : pct >= 50
                                                       ? 'bg-yellow-400'
                                                       : 'bg-emerald-400'
                                             }`}

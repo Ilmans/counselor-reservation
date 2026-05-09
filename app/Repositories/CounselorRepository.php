@@ -34,6 +34,7 @@ class CounselorRepository
     public function getCounselorBySlug(string $slug)
     {
         return Counselor::with(['categories', 'specialization', 'address', 'schedules'])
+            ->withCount('consultations')
             ->whereSlug($slug)->first();
     }
 }

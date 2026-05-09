@@ -3,66 +3,72 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
-use Carbon\CarbonImmutable;
 
 class ScheduleHelpers
 {
-
-
-    // to get next nearest schedule from all schedules
-    public static function findUpcomingSchedule($schedules)
+    /**
+     * Core: cari tanggal terdekat yang ada jadwalnya.
+     * Return Carbon date atau null.
+     */
+    public static function findNearestScheduleDate($schedules): ?Carbon
     {
-        $now = now();
-        foreach ($schedules as $schedule) {
-            $dayDiff = $schedule->day_of_week - $now->isoWeekDay();
-            // still on this week
-            if ($dayDiff > 0) {
-                return array_merge($schedule->toArray(), [
-                    'date' => $now->copy()->addDays($dayDiff)->toDateString(),
-                ]);
+        if (!$schedules || $schedules->isEmpty()) return null;
+
+        $now = Carbon::now(); // ← ganti dari now()
+        $availableDays = $schedules->pluck('day_of_week')->unique()->toArray();
+
+        for ($i = 0; $i < 7; $i++) {
+            $date      = $now->copy()->startOfDay()->addDays($i);
+            $dayOfWeek = (int) $date->format('N');
+
+            if (!in_array($dayOfWeek, $availableDays)) continue;
+
+            $matchedSchedules = $schedules->filter(fn($s) => $s->day_of_week == $dayOfWeek);
+
+            if ($i === 0) {
+                $stillOpen = $matchedSchedules->contains(function ($s) use ($now, $date) {
+                    $close = Carbon::parse($date->toDateString() . ' ' . $s->close_time);
+                    return $now->lt($close);
+                });
+                if (!$stillOpen) continue;
             }
-            // today, check the time
-            if ($dayDiff === 0) {
-                $openTime = Carbon::parse($now->toDateString() . ' ' . $schedule->open_time);
-                if ($now->lt($openTime)) {
-                    return array_merge($schedule->toArray(), [
-                        'date' => $now->toDateString(),
-                    ]);
-                }
-            }
+
+            return $date;
         }
-        // missed day
+
         return null;
     }
 
-    public static function wrapToNextWeek($schedules)
+    /**
+     * Wrapper: return schedule array + date string (untuk response API/view).
+     */
+    public static function findUpcomingSchedule($schedules): ?array
     {
-        $now = now();
-        if ($schedules->isEmpty()) return null;
+        $date = self::findNearestScheduleDate($schedules);
+        if (!$date) return null;
 
-        $first = $schedules->first();
+        $dayOfWeek = (int) $date->format('N');
+        $schedule  = $schedules->first(fn($s) => $s->day_of_week == $dayOfWeek);
+
+        return array_merge($schedule->toArray(), [
+            'date' => $date->toDateString(),
+        ]);
+    }
+
+    /**
+     * Jika semua jadwal minggu ini terlewat, ambil jadwal pertama minggu depan.
+     */
+    public static function wrapToNextWeek($schedules): ?array
+    {
+        if (!$schedules || $schedules->isEmpty()) return null;
+
+        $now   = now();
+        $first = $schedules->sortBy('day_of_week')->first();
+
         $daysUntil = (7 - $now->isoWeekday()) + $first->day_of_week;
 
         return array_merge($first->toArray(), [
             'date' => $now->copy()->addDays($daysUntil)->toDateString(),
         ]);
-    }
-
-
-
-
-    public static function findNearestScheduleDate(array $availableDaysOfWeek): ?Carbon
-    {
-        if (empty($availableDaysOfWeek)) return null;
-
-        for ($i = 0; $i < 7; $i++) {
-            $date = Carbon::now()->startOfDay()->addDays($i);
-
-            if (in_array((int) $date->format('N'), $availableDaysOfWeek)) {
-                return $date;
-            }
-        }
-
-        return null;
     }
 }

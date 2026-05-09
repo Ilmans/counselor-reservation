@@ -1,7 +1,8 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, LogOut, Settings, User } from 'lucide-react';
-import type { User  as UserAuth} from "@/types";
+import type { User as UserAuth } from '@/types';
+import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
 
 export const UserMenu = ({ user }: { user: UserAuth }) => {
     const initials = user.name
@@ -70,15 +71,15 @@ export const UserMenu = ({ user }: { user: UserAuth }) => {
                     <DropdownMenu.Separator className="my-1 h-px bg-zinc-100 dark:bg-zinc-800" />
 
                     <DropdownMenu.Item asChild>
-                        <Link
-                            href="/logout"
-                            method="post"
-                            as="button"
+                        <button
+                            onClick={() => {
+                                router.post('/logout');
+                            }}
                             className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-red-500 transition-colors outline-none hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                         >
                             <LogOut size={13} strokeWidth={1.8} />
                             Keluar
-                        </Link>
+                        </button>
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

@@ -32,7 +32,6 @@ export default function Create({ counselor, availability }: Props) {
 
     function handleSelectMode(mode: 'online' | 'offline') {
         setSessionMode(mode);
-        setSelectedSlot(null);
     }
 
     return (

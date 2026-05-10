@@ -16,8 +16,8 @@ export const MONTH_NAMES = [
 export const DAY_NAMES = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
 export const GENDER_OPTIONS = [
-    { value: 'male', label: 'Laki-laki' },
-    { value: 'female', label: 'Perempuan' },
+    { value: 'L', label: 'Laki-laki' },
+    { value: 'P', label: 'Perempuan' },
 ];
 
 export const SESSION_FIRST_OPTIONS = [

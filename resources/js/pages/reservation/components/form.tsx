@@ -303,7 +303,7 @@ function ToggleGroup({
                         type="button"
                         onClick={() => onChange(opt.value)}
                         className={`flex-1 rounded-lg border py-2 text-[12px] font-medium transition-colors ${
-                            value === opt.value
+                            value == opt.value
                                 ? 'border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900'
                                 : 'border-zinc-200 bg-white text-zinc-500 hover:border-zinc-300 dark:border-zinc-800 dark:bg-transparent dark:text-zinc-400'
                         }`}

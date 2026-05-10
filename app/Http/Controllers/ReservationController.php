@@ -37,13 +37,13 @@ class ReservationController extends Controller
             'age'          => ['required', 'integer', 'min:12', 'max:99'],
             'whatsapp'        => ['required', 'string', 'max:20'],
             'email'        => ['required', 'email', 'max:255'],
-            'gender'       => ['required', 'in:male,female,other'],
+            'gender'       => ['required', 'in:L,P'],
             'is_first'     => ['required', 'boolean'],
             'notes'        => ['nullable', 'string', 'max:1000'],
         ]);
-        dd($data);
 
         $result = $this->service->store($data, $isLoggedIn);
+       
         return back();
     }
 }

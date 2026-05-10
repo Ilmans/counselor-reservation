@@ -52,36 +52,35 @@ class ReservationService
         } else {
             $isBooked = $this->consultationRepository->isSlotBooked($data['counselor'], $data['date'], $data['time']);
             if ($isBooked) {
+
                 throw ValidationException::withMessages([
                     'time' => 'Slot waktu ini sudah penuh, silakan pilih jam lain.',
                 ]);
             }
-
             $user = $this->userRepo->createAndLogin($data['full_name'], $data['email'], $data['whatsapp'], $data['age'], $data['gender'], bcrypt(Str::random(12)));
-
-            $queuePosition = $this->consultationRepository->countQueueForDate($data['counselor'], $data['date'], $data['time']) + 1;
-            $consultation = $this->consultationRepository->create([
-                'user_id'                 => $user->id,
-                'counselor_id'            => $data['counselor'],
-                'categories'              => $data['concerns'],
-                'consultation_date'       => $data['date'],
-                'estimated_time'          => $data['time'],
-                'method'                  => $data['method'],
-                'client_first_experience' => $data['is_first'],
-                'queue_position'          => $queuePosition,
-                'status'                  => 'pending',
-                'meeting_link'            => null,
-            ]);
-
-            if (!empty($data['notes'])) {
-                $consultation->notes()->create([
-                    'type'    => 'client_pre_sesi',
-                    'content' => $data['notes'],
-                ]);
-            }
-
-            return ['consultation' => $consultation];
         }
+        $queuePosition = $this->consultationRepository->countQueueForDate($data['counselor'], $data['date'], $data['time']) + 1;
+        $consultation = $this->consultationRepository->create([
+            'user_id'                 => $user->id,
+            'counselor_id'            => $data['counselor'],
+            'categories'              => $data['concerns'],
+            'consultation_date'       => $data['date'],
+            'estimated_time'          => $data['time'],
+            'method'                  => $data['method'],
+            'client_first_experience' => $data['is_first'],
+            'queue_position'          => $queuePosition,
+            'status'                  => 'pending',
+            'meeting_link'            => null,
+        ]);
+
+        if (!empty($data['notes'])) {
+            $consultation->notes()->create([
+                'type'    => 'client_pre_sesi',
+                'content' => $data['notes'],
+            ]);
+        }
+
+        return ['consultation' => $consultation];
     }
 
 

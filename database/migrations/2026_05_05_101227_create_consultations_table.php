@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("meeting_link")->nullable();
             $table->enum('method', ["offline", "online"])->default("online");
             $table->boolean('client_first_experience');
-            $table->enum("status", ["pending", "confirmed", "in_queue", "in_progress", "completed", "cancelled", "rejected"]);
+            $table->enum("status", ["pending_payment", "pending_confirmation", "confirmed", "in_queue", "in_progress", "completed", "cancelled", "rejected"]);
             $table->timestamps();
         });
     }

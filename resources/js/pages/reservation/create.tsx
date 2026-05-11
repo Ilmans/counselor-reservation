@@ -9,6 +9,8 @@ import Form from './components/form';
 import SessionModePicker from './components/session-mode-picker';
 import StatusInformation from './components/status-information';
 import TimeSlotPicker from './components/time-slot-picker';
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
+import Breadcrumb from '@/components/breadcumb';
 
 type Props = {
     counselor: CounselorDetailPage;
@@ -34,9 +36,28 @@ export default function Create({ counselor, availability }: Props) {
         setSessionMode(mode);
     }
 
+    const breadcumbs = [
+        {
+            label: 'Beranda',
+            href: '/',
+        },
+        {
+            label: 'Konselor',
+            href: '/',
+        },
+        {
+            label: counselor.name,
+            href: CounselorController.details().url + `/${counselor.slug}`,
+        },
+        {
+            label: 'Reservasi',
+        },
+    ];
+
     return (
         <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-[#0d0d0f] dark:text-zinc-200">
             <div className="mx-auto max-w-4xl px-4 py-8">
+                <Breadcrumb items={breadcumbs} />
                 <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
                     <aside className="lg:col-span-1">
                         <CounselorCard counselor={counselor} />

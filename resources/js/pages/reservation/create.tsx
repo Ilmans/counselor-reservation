@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
+import Breadcrumb from '@/components/breadcumb';
 import Wrapper from '@/layouts/wrapper';
 import type { CounselorDetailPage } from '@/types/counselor';
 import type { AvaibilityItem } from '@/types/schedule';
@@ -9,8 +11,6 @@ import Form from './components/form';
 import SessionModePicker from './components/session-mode-picker';
 import StatusInformation from './components/status-information';
 import TimeSlotPicker from './components/time-slot-picker';
-import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
-import Breadcrumb from '@/components/breadcumb';
 
 type Props = {
     counselor: CounselorDetailPage;

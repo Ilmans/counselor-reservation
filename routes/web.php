@@ -11,6 +11,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index']);
     Route::post('/login', [LoginController::class, 'store']);
 });
+
+Route::middleware('auth')->group(function(){
+   // Route::get('/reservation/{reservationRef}',)
+});
 Route::post('/logout', [LoginController::class, 'destroy']);
 
 Route::get('/{category?}', [CounselorController::class, 'index']);

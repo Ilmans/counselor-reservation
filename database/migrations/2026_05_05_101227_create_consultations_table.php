@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();
+            $table->string('reference')->unique();
             $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
             $table->foreignId("counselor_id")->constrained("counselors")->cascadeOnDelete();
             $table->string('categories');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->string("meeting_link")->nullable();
             $table->enum('method', ["offline", "online"])->default("online");
             $table->boolean('client_first_experience');
+            $table->boolean('is_anonymous')->default(false);
             $table->enum("status", ["pending_payment", "pending_confirmation", "confirmed", "in_queue", "in_progress", "completed", "cancelled", "rejected"]);
             $table->timestamps();
         });

@@ -46,7 +46,7 @@ function ErrorPage({ status, message }: Props) {
                 {error.title}
             </h1>
 
-            {/* Description */}
+          
             <p className="mb-10 max-w-sm text-sm leading-relaxed text-zinc-500 dark:text-zinc-500">
                 {error.description}
             </p>

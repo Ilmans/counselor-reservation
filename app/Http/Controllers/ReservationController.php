@@ -26,6 +26,7 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         $isLoggedIn = Auth::check();
+        
         $data =  $request->validate([
             'counselor'    => ['required', 'integer', 'exists:counselors,id'],
             'date'         => ['required', 'date', 'after_or_equal:today'],

@@ -18,7 +18,7 @@
     </x-inertia::head>
 </head>
 
-<body class="font-sans antialiaed ">
+<body class=" antialiaed ">
     <x-inertia::app />
 
     <script>

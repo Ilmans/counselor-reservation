@@ -23,18 +23,18 @@ function Filter({ filters }: Props) {
 
     return (
         <>
-            <div className="mx-auto mb-8 max-w-5xl px-6">
+            <div className=" mb-10  px-6">
                 <div className="flex items-center gap-3">
                     {/* Search input */}
                     <div className="relative shrink-0">
-                        <div className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+                        <div className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-muted-foreground">
                             <SearchIcon />
                         </div>
 
                         <input
                             type="text"
                             placeholder="Cari nama atau spesialisasi…"
-                            className="w-56 rounded-lg border border-zinc-200 bg-white py-2 pr-4 pl-8 text-[13px] text-zinc-800 transition-all placeholder:text-zinc-400 focus:w-72 focus:border-zinc-400 focus:outline-none dark:border-zinc-700/60 dark:bg-transparent dark:text-zinc-200 dark:placeholder:text-zinc-600 dark:focus:border-zinc-500"
+                            className="w-60 rounded-full border border-border bg-card py-2.5 pr-4 pl-9 text-sm text-foreground shadow-sm transition-all placeholder:text-muted-foreground focus:w-80 focus:border-primary focus:outline-none"
                         />
                     </div>
 
@@ -45,7 +45,7 @@ function Filter({ filters }: Props) {
                             as="button"
                             onClick={() => filter('/')}
                             mode={!filters?.category ? 'filled' : 'outlined'}
-                            className="shrink-0 cursor-pointer rounded-full"
+                            className="shrink-0 cursor-pointer rounded-full text-sm"
                         >
                             Semua
                         </Button>
@@ -60,7 +60,7 @@ function Filter({ filters }: Props) {
                                         ? 'filled'
                                         : 'outlined'
                                 }
-                                className="shrink-0 cursor-pointer rounded-full"
+                                className="shrink-0 cursor-pointer rounded-full text-sm"
                             >
                                 {cat.name}
                             </Button>
@@ -70,8 +70,8 @@ function Filter({ filters }: Props) {
             </div>
 
             {/* DIVIDER */}
-            <div className="mx-auto mb-8 max-w-5xl px-6">
-                <div className="h-px bg-gradient-to-r from-transparent via-zinc-300 to-transparent dark:via-zinc-700/60" />
+            <div className="mx-auto mb-10 max-w-5xl px-6">
+                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
             </div>
         </>
     );

@@ -69,7 +69,7 @@ class ReservationService
             'method'                  => $data['method'],
             'client_first_experience' => $data['is_first'],
             'queue_position'          => $queuePosition,
-            'status'                  => 'pending',
+            'status'                  => 'pending_payment',
             'meeting_link'            => null,
         ]);
 

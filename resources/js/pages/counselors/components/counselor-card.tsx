@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import type { Category, Counselor } from '@/types/counselor';
@@ -9,7 +10,6 @@ import {
     METHOD_LABEL,
     METHOD_VARIANT,
 } from '@/utils/schedule';
-import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 
 type Props = {
     counselor: Counselor;
@@ -20,24 +20,25 @@ function CounselorCard({ counselor }: Props) {
         counselor.pricing_type,
         counselor.price_per_hour,
     );
+    const isFree = counselor.pricing_type === 'free';
 
     return (
-        <div className="rounded-xl border border-zinc-200 bg-white p-5 transition-[border-color,background] duration-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800/80 dark:bg-[#111113] dark:hover:border-zinc-700/40 dark:hover:bg-zinc-800/70">
+        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
             {/* Baris 1: Foto + Info + Tombol */}
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-3.5">
                 <img
                     src={counselor.photo_url}
                     alt={counselor.name}
-                    className="h-11 w-11 flex-shrink-0 rounded-xl object-cover"
+                    className="h-12 w-12 flex-shrink-0 rounded-xl object-cover"
                     onError={(e) => {
                         e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(counselor.name)}`;
                     }}
                 />
                 <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                    <p className="truncate text-base font-semibold text-foreground">
                         {counselor.name}
                     </p>
-                    <p className="mt-0.5 truncate text-xs text-zinc-500">
+                    <p className="mt-0.5 truncate text-sm text-muted-foreground">
                         {counselor.specialization?.name ?? '—'}
                     </p>
                 </div>
@@ -47,7 +48,7 @@ function CounselorCard({ counselor }: Props) {
                     }
                     className="flex-shrink-0"
                 >
-                    <Button as="link" size="sm" mode="outlined" as="span">
+                    <Button as="link" size="sm" mode="filled" as="span">
                         Lihat Profil
                     </Button>
                 </Link>
@@ -60,11 +61,11 @@ function CounselorCard({ counselor }: Props) {
             />
 
             {/* Baris 3: Kategori */}
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
+            <div className="mt-3 flex flex-wrap gap-1.5">
                 {counselor.categories.map((category: Category) => (
                     <span
                         key={category.id}
-                        className="rounded border border-zinc-200 bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:border-zinc-700/60 dark:bg-zinc-800 dark:text-zinc-500"
+                        className="rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary"
                     >
                         {category.name}
                     </span>
@@ -72,19 +73,19 @@ function CounselorCard({ counselor }: Props) {
             </div>
 
             {/* Divider */}
-            <div className="my-3 border-t border-zinc-100 dark:border-zinc-800" />
+            <div className="my-4 border-t border-border" />
 
             {/* Baris 4: Jadwal + Harga (dua kolom bersih) */}
             <div className="flex items-center justify-between gap-4">
                 {/* Jadwal terdekat */}
                 <div className="min-w-0">
-                    <p className="mb-1 text-[10px] font-medium tracking-wide text-zinc-400 uppercase dark:text-zinc-600">
+                    <p className="mb-1.5 text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
                         Jadwal Terdekat
                     </p>
                     {counselor.next_schedule ? (
-                        <div className="flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-400 shadow-[0_0_6px_#4ade8088]" />
-                            <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                        <div className="flex items-center gap-2">
+                            <span className="pulse-dot h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
+                            <span className="text-sm text-muted-foreground">
                                 {getScheduleLabel(counselor.next_schedule)},{' '}
                                 {formatTimeRange(
                                     counselor.next_schedule.open_time,
@@ -107,9 +108,9 @@ function CounselorCard({ counselor }: Props) {
                             </Button>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                            <span className="text-xs text-zinc-400 dark:text-zinc-600">
+                        <div className="flex items-center gap-2">
+                            <span className="h-2 w-2 flex-shrink-0 rounded-full bg-muted-foreground/30" />
+                            <span className="text-sm text-muted-foreground/70">
                                 Tidak ada jadwal
                             </span>
                         </div>
@@ -118,18 +119,18 @@ function CounselorCard({ counselor }: Props) {
 
                 {/* Harga */}
                 <div className="flex-shrink-0 text-right">
-                    <p className="mb-1 text-[10px] font-medium tracking-wide text-zinc-400 uppercase dark:text-zinc-600">
+                    <p className="mb-1.5 text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
                         Biaya
                     </p>
-                    <span
-                        className={`text-xs font-semibold ${
-                            counselor.pricing_type === 'free'
-                                ? 'text-green-500'
-                                : 'text-zinc-800 dark:text-zinc-200'
-                        }`}
-                    >
-                        {priceLabel}
-                    </span>
+                    {isFree ? (
+                        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-semibold text-primary">
+                            {priceLabel}
+                        </span>
+                    ) : (
+                        <span className="text-sm font-semibold text-foreground">
+                            {priceLabel}
+                        </span>
+                    )}
                 </div>
             </div>
         </div>

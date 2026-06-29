@@ -13,12 +13,12 @@ function CounselorList({ counselors }: Props) {
 
     return (
         <>
-            <main className="mx-auto max-w-5xl px-6 pb-20">
-                <div className="mb-5 flex items-center justify-between">
-                    <p className="text-xs font-medium tracking-[0.08em] text-zinc-500 uppercase dark:text-zinc-600">
+            <main className=" px-6 pb-20">
+                <div className="mb-6 flex items-center justify-between">
+                    <p className="text-sm font-medium tracking-[0.04em] text-muted-foreground uppercase">
                         12 Konselor Tersedia
                     </p>
-                    <select className="cursor-pointer rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-[12px] text-zinc-600 transition-colors focus:border-zinc-400 focus:outline-none dark:border-zinc-700/60 dark:bg-zinc-900 dark:text-zinc-400 dark:focus:border-zinc-500">
+                    <select className="cursor-pointer rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none">
                         <option>Urut: Rating tertinggi</option>
                         <option>Urut: Harga terendah</option>
                         <option>Urut: Tersedia hari ini</option>
@@ -30,7 +30,7 @@ function CounselorList({ counselors }: Props) {
                     data="counselors"
                     manual={true}
                     preserveUrl={true}
-                    className="grid grid-cols-1 gap-3 md:grid-cols-2"
+                    className="grid grid-cols-1 gap-4 md:grid-cols-2"
                 >
                     {counselors.data.map((counselor: Counselor) => (
                         <CounselorCard
@@ -41,13 +41,13 @@ function CounselorList({ counselors }: Props) {
                 </InfiniteScroll>
 
                 {/* tombol luar */}
-                <div className="mt-8 flex justify-center">
+                <div className="mt-10 flex justify-center">
                     <Button
                         disabled={
                             counselors.current_page >= counselors.last_page
                         }
                         onClick={() => infiniteRef.current?.fetchNext()}
-                        className="cursor-pointer rounded-lg"
+                        className="cursor-pointer rounded-full text-sm"
                     >
                         Tampilkan lebih banyak ↓
                     </Button>

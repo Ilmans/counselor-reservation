@@ -1,32 +1,43 @@
-export interface PaymentMethodSnapshot {
-    code: string;
-    name: string;
-    type: string;
-    metadata: Record<string, string>;
-    selected_at: string;
+export type InvoiceStatus =
+    | 'pending'
+    | 'paid'
+    | 'expired'
+    | 'failed'
+    | 'cancelled'
+    | 'refunded';
+
+export interface PaymentMethodMetadata {
+    logo?: string;
+    account_name?: string;
+    account_number?: string;
+    qr_image?: string;
+    merchant_name?: string;
 }
 
 export interface PaymentMethodOption {
     id: number;
     code: string;
     name: string;
+    type: 'bank_transfer' | 'qris' | string;
+    metadata: PaymentMethodMetadata;
+}
+
+export interface SelectedPaymentMethod {
+    code: string;
+    name: string;
     type: string;
-    metadata: Record<string, string>;
+    metadata: PaymentMethodMetadata;
+    selected_at: string;
 }
 
 export interface InvoiceData {
     id: number;
     reference: string;
-    status:
-        | 'pending'
-        | 'paid'
-        | 'expired'
-        | 'failed'
-        | 'cancelled'
-        | 'refunded';
+    date: string;
     amount: number;
     amount_formatted: string;
-    payment_method: PaymentMethodSnapshot | null;
+    status: InvoiceStatus;
+    payment_method: SelectedPaymentMethod | null;
     expired_at: string | null;
     paid_at: string | null;
     consultation: {
@@ -34,10 +45,11 @@ export interface InvoiceData {
         reference: string;
         date: string;
         time: string;
-        method: 'online' | 'offline';
+        method: 'online' | 'offline' | string;
     };
     counselor: {
         name: string;
+        slug: string;
         specialization: string;
         photo_url: string;
     };

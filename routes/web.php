@@ -17,10 +17,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
      Route::get('/my-reservations',[ReservationController::class,'index']);
+    Route::get('/my-invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/my-reservations/{reference}', [ReservationController::class, 'show'])->name('reservations.detail');
 
-    Route::get('/invoice/{id}', [InvoiceController::class, 'show']);
     Route::post('/invoice/{invoice}/payment-method', [InvoiceController::class, 'updatePaymentMethod']);
+    Route::get('/invoice/{reference}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/invoice/{id}/download', [InvoiceController::class, 'downloadPdf']);
 });
 Route::post('/logout', [LoginController::class, 'destroy']);

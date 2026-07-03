@@ -8,15 +8,19 @@ use Illuminate\Support\Str;
 
 class ConsultationRepository
 {
-    public function getUserStatistic(): array
+    public function getUserStatistic(int $userId): array
     {
-        return (array) Consultation::selectRaw("
-        COUNT(*) total_sessions,
-        SUM(status IN ('pending_payment','pending_confirmation','confirmed','in_queue','in_progress')) upcoming_sessions,
-        SUM(status = 'completed') completed_sessions,
-        SUM(status IN ('cancelled','rejected')) cancelled_sessions,
-        (SELECT COUNT(*) FROM counselors) total_counselors
-    ")->first();
+        return Consultation::query()
+            ->where('user_id', $userId)
+            ->selectRaw("
+            COUNT(*) as total_sessions,
+            SUM(status IN ('pending_payment','pending_confirmation','confirmed','in_queue','in_progress')) as upcoming_sessions,
+            SUM(status = 'completed') as completed_sessions,
+            SUM(status IN ('cancelled','rejected')) as cancelled_sessions,
+            COUNT(DISTINCT counselor_id) as total_counselors
+        ")
+            ->first()
+            ?->toArray() ?? [];
     }
 
     public function findDetailForUser($reference, int $userId): ?Consultation

@@ -8,6 +8,20 @@ use Illuminate\Support\Str;
 
 class InvoiceRepository
 {
+
+    public function getUserInvoices(
+        int $userId,
+        ?string $search = null,
+        int $perPage = 10
+    ) {
+        return Invoice::query()
+            ->where('user_id', $userId)
+            ->when($search, fn($query) => $query->where('reference', 'like', "%{$search}%"))
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
     public function create(array $data)
     {
         return Invoice::create([
@@ -30,10 +44,10 @@ class InvoiceRepository
     }
 
 
-    public function findForUser(int $id, int $userId): ?Invoice
+    public function findForUser($ref, int $userId): ?Invoice
     {
         return Invoice::with(['consultation.counselor.specialization'])
-            ->where('id', $id)
+            ->where('reference', $ref)
             ->where('user_id', $userId)
             ->first();
     }

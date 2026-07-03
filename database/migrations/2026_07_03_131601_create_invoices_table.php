@@ -29,10 +29,9 @@ return new class extends Migration
                 'refunded',
             ])->default('pending');
             $table->json('payment_method')->nullable();
-            $table->string('payment_reference')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('expired_at')->nullable();
-            $table->json('metadata')->nullable();
+            $table->timestamps();
         });
     }
 

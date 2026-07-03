@@ -7,14 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Invoice extends Model
 {
+    protected $casts = [
+        'payment_method' => 'array',
+    ];
 
-    public $timestamps = false;
-    protected $fillable = [
-        'reference',
-        'user_id',
-        'consultation_id',
-        'amount',
-        'status',
+    protected $guarded = [
+        'id',
     ];
 
 

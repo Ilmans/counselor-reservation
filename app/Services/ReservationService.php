@@ -36,7 +36,7 @@ class ReservationService
 
         return [
             'reservations' => $reservations,
-            'stats'        => $this->consultationRepository->getUserStatistic(),
+            'stats'        => $this->consultationRepository->getUserStatistic($userId),
             'activeStatus' => $status,
         ];
     }
@@ -193,9 +193,10 @@ class ReservationService
         $amount = $this->counselorRepository->getCounselorPrice($data['counselor']);
 
         $invoice = $this->invoiceRepository->create([
-            'user_id'          => $user->id,
-            'consultation_id'  => $consultation->id,
-            'amount'           => $amount,
+            'user_id'         => $user->id,
+            'consultation_id' => $consultation->id,
+            'amount'          => $amount,
+            'expired_at'      => now()->addMinutes(10),
         ]);
 
         if (!empty($data['notes'])) {

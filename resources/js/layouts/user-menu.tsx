@@ -1,6 +1,6 @@
 import { Link, router } from '@inertiajs/react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChevronDown, LogOut, Settings, User } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, LogOut, Settings, User } from 'lucide-react';
 import type { User as UserAuth } from '@/types';
 import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
 
@@ -50,11 +50,11 @@ export const UserMenu = ({ user }: { user: UserAuth }) => {
 
                     <DropdownMenu.Item asChild>
                         <Link
-                            href="/profile"
+                            href="/my-reservations"
                             className="flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-zinc-700 transition-colors outline-none hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
                         >
-                            <User size={13} strokeWidth={1.8} />
-                            Profil Saya
+                            <LayoutDashboard size={13} strokeWidth={1.8} />
+                           Dashboard
                         </Link>
                     </DropdownMenu.Item>
 

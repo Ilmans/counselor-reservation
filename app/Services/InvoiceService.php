@@ -13,16 +13,28 @@ class InvoiceService
         protected InvoiceRepository $invoiceRepository
     ) {}
 
-    public function getInvoiceDetail(int $id, int $userId): array
+    public function getUserInvoices(int $userId, ?string $search = null): array
     {
-        $invoice = $this->invoiceRepository->findForUser($id, $userId);
+        $invoices = $this->invoiceRepository
+            ->getUserInvoices($userId, $search);
+
+        $invoices->getCollection()->transform(
+            fn(Invoice $invoice) => $this->formatInvoiceBase($invoice)
+        );
+
+        return ['invoices' => $invoices];
+    }
+
+    public function getInvoiceDetail($ref, int $userId): array
+    {
+        $invoice = $this->invoiceRepository->findForUser($ref, $userId);
 
         abort_if(!$invoice, 404);
 
         $this->autoExpireIfNeeded($invoice);
 
         return [
-            'invoice'        => $this->formatInvoice($invoice),
+            'invoice'        => $this->formatInvoiceDetail($invoice),
             'paymentMethods' => $invoice->status === 'pending'
                 ? $this->invoiceRepository->getActivePaymentMethods()
                 : [],
@@ -51,7 +63,9 @@ class InvoiceService
             'code'        => $method->code,
             'name'        => $method->name,
             'type'        => $method->type,
-            'metadata'    => $method->metadata,
+            'metadata' => is_string($method->metadata)
+                ? json_decode($method->metadata, true)
+                : $method->metadata,
             'selected_at' => now()->toISOString(),
         ];
 
@@ -70,26 +84,53 @@ class InvoiceService
         }
     }
 
-    public function formatInvoice(Invoice $invoice): array
+    /**
+     * Format ringkas untuk list/table invoice.
+     */
+    private function formatInvoiceBase(Invoice $invoice): array
+    {
+        return [
+            'id'        => $invoice->id,
+            'reference' => $invoice->reference,
+            'date'      => $invoice->created_at->translatedFormat('d M Y'),
+            'amount'    => 'Rp' . number_format((float) $invoice->amount, 0, ',', '.'),
+            'status'    => $invoice->status === 'paid' ? 'paid' : 'unpaid',
+        ];
+    }
+
+    /**
+     * Format lengkap untuk halaman detail invoice, extend dari base.
+     */
+    public function formatInvoiceDetail(Invoice $invoice): array
     {
         $consultation = $invoice->consultation;
         $counselor = $consultation->counselor;
 
-        return [
-            'id'               => $invoice->id,
-            'reference'        => $invoice->reference,
+        return array_merge($this->formatInvoiceBase($invoice), [
             'status'           => $invoice->status,
             'amount'           => (float) $invoice->amount,
             'amount_formatted' => 'Rp ' . number_format((float) $invoice->amount, 0, ',', '.'),
-            'payment_method'   => $invoice->payment_method,
             'expired_at'       => optional($invoice->expired_at)->toISOString(),
             'paid_at'          => optional($invoice->paid_at)->toISOString(),
+
+            'payment_method' => $invoice->payment_method ? [
+                'code'     => $invoice->payment_method['code'] ?? null,
+                'name'     => $invoice->payment_method['name'] ?? null,
+                'type'     => $invoice->payment_method['type'] ?? null,
+                'metadata' => [
+                    'logo'           => $invoice->payment_method['metadata']['logo'] ?? null,
+                    'account_name'   => $invoice->payment_method['metadata']['account_name'] ?? null,
+                    'account_number' => $invoice->payment_method['metadata']['account_number'] ?? null,
+                    'qr_image'       => $invoice->payment_method['metadata']['qr_image'] ?? null,
+                    'merchant_name'  => $invoice->payment_method['metadata']['merchant_name'] ?? null,
+                ],
+            ] : null,
 
             'consultation' => [
                 'id'        => $consultation->id,
                 'reference' => $consultation->reference,
-                'date'      => \Carbon\Carbon::parse($consultation->consultation_date)->translatedFormat('l, j F Y'),
-                'time'      => \Carbon\Carbon::parse($consultation->estimated_time)->format('H:i') . ' WIB',
+                'date'      => Carbon::parse($consultation->consultation_date)->translatedFormat('l, j F Y'),
+                'time'      => Carbon::parse($consultation->estimated_time)->format('H:i') . ' WIB',
                 'method'    => $consultation->method,
             ],
 
@@ -99,6 +140,6 @@ class InvoiceService
                 'specialization' => $counselor->specialization->name ?? '-',
                 'photo_url'      => $counselor->photo_url,
             ],
-        ];
+        ]);
     }
 }

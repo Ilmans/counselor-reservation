@@ -5,13 +5,9 @@ import ThemeSwitcher from './ThemeSwitcher';
 import { UserMenu } from './user-menu';
 
 const NAV_ITEMS = [
-    { label: 'Konselor', href: '/', exact: true },
-    {
-        label: 'Reservasi Saya',
-        href: '/my-reservations',
-        exact: false,
-    },
-    { label: 'Tentang', href: '/tentang', exact: true },
+    { label: 'Home', href: '/', exact: true },
+    { label: 'Konselor', href: '/counselors', exact: true },
+    { label: 'Tentang', href: '/about-us', exact: true },
 ] as const;
 
 // Nav

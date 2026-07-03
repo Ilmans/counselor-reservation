@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Consultation;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ConsultationRepository
 {
@@ -16,6 +17,18 @@ class ConsultationRepository
         SUM(status IN ('cancelled','rejected')) cancelled_sessions,
         (SELECT COUNT(*) FROM counselors) total_counselors
     ")->first();
+    }
+
+    public function findDetailForUser($reference, int $userId): ?Consultation
+    {
+        return Consultation::with([
+            'counselor.specialization',
+            'counselor.address',
+            'notes',
+            'invoice',
+        ])->where('reference', $reference)
+            ->where('user_id', $userId)
+            ->first();
     }
 
     /**
@@ -33,7 +46,7 @@ class ConsultationRepository
             ->withQueryString();
     }
 
-   
+
 
     public function getCounselorConsultationsBetween(int $counselorId, Carbon $from, Carbon $to)
     {
@@ -70,6 +83,12 @@ class ConsultationRepository
 
     public function create($data)
     {
+        $data['reference'] = $this->generateReference();
         return Consultation::create($data);
+    }
+
+    private function generateReference(): string
+    {
+        return 'RSV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
     }
 }

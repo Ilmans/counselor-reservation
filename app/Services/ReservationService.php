@@ -2,38 +2,19 @@
 
 namespace App\Services;
 
-use App\Helpers\ScheduleHelpers;
 use App\Models\Consultation;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\CounselorRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Constants\ConsultationConstant;
 
 class ReservationService
 {
-   //tab
-    private const STATUS_GROUPS = [
-        'upcoming'  => ['pending_payment', 'pending_confirmation', 'confirmed', 'in_queue', 'in_progress'],
-        'completed' => ['completed'],
-        'cancelled' => ['cancelled', 'rejected'],
-        'all'       => null,
-    ];
-
-    private const STATUS_LABELS = [
-        'pending_payment'      => 'Menunggu Pembayaran',
-        'pending_confirmation' => 'Menunggu Konfirmasi',
-        'confirmed'            => 'Terkonfirmasi',
-        'in_queue'             => 'Dalam Antrian',
-        'in_progress'          => 'Sedang Berlangsung',
-        'completed'            => 'Selesai',
-        'cancelled'            => 'Dibatalkan',
-        'rejected'             => 'Ditolak',
-    ];
 
     public function __construct(
         protected CounselorRepository $counselorRepository,
@@ -42,36 +23,12 @@ class ReservationService
         protected UserRepository $userRepo
     ) {}
 
-    public function getCounselorScheduleOverview(string $slug): array
-    {
-        $counselor = $this->counselorRepository->getCounselorBySlug($slug);
-        $schedules = $counselor->schedules()->where('is_active', true)->get();
-        $startDate = ScheduleHelpers::findNearestScheduleDate($schedules);
-
-        if (!$startDate) {
-            return [
-                'counselor' => $counselor,
-                'overview'  => [],
-            ];
-        }
-        $endDate = $startDate->copy()->addWeeks(3);
-        $consultations = $this->consultationRepository
-            ->getCounselorConsultationsBetween($counselor->id, $startDate, $endDate)
-            ->groupBy(fn($item) => Carbon::parse($item->consultation_date)->toDateString());
-
-        $overview = $this->buildOverview($schedules, $consultations, $startDate, $endDate);
-
-        return [
-            'counselor' => $counselor,
-            'overview'  => $overview,
-        ];
-    }
 
     public function getUserReservations(int $userId, string $status): array
     {
-        $statuses = array_key_exists($status, self::STATUS_GROUPS)
-            ? self::STATUS_GROUPS[$status]
-            : self::STATUS_GROUPS['upcoming'];
+        $statuses = array_key_exists($status, ConsultationConstant::STATUS_GROUPS)
+            ? ConsultationConstant::STATUS_GROUPS[$status]
+            : ConsultationConstant::STATUS_GROUPS['upcoming'];
 
         $reservations = $this->consultationRepository
             ->getUserConsultations($userId, $statuses)
@@ -82,6 +39,108 @@ class ReservationService
             'stats'        => $this->consultationRepository->getUserStatistic(),
             'activeStatus' => $status,
         ];
+    }
+
+    public function getReservationDetail($reference, int $userId): array
+    {
+        $consultation = $this->consultationRepository->findDetailForUser($reference, $userId);
+        abort_if(!$consultation, 404);
+        return [
+            'reservation' => $this->formatReservationDetail($consultation),
+        ];
+    }
+
+    private function formatReservationDetail(Consultation $c): array
+    {
+        $counselor = $c->counselor;
+
+        // status "sudah dikonfirmasi ke atas" -> tampilkan meeting_link / lokasi
+        $isConfirmedOrBeyond = in_array($c->status, ['confirmed', 'in_queue', 'in_progress', 'completed'], true);
+        $isCancelledLike     = in_array($c->status, ['cancelled', 'rejected'], true);
+
+        $preNote      = $c->notes->firstWhere('type', 'client_pre_sesi');
+        $cancelNote   = $c->notes->firstWhere('type', 'cancel');
+        $progressNote = $c->notes->firstWhere('type', 'progress');
+        $pascaNote    = $c->notes->firstWhere('type', 'pasca_sesi');
+
+        $needsPayment = $c->invoice && $c->invoice->status === 'pending';
+
+        return [
+            'id'             => $c->id,
+            'reference'      => $c->reference,
+            'status'         => $c->status,
+            'status_label'   => ConsultationConstant::STATUS_LABELS[$c->status] ?? $c->status,
+            'status_group'   => $this->resolveStatusGroup($c->status),
+            'queue_position' => $c->status === 'in_queue' ? $c->queue_position : null,
+
+            'counselor' => [
+                'name'           => $counselor->name,
+                'slug'           => $counselor->slug,
+                'photo_url'      => $counselor->photo_url,
+                'specialization' => $counselor->specialization->name ?? '-',
+                'whatsapp'       => $counselor->whatsapp,
+            ],
+
+            'schedule' => [
+                'date'     => Carbon::parse($c->consultation_date)->translatedFormat('l, j F Y'),
+                'time'     => Carbon::parse($c->estimated_time)->format('H:i') . ' WIB',
+                'duration' => $counselor->session_duration_minutes . ' menit',
+            ],
+
+            'method'       => $c->method,
+            'method_label' => $c->method === 'online' ? 'Online' : 'Tatap Muka',
+            'is_anonymous' => (bool) $c->is_anonymous,
+            'is_first'     => (bool) $c->client_first_experience,
+            'categories'   => $c->categories,
+
+            'meeting_link' => ($c->method === 'online' && $isConfirmedOrBeyond)
+                ? $c->meeting_link
+                : null,
+
+            'location' => ($c->method === 'offline' && $isConfirmedOrBeyond)
+                ? [
+                    'name'     => $counselor->address->name ?? null,
+                    'address'  => $counselor->address->address ?? null,
+                    'city'     => $counselor->address->city ?? null,
+                    'maps_url' => $counselor->address->maps_url ?? null,
+                ]
+                : null,
+
+            'notes' => [
+                'client'               => $preNote?->content,
+                'progress'             => $isConfirmedOrBeyond ? $progressNote?->content : null,
+                'post_session'         => $c->status === 'completed' ? $pascaNote?->content : null,
+                'cancellation_reason'  => $isCancelledLike ? $cancelNote?->content : null,
+            ],
+
+            'invoice' => $c->invoice ? [
+                'id'               => $c->invoice->id,
+                'reference'        => $c->invoice->reference,
+                'amount'           => (float) $c->invoice->amount,
+                'amount_formatted' => 'Rp ' . number_format((float) $c->invoice->amount, 0, ',', '.'),
+                'status'           => $c->invoice->status,
+                'payment_method'   => $c->invoice->payment_method,
+                'expired_at'       => optional($c->invoice->expired_at)->toISOString(),
+                'paid_at'          => optional($c->invoice->paid_at)->toISOString(),
+            ] : null,
+
+            'needs_payment' => $needsPayment,
+
+            'price_label' => $counselor->pricing_type === 'free'
+                ? 'Gratis'
+                : 'Rp ' . number_format((float) $counselor->price_per_hour, 0, ',', '.'),
+        ];
+    }
+
+    private function resolveStatusGroup(string $status): string
+    {
+        foreach (ConsultationConstant::STATUS_GROUPS as $group => $statuses) {
+            if ($statuses && in_array($status, $statuses, true)) {
+                return $group;
+            }
+        }
+
+        return 'all';
     }
 
 
@@ -116,9 +175,8 @@ class ReservationService
                 $data['date']
             ) + 1;
 
-        // 1. CREATE CONSULTATION
+
         $consultation = $this->consultationRepository->create([
-            'reference'                => $this->generateReference(),
             'user_id'                 => $user->id,
             'counselor_id'            => $data['counselor'],
             'categories'              => $data['concerns'],
@@ -132,28 +190,21 @@ class ReservationService
             'meeting_link'            => null,
         ]);
 
-        // 2. AMBIL PRICE DARI COUNSELOR
         $amount = $this->counselorRepository->getCounselorPrice($data['counselor']);
 
-        // 3. CREATE INVOICE
         $invoice = $this->invoiceRepository->create([
             'user_id'          => $user->id,
             'consultation_id'  => $consultation->id,
             'amount'           => $amount,
         ]);
 
-        // 4. NOTES
         if (!empty($data['notes'])) {
             $consultation->notes()->create([
                 'type'    => 'client_pre_sesi',
                 'content' => $data['notes'],
             ]);
         }
-
-        return [
-            'consultation' => $consultation,
-            'invoice'      => $invoice,
-        ];
+return $consultation->reference;
     }
 
     private function formatReservation(Consultation $c): array
@@ -175,68 +226,10 @@ class ReservationService
                 ? 'Gratis'
                 : 'Rp ' . number_format((float) $counselor->price_per_hour, 0, ',', '.'),
             'status'                   => $c->status,
-            'status_label'             => self::STATUS_LABELS[$c->status] ?? $c->status,
+            'status_label'             => ConsultationConstant::STATUS_LABELS[$c->status] ?? $c->status,
             'notes'                    => $note?->content,
         ];
     }
 
 
-
-    private function generateReference(): string
-    {
-        do {
-            $reference = 'RSV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
-        } while ($this->consultationRepository->referenceExists($reference));
-
-        return $reference;
-    }
-
-    private function buildOverview($schedules, $consultations, Carbon $startDate, Carbon $endDate): array
-    {
-        $results = [];
-
-        foreach (CarbonPeriod::create($startDate, $endDate) as $date) {
-            $matched = $schedules->filter(fn($s) => $s->day_of_week == $date->format('N'));
-            if ($matched->isEmpty()) continue;
-
-            $dateKey = $date->toDateString();
-
-            $slots = $matched
-                ->flatMap(fn($s) => $this->generateTimeSlots($s->open_time, $s->close_time, 60))
-                ->unique()->sort()->values();
-
-            $bookedConsultations = $consultations[$dateKey] ?? collect();
-            $bookedTimes = $bookedConsultations
-                ->pluck('estimated_time')
-                ->map(fn($t) => Carbon::parse($t)->format('H:i'))
-                ->values()->toArray();
-
-            $total = $slots->count();
-
-            $results[$dateKey] = [
-                'total'        => $total,
-                'booked'       => $bookedConsultations->count(),
-                'booked_times' => $bookedTimes,
-                'slots'        => $slots->toArray(),
-                'method'       => $matched->first()->method,
-                'percentage'   => $total > 0 ? round(($bookedConsultations->count() / $total) * 100) : 0,
-            ];
-        }
-
-        return $results;
-    }
-
-    private function generateTimeSlots(string $openTime, string $closeTime, int $intervalMinutes = 60): array
-    {
-        $slots = [];
-        $cur   = Carbon::createFromTimeString($openTime);
-        $close = Carbon::createFromTimeString($closeTime);
-
-        while ($cur->lt($close)) {
-            $slots[] = $cur->format('H:i');
-            $cur->addMinutes($intervalMinutes);
-        }
-
-        return $slots;
-    }
 }

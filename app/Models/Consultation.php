@@ -24,4 +24,9 @@ class Consultation extends Model
     {
         return $this->hasOne(ConsultationFeedback::class);
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

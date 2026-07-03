@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CounselorScheduleService;
 use App\Services\CounselorService;
 use App\Services\ReservationService;
 use Illuminate\Http\Request;
@@ -11,12 +12,11 @@ class ReservationController extends Controller
 {
     private const ALLOWED_STATUSES = ['upcoming', 'completed', 'cancelled', 'all'];
 
-    public function __construct(protected ReservationService $service) {}
+    public function __construct(protected ReservationService $service,protected CounselorScheduleService $CounselorScheduleService) {}
 
     public function index(Request $request)
     {
         $status = $request->query('status', 'upcoming');
-
         if (!in_array($status, self::ALLOWED_STATUSES, true)) {
             $status = 'upcoming';
         }
@@ -26,12 +26,17 @@ class ReservationController extends Controller
 
     public function create($counselor)
     {
-        $data = $this->service->getCounselorScheduleOverview($counselor);
-
+        $data = $this->CounselorScheduleService->getCounselorScheduleOverview($counselor);
         return inertia('reservation/create', [
             'counselor'    => $data['counselor'],
             'availability' => $data['overview'],
         ]);
+    }
+
+    public function show($reference)
+    {
+        $data = $this->service->getReservationDetail($reference, Auth::id());
+        return inertia('reservation/detail', $data);
     }
 
     public function store(Request $request)
@@ -54,8 +59,13 @@ class ReservationController extends Controller
             'notes'        => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $this->service->store($data, $isLoggedIn);
+        $reference = $this->service->store($data, $isLoggedIn);
 
-        return back();
+        return redirect()
+            ->route('reservations.detail', $reference)
+            ->with('toast', [
+                'type' => 'success',
+                'message' => 'Reservasi berhasil dibuat'
+            ]);
     }
 }

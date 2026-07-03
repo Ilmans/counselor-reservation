@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('consultation_notes', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId("consultation_id")
-                ->constrained("consultations")
-                ->cascadeOnDelete();
-            $table->enum("type",['client_pre_sesi','progress','pasca_sesi','cancel']);
-            $table->longText("content")->nullable();
-
+            $table->string('code')->unique();
+            $table->string('name');
+            $table->string('type'); // bank_transfer, ewallet, qris, virtual_account
+            $table->boolean('is_active')->default(true);
+            $table->json('metadata')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('consultation_notes');
+        Schema::dropIfExists('payment_methods');
     }
 };

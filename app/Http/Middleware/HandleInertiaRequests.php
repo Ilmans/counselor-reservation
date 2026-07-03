@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
         $categories = $repo->getAllCategories();
 
 
-       
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'categories' => $categories,
             'alert' => fn() => $request->session()->get('alert'),
+            'toast' => fn() => $request->session()->get('toast'),
         ];
     }
 }

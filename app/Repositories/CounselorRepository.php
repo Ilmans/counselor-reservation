@@ -7,6 +7,12 @@ use App\Models\Counselor;
 class CounselorRepository
 {
 
+// SCALABLE,FOR RESERVATION
+    public function getCounselorPrice(int $id): int
+    {
+        return Counselor::where('id', $id)
+            ->value('price_per_hour') ?? 0;
+    }
 
     public function getAllCategories()
     {
@@ -36,4 +42,8 @@ class CounselorRepository
             ->withCount('consultations')
             ->whereSlug($slug)->first();
     }
+
+
+
+
 }

@@ -10,9 +10,9 @@ import LoginForm from './form/login-form';
 
 function Login() {
     return (
-        <main className="mx-auto flex min-h-[calc(100dvh-112px)] max-w-5xl items-center justify-center gap-20 px-6 py-16">
+        <main className="flex min-h-[calc(100dvh-112px)]  items-center justify-center gap-20 px-6 py-16">
             <SideInfo />
-            <div className="w-full max-w-[360px]">
+            <div className="w-full max-w-[400px]">
                 <Tab active="login" />
                 {/* Heading */}
                 <div className="mb-6">

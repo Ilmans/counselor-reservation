@@ -8,7 +8,7 @@ const NAV_ITEMS = [
     { label: 'Konselor', href: '/', exact: true },
     {
         label: 'Reservasi Saya',
-        href: '/reservasi',
+        href: '/my-reservations',
         exact: false,
     },
     { label: 'Tentang', href: '/tentang', exact: true },

@@ -10,12 +10,12 @@ Route::get('/template/tes', function () {
     return inertia("templates/myreservation");
 });
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'index']);
+    Route::get('/login', [LoginController::class, 'index'])->name("login");
     Route::post('/login', [LoginController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/reservation/{reservationRef}',)
+     Route::get('/my-reservations',[ReservationController::class,'index']);
 });
 Route::post('/logout', [LoginController::class, 'destroy']);
 

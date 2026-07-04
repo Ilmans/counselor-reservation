@@ -1,15 +1,8 @@
-import { Button } from '@/components/ui/button';
+
 import type { Reservation } from '@/types/reservation';
 import { StatusBadge } from './status-badge';
-
-
-const ACTIVE_STATUSES: Reservation['status'][] = [
-    'pending_payment',
-    'pending_confirmation',
-    'confirmed',
-    'in_queue',
-    'in_progress',
-];
+import ReservationController from '@/actions/App/Http/Controllers/ReservationController';
+import { Link } from '@inertiajs/react';
 
 function initialsFrom(name: string) {
     return name
@@ -30,13 +23,10 @@ export function ReservationCard({ reservation }: { reservation: Reservation }) {
         time,
         duration,
         mode,
-        price,
         status,
         status_label,
         notes,
     } = reservation;
-
-    const isActive = ACTIVE_STATUSES.includes(status);
 
     return (
         <div className="rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/30">
@@ -55,7 +45,15 @@ export function ReservationCard({ reservation }: { reservation: Reservation }) {
                                 {counselor_specialization}
                             </p>
                         </div>
-                        <StatusBadge status={status} label={status_label} />
+                        <div className="flex items-center gap-2">
+                            <StatusBadge status={status} label={status_label} />
+                            <Link
+                                href={ReservationController.show.url(reservation.reference)}
+                                className="text-[12px] font-medium text-primary underline-offset-4 hover:underline"
+                            >
+                                Detail
+                            </Link>
+                        </div>
                     </div>
 
                     <p className="mt-2 text-[11px] font-medium tracking-[0.03em] text-muted-foreground">
@@ -80,73 +78,6 @@ export function ReservationCard({ reservation }: { reservation: Reservation }) {
                             </p>
                         </div>
                     )}
-
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
-                        <span className="text-[12px] font-medium text-foreground/90">
-                            {price}
-                            {price !== 'Gratis' && (
-                                <span className="ml-0.5 font-normal text-muted-foreground">
-                                    /sesi
-                                </span>
-                            )}
-                        </span>
-
-                        <div className="flex flex-wrap gap-2">
-                            {isActive && (
-                                <>
-                                    <Button
-                                        variant="red"
-                                        mode="outlined"
-                                        size="sm"
-                                    >
-                                        Batalkan
-                                    </Button>
-                                    <Button
-                                        variant="default"
-                                        mode="outlined"
-                                        size="sm"
-                                    >
-                                        Reschedule
-                                    </Button>
-                                    <Button
-                                        variant="default"
-                                        mode="filled"
-                                        size="sm"
-                                    >
-                                        Gabung Sesi
-                                    </Button>
-                                </>
-                            )}
-                            {status === 'completed' && (
-                                <>
-                                    <Button
-                                        variant="default"
-                                        mode="outlined"
-                                        size="sm"
-                                    >
-                                        Beri Ulasan
-                                    </Button>
-                                    <Button
-                                        variant="default"
-                                        mode="filled"
-                                        size="sm"
-                                    >
-                                        Pesan Lagi
-                                    </Button>
-                                </>
-                            )}
-                            {(status === 'cancelled' ||
-                                status === 'rejected') && (
-                                <Button
-                                    variant="default"
-                                    mode="filled"
-                                    size="sm"
-                                >
-                                    Pesan Ulang
-                                </Button>
-                            )}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

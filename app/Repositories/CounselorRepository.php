@@ -21,7 +21,7 @@ class CounselorRepository
             ->get();
     }
 
-    public function getAllCounselors(?string $category)
+    public function getAllCounselors(?string $category, ?string $search = null)
     {
         return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_url', 'pricing_type', 'price_per_hour', 'status')
             ->with(['categories', 'specialization'])
@@ -32,7 +32,16 @@ class CounselorRepository
                     $q->where('slug', $slug);
                 });
             })
-            ->paginate(6);
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('specialization', function ($sq) use ($search) {
+                            $sq->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->paginate(6)
+            ->withQueryString();
     }
 
 

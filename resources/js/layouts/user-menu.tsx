@@ -3,6 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, LayoutDashboard, LogOut, Settings, User } from 'lucide-react';
 import type { User as UserAuth } from '@/types';
 import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
+import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
 
 export const UserMenu = ({ user }: { user: UserAuth }) => {
     const initials = user.name
@@ -47,14 +48,26 @@ export const UserMenu = ({ user }: { user: UserAuth }) => {
                     </div>
 
                     <DropdownMenu.Separator className="my-1 h-px bg-zinc-100 dark:bg-zinc-800" />
-
+                    {user.role == 'counselor' && (
+                        <DropdownMenu.Item asChild>
+                            <a
+                                href={DashboardController.index.url()}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-zinc-700 transition-colors outline-none hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                            >
+                                <LayoutDashboard size={13} strokeWidth={1.8} />
+                                Dashboard Konselor
+                            </a>
+                        </DropdownMenu.Item>
+                    )}
                     <DropdownMenu.Item asChild>
                         <Link
                             href="/my-reservations"
                             className="flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-zinc-700 transition-colors outline-none hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
                         >
                             <LayoutDashboard size={13} strokeWidth={1.8} />
-                           Dashboard
+                            Dashboard
                         </Link>
                     </DropdownMenu.Item>
 

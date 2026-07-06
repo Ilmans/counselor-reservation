@@ -1,9 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { FormEvent, ReactNode, useState } from 'react';
+
 import Wrapper from '@/layouts/wrapper';
-import { UserSidebar } from '@/layouts/user-sidebar';
-import { InvoiceTable } from './List/invoice-table';
-import { EmptyState } from '@/components/empty-state';
+import  type { Invoice, InvoiceTable } from './List/invoice-table';
+import InvoiceController from '@/actions/App/Http/Controllers/InvoiceController';
 
 interface PaginationLink {
     url: string | null;
@@ -31,8 +31,7 @@ export default function InvoiceIndex({ invoices, filters }: Props) {
     function handleSearch(e: FormEvent) {
         e.preventDefault();
         router.get(
-            route('invoices.index'),
-            { search: search || undefined },
+            InvoiceController.index.url({ : search || undefined }),
             { preserveState: true, preserveScroll: true, replace: true },
         );
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Counselor\DashboardController;
 use App\Http\Controllers\CounselorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -8,8 +9,8 @@ use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/test',function (){
-    return inertia('tes');
+Route::middleware(['auth', 'can:counselor'])->group(function () {
+    Route::get('/counselor/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::middleware('guest')->group(function () {

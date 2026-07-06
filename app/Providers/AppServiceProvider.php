@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Inertia\ExceptionResponse;
@@ -25,7 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         $this->configureDefaults();
+
+        Gate::define('admin', fn($user) => $user->role === 'admin');
+
+        Gate::define('counselor', fn($user) => $user->role === 'counselor');
+
+        Gate::define('user', fn($user) => $user->role === 'user');
     }
 
     /**

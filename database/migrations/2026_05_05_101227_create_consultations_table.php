@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('method', ["offline", "online"])->default("online");
             $table->boolean('client_first_experience');
             $table->boolean('is_anonymous')->default(false);
+            $table->integer('duration')->default(60);
             $table->enum("status", ["pending_confirmation", "confirmed", "in_queue", "in_progress", "completed", "cancelled", "rejected"]);
             $table->timestamps();
         });

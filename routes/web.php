@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::get('/counselor/dashboard', [DashboardController::class, 'index']);
 });
-
+Route::get('/tes',function(){
+    return inertia('tes');
+});
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name("login");
     Route::post('/login', [LoginController::class, 'store']);

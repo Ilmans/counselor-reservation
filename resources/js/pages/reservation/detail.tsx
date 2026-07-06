@@ -1,5 +1,3 @@
-import type { ReactNode, ComponentType, FormEvent } from 'react';
-import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import {
     Calendar,
@@ -24,8 +22,15 @@ import {
     Star,
     Info,
 } from 'lucide-react';
+import type { ReactNode, ComponentType, FormEvent } from 'react';
+import { useState } from 'react';
 import Breadcrumb from '@/components/breadcumb';
 import Wrapper from '@/layouts/wrapper';
+import type {
+    ConsultationDetail,
+    ConsultationStatus,
+} from '@/types/consultation';
+import reservations from '@/routes/reservations';
 
 /* ── Types ──────────────────────────────────────────────────── */
 type ReservationStatus =
@@ -37,54 +42,7 @@ type ReservationStatus =
     | 'cancelled'
     | 'rejected';
 
-interface ReservationDetail {
-    id: number;
-    reference: string;
-    status: ReservationStatus;
-    status_label: string;
-    status_group: 'upcoming' | 'completed' | 'cancelled' | 'all';
-    queue_position: number | null;
-    counselor: {
-        name: string;
-        slug: string;
-        photo_url: string;
-        specialization: string;
-        whatsapp: string;
-    };
-    schedule: { date: string; time: string; duration: string };
-    method: 'online' | 'offline';
-    method_label: string;
-    is_anonymous: boolean;
-    is_first: boolean;
-    categories: string;
-    meeting_link: string | null;
-    location: {
-        name: string | null;
-        address: string | null;
-        city: string | null;
-        maps_url: string | null;
-    } | null;
-    notes: {
-        client: string | null;
-        progress: string | null;
-        post_session: string | null;
-        cancellation_reason: string | null;
-    };
-    invoice: {
-        id: number;
-        reference: string;
-        amount: number;
-        amount_formatted: string;
-        status: string;
-        payment_method: unknown;
-        expired_at: string | null;
-        paid_at: string | null;
-    } | null;
-    needs_payment: boolean;
-    price_label: string;
-}
-
-type Props = { reservation: ReservationDetail };
+type Props = { reservation: ConsultationDetail };
 
 /* ── Journey — satu hue teal, dibedakan lewat bobot/lightness ── */
 const JOURNEY = [
@@ -94,9 +52,13 @@ const JOURNEY = [
     { key: 'completed', label: 'Selesai', icon: PartyPopper },
 ] as const;
 
-function journeyIndex(status: ReservationStatus) {
-    if (status === 'in_queue') return 1;
+function journeyIndex(status: ConsultationStatus) {
+    if (status === 'in_queue') {
+        return 1;
+    }
+
     const idx = JOURNEY.findIndex((s) => s.key === status);
+
     return idx === -1 ? 0 : idx;
 }
 
@@ -106,7 +68,7 @@ function journeyIndex(status: ReservationStatus) {
 type StatusTone = 'pending' | 'active' | 'completed' | 'muted';
 
 const STATUS_META: Record<
-    ReservationStatus,
+    ConsultationStatus,
     { icon: ComponentType<{ size?: number }>; title: string; tone: StatusTone }
 > = {
     pending_confirmation: {
@@ -150,7 +112,7 @@ const TONE_STYLES: Record<StatusTone, string> = {
     muted: 'border-border bg-background text-muted-foreground',
 };
 
-function statusDescription(r: ReservationDetail): string {
+function statusDescription(r: ConsultationDetail): string {
     switch (r.status) {
         case 'pending_confirmation':
             return 'Permintaan reservasimu sudah kami terima dan sedang ditinjau. Kami akan mengabari begitu konselor mengonfirmasi jadwal ini.';
@@ -166,7 +128,7 @@ function statusDescription(r: ReservationDetail): string {
             return 'Terima kasih sudah meluangkan waktu untuk dirimu. Ceritakan pengalamanmu agar kami bisa terus menghadirkan sesi terbaik.';
         case 'cancelled':
             return (
-                r.notes.cancellation_reason ??
+                r.notes?.cancellation_reason ??
                 'Kamu bisa membuat reservasi baru kapan pun kamu siap.'
             );
         case 'rejected':
@@ -281,7 +243,7 @@ function StatusHero({
     onOpenCancel,
     onOpenReview,
 }: {
-    r: ReservationDetail;
+    r: ConsultationDetail;
     onOpenCancel: () => void;
     onOpenReview: () => void;
 }) {
@@ -342,6 +304,7 @@ function StatusHero({
                                 const StepIcon = step.icon;
                                 const done = i < activeIdx;
                                 const active = i === activeIdx;
+
                                 return (
                                     <li
                                         key={step.key}
@@ -427,7 +390,7 @@ function StatusHero({
 function PaymentAlert({
     invoice,
 }: {
-    invoice: NonNullable<ReservationDetail['invoice']>;
+    invoice: NonNullable<ConsultationDetail['invoice']>;
 }) {
     return (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
@@ -440,7 +403,7 @@ function PaymentAlert({
                         Selesaikan pembayaran
                     </p>
                     <p className="text-xs text-muted-foreground">
-                        {invoice.amount_formatted}
+                        {invoice.amount}
                         {invoice.expired_at
                             ? ` · jatuh tempo ${invoice.expired_at}`
                             : ''}
@@ -459,7 +422,7 @@ function PaymentAlert({
 
 /* Fakta jadwal murni — kontak dipindah ke SummaryCard di sidebar supaya
    tidak dobel dengan aksi yang sama di dua tempat. */
-function ScheduleCard({ r }: { r: ReservationDetail }) {
+function ScheduleCard({ r }: { r: ConsultationDetail }) {
     return (
         <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-center gap-3">
@@ -500,7 +463,7 @@ function ScheduleCard({ r }: { r: ReservationDetail }) {
                     label="Sesi ke"
                     value={r.is_first ? 'Pertama' : 'Lanjutan'}
                 />
-                <InfoItem icon={Wallet} label="Biaya" value={r.price_label} />
+                <InfoItem icon={Wallet} label="Biaya" value={r.price} />
             </div>
         </div>
     );
@@ -547,10 +510,12 @@ function SessionInfoCard({
     r,
     isConfirmedOrLater,
 }: {
-    r: ReservationDetail;
+    r: ConsultationDetail;
     isConfirmedOrLater: boolean;
 }) {
-    if (r.status === 'completed' || r.status_group === 'cancelled') return null;
+    if (r.status === 'completed' || r.status_group === 'cancelled') {
+        return null;
+    }
 
     if (!isConfirmedOrLater) {
         return (
@@ -654,23 +619,33 @@ function SessionInfoCard({
     );
 }
 
-function NotesCard({ r }: { r: ReservationDetail }) {
+function NotesCard({ r }: { r: ConsultationDetail }) {
     const entries: { label: string; content: string }[] = [];
 
-    if (r.notes.client)
+    if (r.notes?.client) {
         entries.push({
             label: 'Catatanmu saat reservasi',
             content: r.notes.client,
         });
-    if (r.notes.progress)
-        entries.push({ label: 'Catatan konselor', content: r.notes.progress });
-    if (r.notes.post_session)
+    }
+
+    if (r.notes?.progress) {
+        entries.push({
+            label: 'Catatan konselor',
+            content: r.notes.progress,
+        });
+    }
+
+    if (r.notes?.post_session) {
         entries.push({
             label: 'Ringkasan sesi',
             content: r.notes.post_session,
         });
+    }
 
-    if (entries.length === 0) return null;
+    if (entries.length === 0) {
+        return null;
+    }
 
     return (
         <div className="rounded-2xl border border-border bg-card p-4">
@@ -702,7 +677,7 @@ function SummaryCard({
     r,
     showContact,
 }: {
-    r: ReservationDetail;
+    r: ConsultationDetail;
     showContact: boolean;
 }) {
     const canJoinNow = r.method === 'online' && !!r.meeting_link && showContact;
@@ -730,7 +705,7 @@ function SummaryCard({
                     Biaya Sesi
                 </span>
                 <span className="font-serif text-lg text-foreground">
-                    {r.price_label}
+                    {r.price}
                 </span>
             </div>
 
@@ -794,11 +769,13 @@ function CancelModal({
     open,
     onClose,
 }: {
-    r: ReservationDetail;
+    r: ConsultationDetail;
     open: boolean;
     onClose: () => void;
 }) {
-    if (!open) return null;
+    if (!open) {
+        return null;
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
@@ -850,7 +827,7 @@ function ReviewModal({
     open,
     onClose,
 }: {
-    r: ReservationDetail;
+    r: ConsultationDetail;
     open: boolean;
     onClose: () => void;
 }) {
@@ -859,7 +836,9 @@ function ReviewModal({
     const [comment, setComment] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
-    if (!open) return null;
+    if (!open) {
+        return null;
+    }
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();

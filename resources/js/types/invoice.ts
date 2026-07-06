@@ -30,27 +30,42 @@ export interface SelectedPaymentMethod {
     selected_at: string;
 }
 
-export interface InvoiceData {
+
+
+export interface Invoice {
     id: number;
     reference: string;
+    counselor_name: string;
     date: string;
-    amount: number;
-    amount_formatted: string;
+    amount: string;
+    amount_formatted : string;
+    expired_at : string;
     status: InvoiceStatus;
-    payment_method: SelectedPaymentMethod | null;
-    expired_at: string | null;
-    paid_at: string | null;
-    consultation: {
-        id: number;
-        reference: string;
-        date: string;
-        time: string;
-        method: 'online' | 'offline' | string;
-    };
-    counselor: {
-        name: string;
-        slug: string;
-        specialization: string;
-        photo_url: string;
-    };
+    status_label: string;
+    created_at: string;
 }
+
+// export interface InvoiceData {
+//     id: number;
+//     reference: string;
+//     date: string;
+//     amount: number;
+//     amount_formatted: string;
+//     status: InvoiceStatus;
+//     payment_method: SelectedPaymentMethod | null;
+//     expired_at: string | null;
+//     paid_at: string | null;
+//     consultation: {
+//         id: number;
+//         reference: string;
+//         date: string;
+//         time: string;
+//         method: 'online' | 'offline' | string;
+//     };
+//     counselor: {
+//         name: string;
+//         slug: string;
+//         specialization: string;
+//         photo_url: string;
+//     };
+// }

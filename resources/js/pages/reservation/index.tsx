@@ -9,7 +9,7 @@ import type {
     Reservation,
     ReservationStats,
     ReservationTabKey,
-} from '@/types/reservation';
+} from '@/types/consultation';
 import { ReservationCard } from './List/reservation-card';
 
 interface Props {
@@ -25,12 +25,7 @@ const TABS: { key: ReservationTabKey; label: string }[] = [
     { key: 'cancelled', label: 'Dibatalkan' },
 ];
 
-export default function Index({
-    reservations,
-    stats,
-    activeStatus,
-}: Props) {
-    
+export default function Index({ reservations, stats, activeStatus }: Props) {
     const tabCounts: Record<ReservationTabKey, number> = {
         all: stats.total_sessions,
         upcoming: stats.upcoming_sessions,

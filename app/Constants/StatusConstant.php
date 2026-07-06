@@ -2,7 +2,7 @@
 
 namespace App\Constants;
 
-class ConsultationConstant
+class StatusConstant
 {
     public const STATUS_GROUPS = [
         'upcoming'  => ['pending_payment', 'pending_confirmation', 'confirmed', 'in_queue', 'in_progress'],
@@ -21,4 +21,15 @@ class ConsultationConstant
         'cancelled'            => 'Dibatalkan',
         'rejected'             => 'Ditolak',
     ];
+
+
+    public const INVOICE_STATUS_LABEL = [
+        'pending'   => 'Menunggu Pembayaran',
+        'paid'      => 'Lunas',
+        'expired'   => 'Kedaluwarsa',
+        'failed'    => 'Gagal',
+        'cancelled' => 'Dibatalkan',
+        'refunded'  => 'Dikembalikan',
+    ];
+
 }

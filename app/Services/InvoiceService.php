@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use App\Repositories\InvoiceRepository;
 use Carbon\Carbon;
@@ -17,22 +18,14 @@ class InvoiceService
     {
         $invoices = $this->invoiceRepository
             ->getUserInvoices($userId, $search);
-
-        $invoices->getCollection()->transform(
-            fn(Invoice $invoice) => $this->formatInvoiceBase($invoice)
-        );
-
-        return ['invoices' => $invoices];
+        return ['invoices' => InvoiceResource::collection($invoices)];
     }
 
     public function getInvoiceDetail($ref, int $userId): array
     {
         $invoice = $this->invoiceRepository->findForUser($ref, $userId);
-
         abort_if(!$invoice, 404);
-
         $this->autoExpireIfNeeded($invoice);
-
         return [
             'invoice'        => $this->formatInvoiceDetail($invoice),
             'paymentMethods' => $invoice->status === 'pending'
@@ -44,21 +37,17 @@ class InvoiceService
     public function selectPaymentMethod(Invoice $invoice, string $code): Invoice
     {
         $this->autoExpireIfNeeded($invoice);
-
         if ($invoice->status !== 'pending') {
             throw ValidationException::withMessages([
                 'payment_method_code' => 'Invoice ini sudah tidak bisa diubah metode pembayarannya.',
             ]);
         }
-
         $method = $this->invoiceRepository->findActivePaymentMethodByCode($code);
-
         if (!$method) {
             throw ValidationException::withMessages([
                 'payment_method_code' => 'Metode pembayaran tidak tersedia.',
             ]);
         }
-
         $snapshot = [
             'code'        => $method->code,
             'name'        => $method->name,

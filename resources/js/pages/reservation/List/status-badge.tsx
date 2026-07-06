@@ -1,4 +1,4 @@
-import type { ReservationStatus } from "@/types/reservation";
+import type { ReservationStatus } from '@/types/consultation';
 
 const STATUS_STYLES: Record<ReservationStatus, string> = {
     pending_payment:

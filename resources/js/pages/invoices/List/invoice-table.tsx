@@ -1,23 +1,24 @@
-import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
-
-export interface Invoice {
-    id: number;
-    reference: string;
-    date: string;
-    amount: string;
-    status: 'paid' | 'unpaid';
-}
+import type { Invoice } from '@/types/invoice';
 
 const STATUS_STYLES: Record<Invoice['status'], string> = {
     paid: 'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800/60',
-    unpaid: 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/60',
+
+    pending:
+        'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/60',
+
+    expired:
+        'bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-900/30 dark:text-gray-400 dark:border-gray-700',
+
+    failed: 'bg-red-50 text-red-600 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800/60',
+
+    cancelled:
+        'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900/30 dark:text-slate-400 dark:border-slate-700',
+
+    refunded:
+        'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800/60',
 };
 
-const STATUS_LABEL: Record<Invoice['status'], string> = {
-    paid: 'Lunas',
-    unpaid: 'Menunggu Pembayaran',
-};
 
 export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
     return (
@@ -46,7 +47,7 @@ export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
                                 </Link>
                             </td>
                             <td className="px-4 py-3 text-muted-foreground">
-                                {inv.date}
+                                {inv.created_at}
                             </td>
                             <td className="px-4 py-3 font-serif text-foreground">
                                 {inv.amount}
@@ -55,7 +56,7 @@ export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
                                 <span
                                     className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${STATUS_STYLES[inv.status]}`}
                                 >
-                                    {STATUS_LABEL[inv.status]}
+                                    {inv.status_label}
                                 </span>
                             </td>
                         </tr>

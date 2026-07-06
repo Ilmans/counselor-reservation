@@ -3,8 +3,9 @@ import type { ReactNode } from 'react';
 import DashboardWrapper from '@/layouts/dashboard/dashboard-wrapper';
 import Greeting from './components/greeting';
 import StatCard from './components/stat-card';
+import type { CounselorDashboardProps } from './type';
 
-function Index() {
+function Index({ statistics, rating }: CounselorDashboardProps) {
     return (
         <main className="mx-auto w-full max-w-6xl flex-1 space-y-6 px-4 py-5 md:space-y-7 md:px-7 md:py-7">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -19,30 +20,34 @@ function Index() {
                     Tinjau konfirmasi
                 </button>
             </div>
+
             <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
                 <StatCard
                     icon={ClipboardList}
                     label="Sesi Hari Ini"
-                    value="4"
-                    hint="2 online · 2 tatap muka"
+                    value={statistics.today_sessions}
+                    hint={`${statistics.today_online_sessions} online · ${statistics.today_offline_sessions} tatap muka`}
                 />
+
                 <StatCard
                     icon={Clock}
                     label="Menunggu Konfirmasi"
-                    value="3"
+                    value={statistics.pending_confirmation_sessions}
                     hint="Perlu tindakan Anda"
                 />
+
                 <StatCard
                     icon={CheckCircle2}
                     label="Sesi Selesai Bulan Ini"
-                    value="42"
-                    hint="dari 50 sesi terjadwal"
+                    value={statistics.completed_this_month}
+                    hint={`dari ${statistics.scheduled_this_month} sesi terjadwal`}
                 />
+
                 <StatCard
                     icon={Star}
                     label="Rating Rata-rata"
-                    value="4.9"
-                    hint="dari 96 ulasan"
+                    value={rating.average_rating}
+                    hint={`dari ${rating.total_reviews} ulasan`}
                 />
             </div>
         </main>
@@ -50,6 +55,7 @@ function Index() {
 }
 
 export default Index;
+
 Index.layout = (page: ReactNode) => (
     <DashboardWrapper children={page} activeKey="dashboard" />
 );

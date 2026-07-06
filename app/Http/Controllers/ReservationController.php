@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\CounselorScheduleService;
-use App\Services\CounselorService;
 use App\Services\ReservationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

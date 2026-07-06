@@ -14,9 +14,9 @@ class ConsultationRepository
             ->where('user_id', $userId)
             ->selectRaw("
             COUNT(*) as total_sessions,
-            SUM(status IN ('pending_payment','pending_confirmation','confirmed','in_queue','in_progress')) as upcoming_sessions,
-            SUM(status = 'completed') as completed_sessions,
-            SUM(status IN ('cancelled','rejected')) as cancelled_sessions,
+            COALESCE(SUM(status IN ('pending_payment','pending_confirmation','confirmed','in_queue','in_progress')), 0) as upcoming_sessions,
+            COALESCE(SUM(status = 'completed'), 0) as completed_sessions,
+            COALESCE(SUM(status IN ('cancelled','rejected')), 0) as cancelled_sessions,
             COUNT(DISTINCT counselor_id) as total_counselors
         ")
             ->first()

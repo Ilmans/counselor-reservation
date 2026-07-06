@@ -12,10 +12,11 @@ export type BaseCounselor = {
     next_schedule: Schedule;
     consultations_count: number;
     feedbacks_avg_rating: number;
+    specialization: string;
 };
 export type Counselor = BaseCounselor & {
     categories: Category[];
-    specialization: Specialization;
+
 };
 
 export type CounselorDetailPage = BaseCounselor &

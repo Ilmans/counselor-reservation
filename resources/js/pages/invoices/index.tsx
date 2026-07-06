@@ -1,9 +1,11 @@
-import { Head, Link, router } from '@inertiajs/react';
 import { FormEvent, ReactNode, useState } from 'react';
+import { Head, Link, router } from '@inertiajs/react';
+import { Invoice, InvoiceTable } from './List/invoice-table';
 
-import Wrapper from '@/layouts/wrapper';
-import  type { Invoice, InvoiceTable } from './List/invoice-table';
 import InvoiceController from '@/actions/App/Http/Controllers/InvoiceController';
+import { EmptyState } from '@/components/empty-state';
+import { UserSidebar } from '@/layouts/user-sidebar';
+import Wrapper from '@/layouts/wrapper';
 
 interface PaginationLink {
     url: string | null;
@@ -31,7 +33,8 @@ export default function InvoiceIndex({ invoices, filters }: Props) {
     function handleSearch(e: FormEvent) {
         e.preventDefault();
         router.get(
-            InvoiceController.index.url({ : search || undefined }),
+            InvoiceController.index.url(),
+            { search: search || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
     }
@@ -77,7 +80,7 @@ export default function InvoiceIndex({ invoices, filters }: Props) {
                                         onClick={() => {
                                             setSearch('');
                                             router.get(
-                                                route('invoices.index'),
+                                                InvoiceController.index.url(),
                                                 {},
                                                 {
                                                     preserveState: true,

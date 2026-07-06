@@ -8,6 +8,10 @@ use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 
+Route::get('/test',function (){
+    return inertia('tes');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name("login");
     Route::post('/login', [LoginController::class, 'store']);

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('counselors', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
             $table->foreignId("specialization_id")
                 ->constrained("specializations")
                 ->restrictOnDelete();

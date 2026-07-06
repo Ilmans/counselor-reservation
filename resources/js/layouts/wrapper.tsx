@@ -53,7 +53,6 @@ export default function Wrapper({ main }: any) {
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <Toaster position="bottom-right" />
-
             <div className="mx-auto flex min-h-screen max-w-6xl flex-col bg-background text-foreground">
                 <Header />
                 <div className="flex-1">{main}</div>

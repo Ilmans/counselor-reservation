@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $now = Carbon::now();
 
         DB::table('users')->insert([
+            [
+                'name'          => 'Admin Konselor',
+                'email'         => 'admin@gmail.com',
+                'whatsapp'      => '081234567000',
+                'image'         => null,
+                'age'           => 30,
+                'gender'        => "L",
+                'role'          => 'admin',
+                'password'      => Hash::make('password'),
+                'created_at'    => $now,
+                'updated_at'    => $now,
+            ],
             [
                 'name'          => 'Budi Santoso',
                 'email'         => 'user@gmail.com',
@@ -25,6 +34,7 @@ class UserSeeder extends Seeder
                 'image'         => null,
                 'age'           => 28,
                 'gender'        => 'L',
+                'role'          => 'user',
                 'password'      => Hash::make('password'),
                 'created_at'    => $now,
                 'updated_at'    => $now,
@@ -36,6 +46,7 @@ class UserSeeder extends Seeder
                 'image'         => null,
                 'age'           => 25,
                 'gender'        => 'P',
+                'role'          => 'user',
                 'password'      => Hash::make('password123'),
                 'created_at'    => $now,
                 'updated_at'    => $now,
@@ -47,6 +58,7 @@ class UserSeeder extends Seeder
                 'image'         => null,
                 'age'           => 30,
                 'gender'        => 'L',
+                'role'          => 'user',
                 'password'      => Hash::make('password123'),
                 'created_at'    => $now,
                 'updated_at'    => $now,
@@ -58,6 +70,7 @@ class UserSeeder extends Seeder
                 'image'         => null,
                 'age'           => 27,
                 'gender'        => 'P',
+                'role'          => 'user',
                 'password'      => Hash::make('password123'),
                 'created_at'    => $now,
                 'updated_at'    => $now,
@@ -69,6 +82,7 @@ class UserSeeder extends Seeder
                 'image'         => null,
                 'age'           => 24,
                 'gender'        => 'L',
+                'role'          => 'user',
                 'password'      => Hash::make('password123'),
                 'created_at'    => $now,
                 'updated_at'    => $now,

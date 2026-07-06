@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ConseulorSeeder extends Seeder
 {
@@ -231,9 +232,12 @@ class ConseulorSeeder extends Seeder
         ];
 
         $addressIds = [];
+        $userIds = [];
+
         foreach ($counselors as $counselor) {
             $addressData = $counselor['address'];
 
+            // Insert alamat
             DB::table('counselor_addresses')->insert([
                 'name' => "Klinik " . $counselor['name'],
                 'address' => $addressData['address'],
@@ -244,22 +248,35 @@ class ConseulorSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
-
-            // Ambil address_id terakhir yang diinsert
             $addressIds[$counselor['id']] = DB::table('counselor_addresses')->max('id');
+
+            // Insert user untuk konselor ini
+            $userId = DB::table('users')->insertGetId([
+                'name'       => $counselor['name'],
+                'email'      => $counselor['email'],
+                'whatsapp'   => $counselor['whatsapp'],
+                'image'      => null,
+                'age'        => 20,
+                'gender'     => "L",
+                'role'       => 'counselor',
+                'password'   => Hash::make('password'), // password default, bisa diganti nanti
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+            $userIds[$counselor['id']] = $userId;
         }
 
-        // Insert counselors dengan address_id
+        // Insert counselors dengan address_id & user_id
         foreach ($counselors as $counselor) {
             unset($counselor['address']);
 
             DB::table('counselors')->insert(array_merge($counselor, [
                 'address_id' => $addressIds[$counselor['id']],
+                'user_id'    => $userIds[$counselor['id']],
                 'created_at' => $now,
                 'updated_at' => $now,
             ]));
         }
-
 
         DB::table('counselor_categories')->insert([
             ['counselor_id' => 1,  'category_id' => 1],

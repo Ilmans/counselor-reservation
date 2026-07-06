@@ -1,6 +1,7 @@
 import { Search, Menu } from 'lucide-react';
 import ThemeSwitcher from '../ThemeSwitcher';
 import NotificationBell from './notification-bell';
+import { usePage } from '@inertiajs/react';
 
 // Header.jsx
 // Judul, tanggal, dan placeholder pencarian di-hardcode di sini.
@@ -11,11 +12,7 @@ export default function DashboardHeader({
     notifOpen,
     onToggleNotif,
 }: any) {
-    const today = new Date().toLocaleDateString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-    });
+    const { app } = usePage().props;
 
     return (
         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-card px-4 py-3.5 md:gap-4 md:px-7 md:py-4">
@@ -35,7 +32,7 @@ export default function DashboardHeader({
                         Dashboard
                     </p>
                     <p className="truncate text-[11px] text-muted-foreground capitalize">
-                        {today}
+                        {app.date.day},{app.date.date},{app.date.time}
                     </p>
                 </div>
             )}

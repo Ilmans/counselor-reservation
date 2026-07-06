@@ -10,6 +10,10 @@ class Counselor extends Model
 {
     protected $appends = ['next_schedule'];
 
+
+    public function user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
     public function specialization()
     {
         return $this->belongsTo(Specialization::class);

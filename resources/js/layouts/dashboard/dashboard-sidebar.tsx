@@ -29,7 +29,8 @@ export default function DashboardSidebar({
 }: any) {
     const { props } = usePage();
     const user = props?.auth.user;
-    
+    const app = props.app;
+
     return (
         <aside
             className={` ${isDesktop ? 'sticky' : 'fixed'} top-0 z-40 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card transition-transform duration-300 ${visible ? 'translate-x-0' : '-translate-x-full'} `}
@@ -41,7 +42,7 @@ export default function DashboardSidebar({
                         <span className="font-serif text-sm">T</span>
                     </div>
                     <span className="truncate font-serif text-base">
-                        Tenang Aja
+                        {app.name}
                     </span>
                 </div>
                 {!isDesktop && (
@@ -94,7 +95,7 @@ export default function DashboardSidebar({
                             {user.name}
                         </p>
                         <p className="truncate text-xs text-muted-foreground">
-                            Psikolog Klinis · Tersedia
+                            {user.counselor.specialization.name}
                         </p>
                     </div>
                 </div>

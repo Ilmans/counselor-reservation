@@ -35,4 +35,8 @@ class User extends Authenticatable
     {
         return $this->hasMany("consultations");
     }
+
+    public function counselor(){
+        return $this->hasOne(Counselor::class);
+    }
 }

@@ -4,10 +4,15 @@ export type User = {
     email: string;
     whatsapp: string;
     age: string;
-    gender : string;
+    gender: string;
     avatar?: string;
-    role : string;
+    role: string;
     email_verified_at: string | null;
+    counselor: {
+        specialization: {
+            name: string;
+        };
+    };
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

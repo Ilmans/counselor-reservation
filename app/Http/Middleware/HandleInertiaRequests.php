@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Repositories\CounselorRepository;
+use App\Support\AppContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use Inertia\Middleware;
@@ -43,12 +44,13 @@ class HandleInertiaRequests extends Middleware
         $categories = $repo->getAllCategories();
 
 
-
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
+            'app' => AppContext::make(),
             'auth' => [
-                'user' => $request->user(),
+                'user' => fn() => $request->user()?->loadMissing([
+                    'counselor.specialization:id,name',
+                ]),
             ],
             'categories' => $categories,
             'alert' => fn() => $request->session()->get('alert'),

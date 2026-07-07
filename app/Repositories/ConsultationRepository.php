@@ -81,15 +81,13 @@ class ConsultationRepository
     }
 
 
-    // logic
 
+    // needs for schedule formatter, get only date and time betweenspesific start and end date
     public function getCounselorConsultationsBetween(int $counselorId, Carbon $from, Carbon $to)
     {
-        return Consultation::where('counselor_id', $counselorId)
-            ->whereBetween('consultation_date', [
-                $from->toDateString(),
-                $to->toDateString(),
-            ])
+        return Consultation::query()->select(['consultation_date','estimated_time','status',])
+            ->where('counselor_id', $counselorId)
+            ->whereBetween('consultation_date', [ $from->toDateString(), $to->toDateString(), ])
             ->whereNotIn('status', ['cancelled', 'rejected'])
             ->get();
     }

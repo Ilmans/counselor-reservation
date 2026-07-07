@@ -31,7 +31,7 @@ const alertIcons: Record<AlertVariant, React.ElementType> = {
     info: Info,
 };
 
-export function Alert({
+export function AlertCard({
     variant = 'info',
     children,
     onClose,

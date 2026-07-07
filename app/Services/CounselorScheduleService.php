@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Helpers\ScheduleHelpers;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\CounselorRepository;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\ScheduleRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -18,8 +18,42 @@ class CounselorScheduleService
         protected CounselorRepository $counselorRepository,
         protected ConsultationRepository $consultationRepository,
         protected InvoiceRepository $invoiceRepository,
+        protected ScheduleRepository $scheduleRepository,
         protected UserRepository $userRepo
     ) {}
+
+    public function getSimpleCounselorScheduleOverview(int $counselorId)
+    {
+        $startDate = Carbon::today();
+        $endDate = $startDate->copy()->addWeeks(3);
+        $activeSchedules = $this->scheduleRepository->getActiveScheduleByCounselor($counselorId);
+
+        $consultations = $this->consultationRepository
+            ->getCounselorConsultationsBetween($counselorId, $startDate, $endDate)
+            ->groupBy(fn($item) => Carbon::parse($item->consultation_date)->toDateString());
+
+        $schedules = [];
+
+        foreach (CarbonPeriod::create($startDate, $endDate) as $date) {
+            $matched = $activeSchedules->filter(fn($s) => $s->day_of_week == $date->format('N'));
+            if ($matched->isEmpty()) {
+                continue;
+            }
+            $dateKey = $date->toDateString();
+            $bookedConsultations = $consultations[$dateKey] ?? collect();
+            $total = $bookedConsultations->count();
+            $schedules[$dateKey] = [
+                'totalBooked' => $total,
+                'method'     => $matched->first()->method,
+            ];
+        }
+
+        return [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'schedule' => $schedules
+        ];
+    }
 
     public function getCounselorScheduleOverview(string $slug): array
     {
@@ -27,12 +61,6 @@ class CounselorScheduleService
         $schedules = $counselor->schedules()->where('is_active', true)->get();
         $startDate = Carbon::today();
 
-        if (!$startDate) {
-            return [
-                'counselor' => $counselor,
-                'overview'  => [],
-            ];
-        }
         $endDate = $startDate->copy()->addWeeks(3);
         $consultations = $this->consultationRepository
             ->getCounselorConsultationsBetween($counselor->id, $startDate, $endDate)
@@ -76,7 +104,7 @@ class CounselorScheduleService
             $slots = $times->map(function (string $time) use ($dateKey, $bookedTimes) {
                 $slotDateTime = Carbon::parse("{$dateKey} {$time}");
                 $booked = in_array($time, $bookedTimes, true);
-                $reason = $booked ? 'Telah dibooking' : ($slotDateTime->isPast() ? 'Terlewat' : ($slotDateTime->lte(now()->addHour()) ? 'Terlalu dekat': null));
+                $reason = $booked ? 'Telah dibooking' : ($slotDateTime->isPast() ? 'Terlewat' : ($slotDateTime->lte(now()->addHour()) ? 'Terlalu dekat' : null));
                 return [
                     'time'    => $time,
                     'enabled' => $reason === null,
@@ -90,7 +118,7 @@ class CounselorScheduleService
             $results[$dateKey] = [
                 'slots'      => $slots,
                 'method'     => $matched->first()->method,
-                'percentage' => $total > 0 ? round((count($bookedTimes) / $total) * 100): 0,
+                'percentage' => $total > 0 ? round((count($bookedTimes) / $total) * 100) : 0,
             ];
         }
 

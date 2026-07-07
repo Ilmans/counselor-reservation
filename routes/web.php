@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::get('/counselor/dashboard', [DashboardController::class, 'index']);
-    Route::get('/counselor/consultations',[ConsultationController::class,'index']);
+    Route::get('/counselor/consultations', [ConsultationController::class, 'index']);
     Route::get('/counselor/consultations/{reference}/detail', [ConsultationController::class, 'show']);
 
-    Route::get('/counselor/schedules',[ScheduleController::class,'index']);
+    Route::get('/counselor/schedules', [ScheduleController::class, 'index']);
+    Route::put('/counselor/schedules', [ScheduleController::class, 'update']);
 });
-Route::get('/tes',function(){
+Route::get('/tes', function () {
     return inertia('tes');
 });
 Route::middleware('guest')->group(function () {
@@ -28,7 +29,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-     Route::get('/my-reservations',[ReservationController::class,'index']);
+    Route::get('/my-reservations', [ReservationController::class, 'index']);
     Route::get('/my-invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/my-reservations/{reference}', [ReservationController::class, 'show'])->name('reservations.detail');
     Route::get('/reservations/{reference}/summary-pdf', [ConsultationSummaryController::class, 'download']);
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::post('/logout', [LoginController::class, 'destroy']);
 
-Route::get('/',[HomeController::class,'index']);
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/about-us', [HomeController::class, 'about']);
 Route::get('/counselors/{category?}', [CounselorController::class, 'index']);
 Route::get('/psikolog/{couonselor?}', [CounselorController::class, 'details']);

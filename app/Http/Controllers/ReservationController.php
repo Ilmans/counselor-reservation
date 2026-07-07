@@ -11,7 +11,7 @@ class ReservationController extends Controller
 {
     private const ALLOWED_STATUSES = ['upcoming', 'completed', 'cancelled', 'all'];
 
-    public function __construct(protected ReservationService $service,protected CounselorScheduleService $CounselorScheduleService) {}
+    public function __construct(protected ReservationService $service, protected CounselorScheduleService $CounselorScheduleService) {}
 
     public function index(Request $request)
     {
@@ -26,9 +26,10 @@ class ReservationController extends Controller
     public function create($counselor)
     {
         $data = $this->CounselorScheduleService->getCounselorScheduleOverview($counselor);
+
         return inertia('reservation/create', [
             'counselor'    => $data['counselor'],
-            'availability' => $data['overview'],
+            'overview' => $data['overview'],
         ]);
     }
 

@@ -30,4 +30,8 @@ class ConsultationController extends Controller
         );
         return inertia('Counselor/consultation/index', compact('consultations', 'filters'));
     }
+
+    public function show (Request $request){
+        return inertia('Counselor/consultation/show');
+    }
 }

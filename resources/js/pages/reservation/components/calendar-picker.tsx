@@ -1,20 +1,21 @@
 import { useMemo } from 'react';
 
-import type { AvaibilityItem } from '@/types/schedule';
+import type {  ScheduleOverview } from '@/types/schedule';
 import { DAY_NAMES } from '@/utils/constant';
 import { buildCalendarWeeks, buildMonthLabel, toDateStr } from '@/utils/helper';
 
 type Props = {
-    availability: AvaibilityItem;
+    overview: ScheduleOverview;
     selectedDate: string | null;
     onSelect: (date: string) => void;
 };
 
 export default function CalendarPicker({
-    availability,
+    overview,
     selectedDate,
     onSelect,
 }: Props) {
+
     const today = useMemo(() => {
         const d = new Date();
         d.setHours(0, 0, 0, 0);
@@ -23,23 +24,23 @@ export default function CalendarPicker({
     }, []);
 
     const availableDates = useMemo(
-        () => new Set(Object.keys(availability)),
-        [availability],
+        () => new Set(Object.keys(overview.avaibility)),
+        [overview.avaibility],
     );
 
     const { weeks, monthLabel, rangeStart, rangeEnd } = useMemo(() => {
-        if (!Object.keys(availability).length) {
+        if (!Object.keys(overview.avaibility).length) {
             return {
                 weeks: [],
                 monthLabel: '',
-                rangeStart: null,
-                rangeEnd: null,
+                rangeStart: overview.startDate,
+                rangeEnd: overview.endDate,
             };
         }
 
-        const dates = Object.keys(availability).sort();
-        const start = new Date(dates[0] + 'T00:00:00');
-        const end = new Date(dates[dates.length - 1] + 'T00:00:00');
+
+        const start = new Date(overview.startDate);
+        const end = new Date(overview.endDate);
 
         return {
             weeks: buildCalendarWeeks(start, end),
@@ -47,7 +48,7 @@ export default function CalendarPicker({
             rangeStart: start,
             rangeEnd: end,
         };
-    }, [availability]);
+    }, [overview.avaibility]);
 
     return (
         <section className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800/80 dark:bg-[#111113]">
@@ -84,7 +85,7 @@ export default function CalendarPicker({
                         {week.map((date, di) => {
                             const dateStr = toDateStr(date);
                             const percentage =
-                                availability[dateStr]?.percentage;
+                                overview.avaibility[dateStr]?.percentage;
                             const pct = Number(percentage);
 
                             const inRange =

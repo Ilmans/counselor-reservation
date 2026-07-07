@@ -4,7 +4,7 @@ import CounselorController from '@/actions/App/Http/Controllers/CounselorControl
 import Breadcrumb from '@/components/breadcumb';
 import Wrapper from '@/layouts/wrapper';
 import type { CounselorDetailPage } from '@/types/counselor';
-import type { AvaibilityItem } from '@/types/schedule';
+import type {  ScheduleOverview } from '@/types/schedule';
 import CalendarPicker from './components/calendar-picker';
 import CounselorCard from './components/cunselor-card';
 import Form from './components/form';
@@ -14,19 +14,20 @@ import TimeSlotPicker from './components/time-slot-picker';
 
 type Props = {
     counselor: CounselorDetailPage;
-    availability: AvaibilityItem;
+    overview: ScheduleOverview;
 };
 
-export default function Create({ counselor, availability }: Props) {
+
+export default function Create({ counselor, overview }: Props) {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
     const [sessionMode, setSessionMode] = useState<'online' | 'offline' | null>(
         null,
     );
-    const current = selectedDate ? availability[selectedDate] : null;
+    const current = selectedDate ? overview.avaibility[selectedDate] : null;
 
     function handleSelectDate(date: string) {
-        const item = availability[date];
+        const item = overview.avaibility[date];
         setSelectedDate(date);
         setSelectedSlot(null);
         setSessionMode(item?.method !== 'both' ? (item?.method ?? null) : null);
@@ -66,7 +67,7 @@ export default function Create({ counselor, availability }: Props) {
 
                     <main className="flex flex-col gap-5 lg:col-span-2">
                         <CalendarPicker
-                            availability={availability}
+                            overview={overview}
                             selectedDate={selectedDate}
                             onSelect={handleSelectDate}
                         />
@@ -74,7 +75,6 @@ export default function Create({ counselor, availability }: Props) {
                             <TimeSlotPicker
                                 date={selectedDate}
                                 slots={current.slots}
-                                bookedTimes={current.booked_times}
                                 selected={selectedSlot}
                                 onSelect={setSelectedSlot}
                             />

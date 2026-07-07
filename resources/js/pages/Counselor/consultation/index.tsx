@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import  {
+import {
     Consultation,
     CONSULTATION_STATUS_CLASSES,
     PaginatedData,
@@ -35,7 +35,6 @@ interface Props {
 }
 
 function Index({ consultations, filters }: Props) {
-
     return (
         <>
             <Breadcrumb items={breadcumbs} />
@@ -108,7 +107,9 @@ function Index({ consultations, filters }: Props) {
 
                                     <Table.Cell align="right">
                                         <Link
-                                            href={`/consultations/${row.reference}`}
+                                            href={ConsultationController.show.url(
+                                                { reference: row.reference },
+                                            )}
                                             className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                                         >
                                             <Eye className="h-3.5 w-3.5" />

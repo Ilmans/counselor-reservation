@@ -1,5 +1,6 @@
 import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
 import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
+import ScheduleController from '@/actions/App/Http/Controllers/Counselor/ScheduleController';
 import { Link, usePage } from '@inertiajs/react';
 import {
     Home,
@@ -16,8 +17,8 @@ import {
 const NAV_ITEMS = [
     { key: 'dashboard', label: 'Beranda', icon: Home  , url : DashboardController.index.url()},
     { key: 'consultations', label: 'Konsultasi', icon: ClipboardList, badge: 3 ,url : ConsultationController.index.url()},
-    { key: 'jadwal', label: 'Jadwal Praktik', icon: CalendarDays },
-    { key: 'klien', label: 'Klien', icon: Users },
+    { key: 'schedule', label: 'Jadwal Praktik', icon: CalendarDays,url : ScheduleController.index.url()  },
+    // { key: 'klien', label: 'Klien', icon: Users },
     { key: 'ulasan', label: 'Ulasan', icon: Star },
     { key: 'keuangan', label: 'Keuangan', icon: Wallet },
     { key: 'profil', label: 'Profil & Layanan', icon: Settings },

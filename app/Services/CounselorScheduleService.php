@@ -25,7 +25,7 @@ class CounselorScheduleService
     {
         $counselor = $this->counselorRepository->getCounselorBySlug($slug);
         $schedules = $counselor->schedules()->where('is_active', true)->get();
-        $startDate = ScheduleHelpers::findNearestScheduleDate($schedules);
+        $startDate = Carbon::today();
 
         if (!$startDate) {
             return [
@@ -38,49 +38,65 @@ class CounselorScheduleService
             ->getCounselorConsultationsBetween($counselor->id, $startDate, $endDate)
             ->groupBy(fn($item) => Carbon::parse($item->consultation_date)->toDateString());
 
-        $overview = $this->buildOverview($schedules, $consultations, $startDate, $endDate);
+        $avaibilityDate = $this->formatAvaibilitySchedule($schedules, $consultations, $startDate, $endDate);
 
         return [
             'counselor' => $counselor,
-            'overview'  => $overview,
+            'overview'  => [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'avaibility' => $avaibilityDate,
+            ]
         ];
     }
 
 
-    private function buildOverview($schedules, $consultations, Carbon $startDate, Carbon $endDate): array
+    private function formatAvaibilitySchedule($schedules, $consultations, Carbon $startDate, Carbon $endDate): array
     {
         $results = [];
 
         foreach (CarbonPeriod::create($startDate, $endDate) as $date) {
             $matched = $schedules->filter(fn($s) => $s->day_of_week == $date->format('N'));
-            if ($matched->isEmpty()) continue;
+            if ($matched->isEmpty()) {
+                continue;
+            }
 
             $dateKey = $date->toDateString();
-
-            $slots = $matched
+            $times = $matched
                 ->flatMap(fn($s) => $this->generateTimeSlots($s->open_time, $s->close_time, 60))
-                ->unique()->sort()->values();
-
+                ->unique()
+                ->sort()
+                ->values();
             $bookedConsultations = $consultations[$dateKey] ?? collect();
             $bookedTimes = $bookedConsultations
                 ->pluck('estimated_time')
-                ->map(fn($t) => Carbon::parse($t)->format('H:i'))
-                ->values()->toArray();
+                ->map(fn($time) => Carbon::parse($time)->format('H:i'))
+                ->values()
+                ->toArray();
+            $slots = $times->map(function (string $time) use ($dateKey, $bookedTimes) {
+                $slotDateTime = Carbon::parse("{$dateKey} {$time}");
+                $booked = in_array($time, $bookedTimes, true);
+                $reason = $booked ? 'Telah dibooking' : ($slotDateTime->isPast() ? 'Terlewat' : ($slotDateTime->lte(now()->addHour()) ? 'Terlalu dekat': null));
+                return [
+                    'time'    => $time,
+                    'enabled' => $reason === null,
+                    'booked'  => $booked,
+                    'reason'  => $reason,
+                ];
+            })->values();
 
             $total = $slots->count();
 
             $results[$dateKey] = [
-                'total'        => $total,
-                'booked'       => $bookedConsultations->count(),
-                'booked_times' => $bookedTimes,
-                'slots'        => $slots->toArray(),
-                'method'       => $matched->first()->method,
-                'percentage'   => $total > 0 ? round(($bookedConsultations->count() / $total) * 100) : 0,
+                'slots'      => $slots,
+                'method'     => $matched->first()->method,
+                'percentage' => $total > 0 ? round((count($bookedTimes) / $total) * 100): 0,
             ];
         }
 
         return $results;
     }
+
 
     private function generateTimeSlots(string $openTime, string $closeTime, int $intervalMinutes = 60): array
     {

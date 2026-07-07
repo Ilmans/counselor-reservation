@@ -54,13 +54,21 @@ export interface ConsultationLocation {
     maps_url: string | null;
 }
 
-export interface ConsultationNotes {
-    client: string | null;
-    progress: string | null;
-    post_session: string | null;
-    cancellation_reason: string | null;
-}
+export type ConsultationNoteType =
+    | 'pre_session'
+    | 'session'
+    | 'summary'
+    | 'follow_up';
 
+export type ConsultationNoteVisibility = 'shared' | 'counselor_only';
+
+export interface ConsultationNote {
+    id: number;
+    type: ConsultationNoteType;
+    visibility: ConsultationNoteVisibility;
+    content: string;
+    created_at: string;
+}
 // hasil ConsultationDetailResource -> extends semua field Consultation (list) + tambahan berikut
 export interface ConsultationDetail extends Consultation {
     status_group: ConsultationTabKey | 'all';
@@ -81,7 +89,7 @@ export interface ConsultationDetail extends Consultation {
     location?: ConsultationLocation | null;
 
     // di detail, 'notes' di-override jadi object (bukan string kayak di list)
-    notes: ConsultationNotes | null;
+    notes: ConsultationNote[];
 
     invoice?: Invoice | null;
     needs_payment?: boolean;

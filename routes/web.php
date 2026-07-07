@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\DashboardController;
 use App\Http\Controllers\CounselorController;
@@ -26,6 +27,7 @@ Route::middleware('auth')->group(function () {
      Route::get('/my-reservations',[ReservationController::class,'index']);
     Route::get('/my-invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/my-reservations/{reference}', [ReservationController::class, 'show'])->name('reservations.detail');
+    Route::get('/reservations/{reference}/summary-pdf', [ConsultationSummaryController::class, 'download']);
 
     Route::post('/invoice/{invoice}/payment-method', [InvoiceController::class, 'updatePaymentMethod']);
     Route::get('/invoice/{reference}', [InvoiceController::class, 'show'])->name('invoices.show');

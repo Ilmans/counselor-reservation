@@ -24,15 +24,15 @@ class ConsultationRepository
             ?->toArray() ?? [];
     }
 
-    public function findDetailForUser($reference, int $userId): ?Consultation
+    public function findByReference($reference): ?Consultation
     {
         return Consultation::with([
+            'user',
             'counselor.specialization',
             'counselor.address',
             'notes',
             'invoice',
         ])->where('reference', $reference)
-            ->where('user_id', $userId)
             ->first();
     }
 
@@ -81,6 +81,7 @@ class ConsultationRepository
     }
 
 
+    // logic
 
     public function getCounselorConsultationsBetween(int $counselorId, Carbon $from, Carbon $to)
     {
@@ -115,6 +116,7 @@ class ConsultationRepository
         return Consultation::where('reference', $reference)->exists();
     }
 
+    //input
     public function create($data)
     {
         $data['reference'] = $this->generateReference();

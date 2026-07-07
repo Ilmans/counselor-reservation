@@ -5,6 +5,7 @@ import SelectFilter from '@/components/interactive/select-filter';
 
 function Filters({ filters }: any) {
     return (
+        
         <div className="flex w-full items-center gap-2 sm:w-auto sm:flex-shrink-0">
             <SelectFilter
                 name="status"

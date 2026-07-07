@@ -4,7 +4,7 @@ import  {
     CONSULTATION_STATUS_CLASSES,
     PaginatedData,
 } from '@/types/consultation';
-import { Search } from 'lucide-react';
+import { Eye, Search } from 'lucide-react';
 import type { ReactNode } from 'react';
 import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
 import Breadcrumb from '@/components/breadcumb';
@@ -40,7 +40,6 @@ function Index({ consultations, filters }: Props) {
         <>
             <Breadcrumb items={breadcumbs} />
             <div className="rounded-xl border border-border bg-card">
-                {/* Toolbar: search & filter (tampilan saja, belum fungsional) */}
                 <div className="border-b border-border p-4">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <div className="relative min-w-0 flex-1 sm:max-w-xs">
@@ -110,8 +109,9 @@ function Index({ consultations, filters }: Props) {
                                     <Table.Cell align="right">
                                         <Link
                                             href={`/consultations/${row.reference}`}
-                                            className="text-[12px] font-medium text-primary hover:underline"
+                                            className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                                         >
+                                            <Eye className="h-3.5 w-3.5" />
                                             Detail
                                         </Link>
                                     </Table.Cell>

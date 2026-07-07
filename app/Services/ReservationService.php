@@ -42,8 +42,8 @@ class ReservationService
 
     public function getReservationDetail($reference, int $userId): array
     {
-        $consultation = $this->consultationRepository->findDetailForUser($reference, $userId);
-        abort_if(!$consultation, 404);
+        $consultation = $this->consultationRepository->findByReference($reference, $userId);
+        abort_if(!$consultation || $consultation->user_id != Auth::id(), 404);
         return [
             'reservation' => new ConsultationDetailResource($consultation)
         ];
@@ -106,7 +106,7 @@ class ReservationService
 
         if (!empty($data['notes'])) {
             $consultation->notes()->create([
-                'type'    => 'client_pre_sesi',
+                'type'    => 'pre_session',
                 'content' => $data['notes'],
             ]);
         }

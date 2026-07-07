@@ -49,12 +49,15 @@ class ConsultationDetailResource extends ConsultationListResource
             ),
 
             // di sini 'notes' di-override jadi object lengkap (parent cuma string client note)
-            'notes' => $this->whenLoaded('notes', fn() => [
-                'client'              => $this->notes->firstWhere('type', 'client_pre_sesi')?->content,
-                'progress'            => $isConfirmedOrBeyond ? $this->notes->firstWhere('type', 'progress')?->content : null,
-                'post_session'        => $this->status === 'completed' ? $this->notes->firstWhere('type', 'pasca_sesi')?->content : null,
-                'cancellation_reason' => $isCancelledLike ? $this->notes->firstWhere('type', 'cancel')?->content : null,
-            ]),
+            'notes' => $this->whenLoaded('notes',fn() =>
+                $this->notes->map(fn($note) => [
+                    'id'         => $note->id,
+                    'type'       => $note->type,
+                    'visibility' => $note->visibility,
+                    'content'    => $note->content,
+                    'created_at' => $note->created_at,
+                ])
+            ),
 
             'invoice' => $this->whenLoaded(
                 'invoice',

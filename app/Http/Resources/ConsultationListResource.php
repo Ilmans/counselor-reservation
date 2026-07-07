@@ -46,7 +46,7 @@ class ConsultationListResource extends JsonResource
             'pra_note' => $this->whenLoaded(
                 'notes',
                 fn() =>
-                $this->notes->firstWhere('type', 'client_pre_sesi')?->content
+                $this->notes->firstWhere('type', 'pre_session')?->content
             ),
         ];
     }

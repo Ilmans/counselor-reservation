@@ -14,11 +14,23 @@ return new class extends Migration
         Schema::create('consultation_notes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId("consultation_id")
-                ->constrained("consultations")
+            $table->foreignId('consultation_id')
+                ->constrained()
                 ->cascadeOnDelete();
-            $table->enum("type",['client_pre_sesi','progress','pasca_sesi','cancel']);
-            $table->longText("content")->nullable();
+
+            $table->enum('type', [
+                'pre_session', // Keluhan awal / informasi sebelum konsultasi dimulai
+                'session',     // Catatan proses konsultasi saat sesi berlangsung
+                'summary',     // Ringkasan hasil konsultasi dan saran untuk klien
+                'follow_up',   // Catatan tindak lanjut setelah sesi selesai
+            ]);
+
+            $table->enum('visibility', [
+                'shared',          // Bisa dilihat user dan konselor
+                'counselor_only',  // Hanya konselor
+            ])->default('shared');
+
+            $table->longText('content');
 
             $table->timestamps();
         });

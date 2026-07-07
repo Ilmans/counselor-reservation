@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\DashboardController;
+use App\Http\Controllers\Counselor\ReviewController;
 use App\Http\Controllers\Counselor\ScheduleController;
 use App\Http\Controllers\CounselorController;
 use App\Http\Controllers\HomeController;
@@ -19,6 +20,8 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
 
     Route::get('/counselor/schedules', [ScheduleController::class, 'index']);
     Route::put('/counselor/schedules', [ScheduleController::class, 'update']);
+
+    Route::get('/counselor/reviews', [ReviewController::class, 'index']);
 });
 Route::get('/tes', function () {
     return inertia('tes');
@@ -33,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/my-reservations/{reference}', [ReservationController::class, 'show'])->name('reservations.detail');
     Route::get('/reservations/{reference}/summary-pdf', [ConsultationSummaryController::class, 'download']);
+    Route::post('/reservations/{reference}/review', [ConsultationController::class, 'storeReview']);
 
     Route::post('/invoice/{invoice}/payment-method', [InvoiceController::class, 'updatePaymentMethod']);
     Route::get('/invoice/{reference}', [InvoiceController::class, 'show'])->name('invoices.show');

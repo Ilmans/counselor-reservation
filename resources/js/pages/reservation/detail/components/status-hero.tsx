@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight, Star, X } from 'lucide-react';
 import type { ConsultationDetail } from '@/types/consultation';
+import type { Review } from '@/types/review';
 import {
     JOURNEY,
     journeyIndex,
@@ -14,10 +15,12 @@ function StatusHero({
     r,
     onOpenCancel,
     onOpenReview,
+    feedback,
 }: {
     r: ConsultationDetail;
     onOpenCancel: () => void;
     onOpenReview: () => void;
+    feedback : Review;
 }) {
     const meta = STATUS_META[r.status];
     const Icon = meta.icon;
@@ -129,21 +132,51 @@ function StatusHero({
                 </div>
             )}
 
-            {r.status === 'completed' && (
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-secondary/40 px-4 py-3">
-                    <p className="text-xs text-foreground/80">
-                        Bagikan pengalamanmu bersama{' '}
-                        {r.counselor.name.split(',')[0]}.
-                    </p>
-                    <button
-                        type="button"
-                        onClick={onOpenReview}
-                        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                    >
-                        <Star size={13} /> Beri Ulasan
-                    </button>
-                </div>
-            )}
+            {r.status === 'completed' &&
+                (feedback ? (
+                    <div className="mt-5 rounded-xl border border-border bg-secondary/40 px-4 py-3">
+                        <div className="flex items-center justify-between">
+                            <p className="text-xs font-medium text-foreground">
+                                Ulasanmu
+                            </p>
+                            <span className="text-[10.5px] text-muted-foreground">
+                                {feedback.created_at}
+                            </span>
+                        </div>
+                        <div className="mt-1.5 flex gap-0.5">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                    key={i}
+                                    size={14}
+                                    className={
+                                        i < feedback.rating
+                                            ? 'fill-amber-400 text-amber-400'
+                                            : 'text-muted-foreground/30'
+                                    }
+                                />
+                            ))}
+                        </div>
+                        {feedback.comment && (
+                            <p className="mt-1.5 text-xs text-muted-foreground">
+                                {feedback.comment}
+                            </p>
+                        )}
+                    </div>
+                ) : (
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-secondary/40 px-4 py-3">
+                        <p className="text-xs text-foreground/80">
+                            Bagikan pengalamanmu bersama{' '}
+                            {r.counselor.name.split(',')[0]}.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={onOpenReview}
+                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                        >
+                            <Star size={13} /> Beri Ulasan
+                        </button>
+                    </div>
+                ))}
 
             {(r.status === 'cancelled' || r.status === 'rejected') && (
                 <div className="mt-5">

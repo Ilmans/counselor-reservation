@@ -31,7 +31,49 @@ class ConsultationController extends Controller
         return inertia('Counselor/consultation/index', compact('consultations', 'filters'));
     }
 
-    public function show (Request $request){
+    public function show(Request $request)
+    {
         return inertia('Counselor/consultation/show');
+    }
+
+    public function storeReview(Request $request, string $reference)
+    {
+        $validated = $request->validate([
+            'rating'       => ['required', 'integer', 'min:1', 'max:5'],
+            'comment'      => ['nullable', 'string', 'max:1000'],
+            'is_anonymous' => ['boolean'],
+        ], [
+            'rating.required' => 'Rating wajib diisi.',
+            'rating.min'      => 'Rating minimal 1 bintang.',
+            'rating.max'      => 'Rating maksimal 5 bintang.',
+            'comment.max'     => 'Komentar maksimal 1000 karakter.',
+        ]);
+
+        $consultation = $this->repo->findByReference($reference, Auth::id());
+
+        if (!$consultation || $consultation->user_id != Auth::id()) {
+            abort(404);
+        }
+
+        if ($consultation->status !== 'completed') {
+            return back()->with('toast', [
+                'type'    => 'error',
+                'message' => 'Konsultasi belum selesai, belum bisa memberi ulasan.',
+            ]);
+        }
+
+        if ($consultation->feedback()->exists()) {
+            return back()->with('toast', [
+                'type'    => 'error',
+                'message' => 'Ulasan untuk konsultasi ini sudah pernah dikirim.',
+            ]);
+        }
+
+        $consultation->feedback()->create($validated);
+
+        return back()->with('toast', [
+            'type'    => 'success',
+            'message' => 'Ulasan berhasil dikirim. Terima kasih!',
+        ]);
     }
 }

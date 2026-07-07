@@ -1,11 +1,12 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Breadcrumb from '@/components/breadcumb';
 import Wrapper from '@/layouts/wrapper';
 import type { ConsultationDetail } from '@/types/consultation';
-import { getSurfacedNoteId } from './detail/components/consultationstatus';
+import type { Review } from '@/types/review';
 import CancelReservationModal from './detail/components/cancel-modal';
+import { getSurfacedNoteId } from './detail/components/consultationstatus';
 import NotesCard from './detail/components/notes-card';
 import PaymentAlert from './detail/components/payment-alert';
 import ReviewModal from './detail/components/review-modal';
@@ -14,9 +15,12 @@ import SessionInfoCard from './detail/components/session-info';
 import StatusHero from './detail/components/status-hero';
 import SummaryCard from './detail/components/summary-card';
 
-type Props = { reservation: ConsultationDetail };
+type Props = {
+    reservation: ConsultationDetail;
+    feedback: Review | null;
+};
 
-export default function Detail({ reservation: r }: Props) {
+export default function Detail({ reservation: r, feedback }: Props) {
     const [cancelOpen, setCancelOpen] = useState(false);
     const [reviewOpen, setReviewOpen] = useState(false);
 
@@ -39,6 +43,10 @@ export default function Detail({ reservation: r }: Props) {
         { label: r.reference },
     ];
 
+    function handleReviewSuccess() {
+        router.reload({ only: ['feedback'] });
+    }
+
     return (
         <div className="min-h-screen bg-background font-sans text-foreground antialiased">
             <div className="mx-auto max-w-5xl px-4 py-6 lg:px-6 lg:py-10">
@@ -52,6 +60,7 @@ export default function Detail({ reservation: r }: Props) {
 
                         <StatusHero
                             r={r}
+                            feedback={feedback}
                             onOpenCancel={() => setCancelOpen(true)}
                             onOpenReview={() => setReviewOpen(true)}
                         />
@@ -96,6 +105,7 @@ export default function Detail({ reservation: r }: Props) {
                 reservation={r}
                 open={reviewOpen}
                 onClose={() => setReviewOpen(false)}
+                onSuccess={handleReviewSuccess}
             />
         </div>
     );

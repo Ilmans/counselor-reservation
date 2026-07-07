@@ -12,6 +12,8 @@ use Illuminate\Validation\ValidationException;
 use App\Constants\StatusConstant;
 use App\Http\Resources\ConsultationDetailResource;
 use App\Http\Resources\ConsultationListResource;
+use App\Http\Resources\ReviewListResource;
+use App\Repositories\ReviewRepository;
 
 class ReservationService
 {
@@ -20,6 +22,7 @@ class ReservationService
         protected CounselorRepository $counselorRepository,
         protected ConsultationRepository $consultationRepository,
         protected InvoiceRepository $invoiceRepository,
+        protected ReviewRepository $reviewRepo,
         protected UserRepository $userRepo
     ) {}
 
@@ -44,8 +47,12 @@ class ReservationService
     {
         $consultation = $this->consultationRepository->findByReference($reference, $userId);
         abort_if(!$consultation || $consultation->user_id != Auth::id(), 404);
+        
+        $feedback = $this->reviewRepo->findFeedback($consultation->id);
+
         return [
-            'reservation' => new ConsultationDetailResource($consultation)
+            'reservation' => new ConsultationDetailResource($consultation),
+            'feedback'    => $feedback ? new ReviewListResource($feedback) : null,
         ];
     }
 

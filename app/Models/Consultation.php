@@ -29,4 +29,6 @@ class Consultation extends Model
     {
         return $this->hasOne(Invoice::class);
     }
+    // di dalam App\Models\Consultation
+  
 }

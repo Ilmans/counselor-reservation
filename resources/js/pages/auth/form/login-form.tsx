@@ -3,7 +3,7 @@ import GoogleIcon from '@/components/icons/google-icon';
 import { Button } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
 import { Input } from '@/components/ui/input';
-import { Alert } from '@/components/ui/alert';
+import {  AlertCard } from '@/components/ui/alert';
 import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
 
 function LoginForm() {
@@ -25,7 +25,7 @@ function LoginForm() {
 
     return (
         <form method="post" onSubmit={onSubmit} className="flex flex-col gap-5">
-            {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
+            {alert && <AlertCard variant={alert.type}>{alert.message}</AlertCard>}
 
             <Input
                 label="Email"

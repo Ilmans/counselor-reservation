@@ -5,10 +5,10 @@ import CounselorController from '@/actions/App/Http/Controllers/CounselorControl
 import SearchIcon from '@/components/icons/search';
 import { Button } from '@/components/ui/button';
 import type { Category } from '@/types/counselor';
-import type { COUNSELOR_FILTER } from '@/types/filter';
+import type { FILTERS } from '@/types/filter';
 
 type Props = {
-    filters: COUNSELOR_FILTER;
+    filters: FILTERS;
 };
 
 function Filter({ filters }: Props) {

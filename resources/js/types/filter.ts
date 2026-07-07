@@ -1,4 +1,6 @@
-export type COUNSELOR_FILTER = {
+export type FILTERS = {
     category: string;
     search: string;
+    status:string;
+    date:string;
 };

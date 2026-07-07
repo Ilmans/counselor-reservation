@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\DashboardController;
 use App\Http\Controllers\CounselorController;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::get('/counselor/dashboard', [DashboardController::class, 'index']);
+   Route::get('/counselor/consultations',[ConsultationController::class,'index']);
 });
 Route::get('/tes',function(){
     return inertia('tes');

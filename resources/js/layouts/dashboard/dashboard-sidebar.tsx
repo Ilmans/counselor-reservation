@@ -1,4 +1,6 @@
-import { usePage } from '@inertiajs/react';
+import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
+import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Home,
     ClipboardList,
@@ -12,8 +14,8 @@ import {
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-    { key: 'dashboard', label: 'Beranda', icon: Home },
-    { key: 'konsultasi', label: 'Konsultasi', icon: ClipboardList, badge: 3 },
+    { key: 'dashboard', label: 'Beranda', icon: Home  , url : DashboardController.index.url()},
+    { key: 'consultations', label: 'Konsultasi', icon: ClipboardList, badge: 3 ,url : ConsultationController.index.url()},
     { key: 'jadwal', label: 'Jadwal Praktik', icon: CalendarDays },
     { key: 'klien', label: 'Klien', icon: Users },
     { key: 'ulasan', label: 'Ulasan', icon: Star },
@@ -63,11 +65,12 @@ export default function DashboardSidebar({
                     const Icon = item.icon;
 
                     return (
-                        <button
+                        <Link
+                            href={item.url}
                             key={item.key}
                             className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted'} `}
                         >
-                            <span className="flex items-center gap-2.5">
+                            <span className="flex cursor-pointer items-center gap-2.5">
                                 <Icon size={16} strokeWidth={2} />
                                 {item.label}
                             </span>
@@ -76,7 +79,7 @@ export default function DashboardSidebar({
                                     {item.badge}
                                 </span>
                             )}
-                        </button>
+                        </Link>
                     );
                 })}
             </nav>

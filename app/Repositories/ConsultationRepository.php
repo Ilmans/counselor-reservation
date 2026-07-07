@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\ConsultationStatus;
 use App\Models\Consultation;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -36,16 +37,45 @@ class ConsultationRepository
     }
 
     /**
-     * Reservasi milik user, opsional difilter berdasarkan sekumpulan status.
-     * $statuses = null artinya tidak difilter (tab "Semua").
+     * consultation list
      */
-    public function getUserConsultations(int $userId, ?array $statuses, int $perPage = 10)
+    private function baseQuery(?array $statuses, $search, ?string $date = null)
     {
-        return Consultation::with(['counselor.specialization', 'notes'])
-            ->where('user_id', $userId)
+        return Consultation::query()
             ->when($statuses, fn($q) => $q->whereIn('status', $statuses))
+            ->when($search, function ($query, $s) {
+                $query->where('reference', $s);
+            })
+            ->when($date, function ($query, $d) {
+                $query->whereDate('consultation_date', $d);
+            })
             ->orderByDesc('consultation_date')
-            ->orderByDesc('estimated_time')
+            ->orderByDesc('estimated_time');
+    }
+    public function getUserConsultations(int $userId, ?array $statuses, $search = "", int $perPage = 10)
+    {
+        return $this->baseQuery($statuses, $search)->where('user_id', $userId)->with(['counselor.specialization', 'notes'])
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    public function getCounselorConsultations(
+        int $counselorId,
+        ?array $statuses,
+        ?string $search = null,
+        ?string $date = null,
+        int $perPage = 10
+    ) {
+        $statuses = $statuses
+            ? array_diff($statuses, [ConsultationStatus::PENDING_PAYMENT->value])
+            : array_diff(
+                ConsultationStatus::values(),
+                [ConsultationStatus::PENDING_PAYMENT->value]
+            );
+
+        return $this->baseQuery($statuses, $search, $date)
+            ->where('counselor_id', $counselorId)
+            ->with(['user', 'notes', 'invoice'])
             ->paginate($perPage)
             ->withQueryString();
     }

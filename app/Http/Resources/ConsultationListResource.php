@@ -24,11 +24,9 @@ class ConsultationListResource extends JsonResource
             'duration' => $this->duration . " menit",
 
             'price' => $this->whenLoaded(
-                'counselor',
+                'invoice',
                 fn() =>
-                $this->counselor->pricing_type === 'free'
-                    ? 'Gratis'
-                    : 'Rp ' . number_format((float) $this->counselor->price_per_hour, 0, ',', '.')
+                'Rp ' . number_format((float) $this->invoice->amount, 0, ',', '.'),
             ),
 
             'counselor' => $this->whenLoaded('counselor', fn() => [
@@ -45,7 +43,7 @@ class ConsultationListResource extends JsonResource
                 'whatsapp' => $this->user->whatsapp,
             ]),
 
-            'notes' => $this->whenLoaded(
+            'pra_note' => $this->whenLoaded(
                 'notes',
                 fn() =>
                 $this->notes->firstWhere('type', 'client_pre_sesi')?->content

@@ -32,7 +32,7 @@ class ConsultationListResource extends JsonResource
             'counselor' => $this->whenLoaded('counselor', fn() => [
                 'name'           => $this->counselor->name,
                 'slug'           => $this->counselor->slug,
-                'photo_url'      => $this->counselor->photo_url,
+                'photo_path'      => $this->counselor->photo_path,
                 'specialization' => $this->counselor->specialization->name ?? '-',
                 'whatsapp'       => $this->counselor->whatsapp,
             ]),

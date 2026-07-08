@@ -72,7 +72,7 @@ function ProfileForm({ counselor }: Props) {
             <div className="mt-4">
                 <AvatarUpload
                     currentAvatarUrl={
-                        data.photo ? undefined : counselor.photo_url
+                        data.photo ? undefined : counselor.photo_path
                     }
                     onChange={(file) => setData('photo', file)}
                     error={errors.photo}

@@ -36,13 +36,13 @@ class CounselorResource extends JsonResource
             'email'                      => $this->email,
             'whatsapp'                   => $this->whatsapp,
             'bio'                        => $this->bio,
-            'photo_url'                  => $this->photo_url
-                ? Storage::url($this->photo_url)
+            'photo_path'                  => $this->photo_path
+                ? Storage::url($this->photo_path)
                 : null,
-            'photo' => $this->photo_url
-                ? (filter_var($this->photo_url, FILTER_VALIDATE_URL)
-                    ? $this->photo_url
-                    : Storage::disk('public')->url($this->photo_url))
+            'photo' => $this->photo_path
+                ? (filter_var($this->photo_path, FILTER_VALIDATE_URL)
+                    ? $this->photo_path
+                    : Storage::disk('public')->url($this->photo_path))
                 : null,
             'pricing_type'               => $this->pricing_type,
             'price_per_hour'             => $this->price_per_hour,

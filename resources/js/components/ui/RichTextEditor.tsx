@@ -126,9 +126,9 @@ export function RichTextEditor({
             </div>
 
             {error ? (
-                <span className="text-[11px] text-destructive">{error}</span>
+                <span className="text-[11px] text-red-400 text-destructive">{error}</span>
             ) : hint ? (
-                <span className="text-[11px] text-muted-foreground">{hint}</span>
+                <span className="text-[11px]  text-muted-foreground">{hint}</span>
             ) : null}
         </div>
     );

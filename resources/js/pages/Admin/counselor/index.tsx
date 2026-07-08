@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { Search, Star, Pencil, Power, PowerOff } from 'lucide-react';
+import { Search, Star, Pencil, Power, PowerOff, Plus } from 'lucide-react';
 import type { ReactNode } from 'react';
 import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
 import { EmptyState } from '@/components/empty-state';
@@ -13,6 +13,7 @@ import type { PaginatedData } from '@/types/consultation';
 import type { CounselorList } from '@/types/counselor';
 import type { FILTERS } from '@/types/filter';
 import FilterCo from './components/filter-co';
+import { Button } from '@/components/ui/button';
 
 interface Props {
     counselors: PaginatedData<CounselorList>;
@@ -41,11 +42,19 @@ function handleToggleStatus(slug: string) {}
 function Index({ counselors, filters }: Props) {
     return (
         <>
-            <div className="mb-4">
+            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <DashboardTitle
-                    title={'Konselor'}
-                    desc={'Semua daftar konselor tersedia.'}
+                    title="Konselor"
+                    desc="Semua daftar konselor tersedia."
                 />
+
+                <Link
+                    href={AdminCounselorController.create.url()}
+                    className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-green-700"
+                >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Tambah Konselor
+                </Link>
             </div>
             <div className="rounded-xl border border-border bg-card">
                 <div className="border-b border-border p-4">
@@ -91,12 +100,12 @@ function Index({ counselors, filters }: Props) {
                                 <Table.Row key={row.id}>
                                     <Table.Cell>
                                         <div className="flex items-center gap-3">
-                                            {row.photo_url ? (
+                                            {row.photo_path ? (
                                                 <img
                                                     src={
                                                         row.photo
                                                             ? row.photo
-                                                            : row.photo_url
+                                                            : row.photo_path
                                                     }
                                                     alt={row.name}
                                                     className="h-9 w-9 rounded-full object-cover"

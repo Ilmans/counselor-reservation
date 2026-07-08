@@ -127,7 +127,7 @@ class InvoiceService
                 'name'           => $counselor->name,
                 'slug'           => $counselor->slug,
                 'specialization' => $counselor->specialization->name ?? '-',
-                'photo_url'      => $counselor->photo_url,
+                'photo_path'      => $counselor->photo_path,
             ],
         ]);
     }

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string("email");
             $table->string("whatsapp");
             $table->longText("bio");
-            $table->string("photo_url");
+            $table->string("photo_path")->nullable();
             $table->enum("pricing_type", ["paid", "free"])->default("free");
             $table->decimal("price_per_hour")->nullable();
             $table->integer("session_duration_minutes");

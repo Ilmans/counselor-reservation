@@ -46,7 +46,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     ))}
                 </select>
                 {error && (
-                    <span className="text-[11px] text-destructive">{error}</span>
+                    <span className="text-[11px] text-red-500 text-destructive">{error}</span>
                 )}
             </label>
         );

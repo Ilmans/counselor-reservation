@@ -12,7 +12,7 @@ export type CounselorRow = {
     email: string;
     whatsapp: string;
     bio: string;
-    photo_url: string;
+    photo_path: string;
     photo : string;
     pricing_type: 'paid' | 'free';
     price_per_hour: string | null;

@@ -19,7 +19,7 @@ class CounselorRepository
 
     public function getAllCounselors(array $statusses, $perPage = 12, ?string $category, ?string $search = null)
     {
-        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_url', 'pricing_type', 'price_per_hour', 'status')
+        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_path', 'pricing_type', 'price_per_hour', 'status','created_at')
             ->with(['categories', 'specialization'])
             ->withCount('consultations')
             ->withAvg('feedbacks', 'rating')
@@ -37,7 +37,9 @@ class CounselorRepository
                         });
                 });
             })
+            ->orderByDesc('created_at') // terbaru
             ->paginate($perPage)
+
             ->withQueryString();
     }
 

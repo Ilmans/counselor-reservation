@@ -8,7 +8,7 @@ export interface CounselorList {
     email: string;
     whatsapp: string;
 
-    photo_url: string | null;
+    photo_path: string | null;
     photo: string | null;
 
     specialization: string | null;
@@ -32,7 +32,7 @@ export type BaseCounselor = {
     name: string;
     email: string;
     whatsapp: string;
-    photo_url: string;
+    photo_path: string;
     experience_years: number;
     pricing_type: 'paid' | 'free'; // bisa ditambah kalau ada varian lain
     price_per_hour: string; // dari backend masih string "150000.00"

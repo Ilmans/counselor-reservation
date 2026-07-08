@@ -23,7 +23,7 @@ function SummaryCard({
             <div className="rounded-2xl border border-border bg-card p-5">
                 <div className="flex items-center gap-3">
                     <img
-                        src={r.counselor.photo_url}
+                        src={r.counselor.photo_path}
                         alt={r.counselor.name}
                         className="h-12 w-12 rounded-full object-cover ring-2 ring-secondary"
                     />

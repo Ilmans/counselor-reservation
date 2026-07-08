@@ -62,7 +62,7 @@ export default function Show({ invoice, paymentMethods }: Props) {
                     <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/50">
                         <div className="flex items-center gap-3">
                             <img
-                                src={invoice.counselor.photo_url}
+                                src={invoice.counselor.photo_path}
                                 alt={invoice.counselor.name}
                                 className="h-11 w-11 rounded-full object-cover"
                             />

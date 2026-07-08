@@ -15,10 +15,10 @@ trait ManagesCounselorProfile
         $validated = $request->validated();
 
         if ($request->hasFile('photo')) {
-            if ($counselor->photo_url) {
-                Storage::disk('public')->delete($counselor->photo_url);
+            if ($counselor->photo_path) {
+                Storage::disk('public')->delete($counselor->photo_path);
             }
-            $validated['photo_url'] = $request->file('photo')->store('counselors', 'public');
+            $validated['photo_path'] = $request->file('photo')->store('counselors', 'public');
         }
         unset($validated['photo']);
 

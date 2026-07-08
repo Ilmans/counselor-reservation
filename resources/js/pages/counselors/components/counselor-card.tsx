@@ -27,7 +27,7 @@ function CounselorCard({ counselor }: Props) {
             {/* Baris 1: Foto + Info + Tombol */}
             <div className="flex items-start gap-3.5">
                 <img
-                    src={counselor.photo_url}
+                    src={counselor.photo_path}
                     alt={counselor.name}
                     className="h-12 w-12 flex-shrink-0 rounded-xl object-cover"
                     onError={(e) => {

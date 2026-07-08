@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Concerns\ManagesCounselorProfile;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCounselorRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Resources\CounselorListResource;
 use App\Http\Resources\CounselorResource;
 use App\Models\Counselor;
+use App\Models\CounselorAddress;
 use App\Repositories\CounselorRepository;
 use App\Repositories\ScheduleRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminCounselorController extends Controller
 {
@@ -28,8 +33,57 @@ class AdminCounselorController extends Controller
         $counselors = CounselorListResource::collection(
             $this->counselorRepo->getAllCounselors($status, 12, $request->category, $request->search)
         );
-
         return inertia('Admin/counselor/index', compact('counselors', 'filters'));
+    }
+
+    public function create()
+    {
+        return inertia('Admin/counselor/create');
+    }
+
+    public function store(StoreCounselorRequest $request)
+    {
+        $validated = $request->validated();
+
+        DB::transaction(function () use ($validated, $request) {
+
+            $address = CounselorAddress::create($validated['address']);
+
+            $photoPath = $request->hasFile('photo')
+                ? $request->file('photo')->store('counselors', 'public')
+                : null;
+
+            $profileOnly = Arr::except($validated, [
+                'user_id',
+                'address',
+                'category_ids',
+                'photo',
+                'schedules',
+            ]);
+
+            $counselor = Counselor::create([
+                ...$profileOnly,
+                'user_id' => $validated['user_id'],
+                'address_id' => $address->id,
+                'photo_path' => $photoPath,
+                'slug' => Str::slug($validated['name']),
+            ]);
+
+            $counselor->categories()->sync($validated['category_ids']);
+
+            if (!empty($validated['schedules'])) {
+                foreach ($validated['schedules'] as $schedule) {
+                    $counselor->schedules()->create($schedule);
+                }
+            }
+        });
+
+        return redirect()
+            ->route('admin.counselors')
+            ->with('toast', [
+                'type' => 'success',
+                'message' => 'Konselor berhasil ditambahkan.',
+            ]);
     }
 
     public function edit(int $id)

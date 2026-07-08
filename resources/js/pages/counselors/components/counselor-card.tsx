@@ -2,44 +2,30 @@ import { Link } from '@inertiajs/react';
 import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
-import type { Category, Counselor } from '@/types/counselor';
-import { counselorPricingLabel } from '@/utils/helper';
-import {
-    formatTimeRange,
-    getScheduleLabel,
-    METHOD_LABEL,
-    METHOD_VARIANT,
-} from '@/utils/schedule';
+import type { CounselorList } from '@/types/counselor';
+import { METHOD_VARIANT } from '@/utils/schedule';
 
 type Props = {
-    counselor: Counselor;
+    counselor: CounselorList;
 };
 
 function CounselorCard({ counselor }: Props) {
-    const priceLabel = counselorPricingLabel(
-        counselor.pricing_type,
-        counselor.price_per_hour,
-    );
-    const isFree = counselor.pricing_type === 'free';
-
     return (
-        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+        <div className="group rounded-2xl border border-border/60 bg-card p-6 shadow-sm ring-1 ring-transparent transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/25 hover:shadow-lg hover:ring-primary/10">
             {/* Baris 1: Foto + Info + Tombol */}
             <div className="flex items-start gap-3.5">
                 <img
-                    src={counselor.photo_path}
+                    loading="lazy"
+                    src={counselor.photo}
                     alt={counselor.name}
-                    className="h-12 w-12 flex-shrink-0 rounded-xl object-cover"
-                    onError={(e) => {
-                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(counselor.name)}`;
-                    }}
+                    className="h-12 w-12 flex-shrink-0 rounded-xl object-cover ring-1 ring-border/60 transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-base font-semibold text-foreground">
                         {counselor.name}
                     </p>
                     <p className="mt-0.5 truncate text-sm text-muted-foreground">
-                        {counselor.specialization?.name ?? '—'}
+                        {counselor.specialization ?? '—'}
                     </p>
                 </div>
                 <Link
@@ -62,12 +48,12 @@ function CounselorCard({ counselor }: Props) {
 
             {/* Baris 3: Kategori */}
             <div className="mt-3 flex flex-wrap gap-1.5">
-                {counselor.categories.map((category: Category) => (
+                {counselor.categories.split(',').map((category, index) => (
                     <span
-                        key={category.id}
+                        key={index}
                         className="rounded-full bg-primary/8 px-2.5 py-1 text-xs font-medium text-primary"
                     >
-                        {category.name}
+                        {category.trim()}
                     </span>
                 ))}
             </div>
@@ -84,13 +70,14 @@ function CounselorCard({ counselor }: Props) {
                     </p>
                     {counselor.next_schedule ? (
                         <div className="flex items-center gap-2">
-                            <span className="pulse-dot h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
-                            <span className="text-sm text-muted-foreground">
-                                {getScheduleLabel(counselor.next_schedule)},{' '}
-                                {formatTimeRange(
-                                    counselor.next_schedule.open_time,
-                                    counselor.next_schedule.close_time,
-                                )}
+                            <span className="relative flex h-2 w-2 flex-shrink-0">
+                                <span className="pulse-dot absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+                            </span>
+                            <span className="truncate text-sm text-muted-foreground">
+                                {counselor.next_schedule.day_label},{' '}
+                                {counselor.next_schedule.open_time} {'-'}{' '}
+                                {counselor.next_schedule.close_time}
                             </span>
                             <Button
                                 as="span"
@@ -104,7 +91,7 @@ function CounselorCard({ counselor }: Props) {
                                 hoverable={false}
                                 className="flex-shrink-0"
                             >
-                                {METHOD_LABEL[counselor.next_schedule.method]}
+                                {counselor.next_schedule.method_label}
                             </Button>
                         </div>
                     ) : (
@@ -122,13 +109,13 @@ function CounselorCard({ counselor }: Props) {
                     <p className="mb-1.5 text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
                         Biaya
                     </p>
-                    {isFree ? (
+                    {counselor.pricing_type == 'free' ? (
                         <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-semibold text-primary">
-                            {priceLabel}
+                            {counselor.price_per_hour}
                         </span>
                     ) : (
                         <span className="text-sm font-semibold text-foreground">
-                            {priceLabel}
+                            {counselor.price_per_hour}
                         </span>
                     )}
                 </div>

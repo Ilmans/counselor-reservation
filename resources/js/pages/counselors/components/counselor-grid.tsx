@@ -1,33 +1,54 @@
 import { InfiniteScroll } from '@inertiajs/react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import type { Counselor, Paginated } from '@/types/counselor';
+import type { CounselorList, Paginated } from '@/types/counselor';
 import CounselorCard from './counselor-card';
+import CounselorGridSkeleton from './counselor-skeleton';
 
 type Props = {
-    counselors: Paginated<Counselor>;
+    counselors: Paginated<CounselorList>;
 };
 
-function CounselorList({ counselors }: Props) {
+function CounselorGrid({ counselors }: Props) {
     const infiniteRef = useRef<any>(null);
     const total = counselors.total ?? counselors.data.length;
+
+    // NOTE: ini fake loading state buat nunjukin visual skeleton-nya aja
+    // (delay statis 900ms). Di production, ganti ini dengan sinyal loading
+    // asli, misal `router.on('start' | 'finish', ...)` dari Inertia, atau
+    // state loading dari InfiniteScroll kalau tersedia.
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsLoading(false), 900);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <main className="px-6 pb-20">
             <div className="mx-auto max-w-5xl">
                 <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium tracking-[0.04em] text-muted-foreground uppercase">
-                        {total} Konselor Tersedia
+                        {isLoading ? (
+                            <span className="inline-block h-4 w-32 animate-pulse rounded-full bg-muted align-middle" />
+                        ) : (
+                            `${total} Konselor Tersedia`
+                        )}
                     </p>
-                    <select className="w-full cursor-pointer rounded-full border border-border bg-card px-4 py-2.5 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none sm:w-auto">
+                    <select
+                        disabled={isLoading}
+                        className="w-full cursor-pointer rounded-full border border-border bg-card px-4 py-2.5 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                    >
                         <option>Urut: Rating tertinggi</option>
                         <option>Urut: Harga terendah</option>
                         <option>Urut: Tersedia hari ini</option>
                     </select>
                 </div>
 
-                {counselors.data.length === 0 ? (
+                {isLoading ? (
+                    <CounselorGridSkeleton count={6} />
+                ) : counselors.data.length === 0 ? (
                     <div className="flex flex-col items-center gap-2 rounded-3xl border border-dashed border-border py-20 text-center">
                         <p className="font-serif text-xl text-foreground">
                             Konselor tidak ditemukan
@@ -37,7 +58,17 @@ function CounselorList({ counselors }: Props) {
                         </p>
                     </div>
                 ) : (
-                    <>
+                    <div className="content-fade-in">
+                        <style>{`
+                            @keyframes content-fade-in {
+                                from { opacity: 0; transform: translateY(6px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
+                            .content-fade-in {
+                                animation: content-fade-in 0.45s ease-out both;
+                            }
+                        `}</style>
+
                         <InfiniteScroll
                             ref={infiniteRef}
                             data="counselors"
@@ -45,7 +76,7 @@ function CounselorList({ counselors }: Props) {
                             preserveUrl={true}
                             className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
                         >
-                            {counselors.data.map((counselor: Counselor) => (
+                            {counselors.data.map((counselor: CounselorList) => (
                                 <CounselorCard
                                     key={counselor.id}
                                     counselor={counselor}
@@ -65,11 +96,11 @@ function CounselorList({ counselors }: Props) {
                                 </Button>
                             </div>
                         )}
-                    </>
+                    </div>
                 )}
             </div>
         </main>
     );
 }
 
-export default CounselorList;
+export default CounselorGrid;

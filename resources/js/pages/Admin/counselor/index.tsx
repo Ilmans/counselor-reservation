@@ -1,5 +1,13 @@
 import { Link, router } from '@inertiajs/react';
-import { Search, Star, Pencil, Power, PowerOff, Plus } from 'lucide-react';
+import {
+    Search,
+    Star,
+    Pencil,
+    Power,
+    PowerOff,
+    Plus,
+    Trash,
+} from 'lucide-react';
 import type { ReactNode } from 'react';
 import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
 import { EmptyState } from '@/components/empty-state';
@@ -14,6 +22,8 @@ import type { CounselorList } from '@/types/counselor';
 import type { FILTERS } from '@/types/filter';
 import FilterCo from './components/filter-co';
 import { Button } from '@/components/ui/button';
+import { VISIBILITY } from '@/types/badge';
+import { useConfirm } from '@/hooks/use-confirm';
 
 interface Props {
     counselors: PaginatedData<CounselorList>;
@@ -37,12 +47,42 @@ function RatingStars({ rating }: { rating: number }) {
     );
 }
 
-function handleToggleStatus(slug: string) {}
-
 function Index({ counselors, filters }: Props) {
+   const { confirm, ConfirmDialog, setProcessing } = useConfirm();
+
+   const onDelete = (counselor: CounselorList) => {
+       confirm({
+           variant: 'danger',
+           title: 'Konfirmasi penghapusan',
+           description:
+               'Anda yakin ingin menghapus konselor ' +
+               counselor.name +
+               ', aksi ini tidak bisa dibatalkan setelah dikonfirmasi!',
+           confirmLabel: 'Hapus',
+
+           onConfirm: () => {
+               router.delete(
+                   AdminCounselorController.delete.url(counselor.id),
+                   {
+                       preserveScroll: true,
+
+                       onStart: () => {
+                           setProcessing(true);
+                       },
+
+                       onFinish: () => {
+                           setProcessing(false);
+                       },
+                   },
+               );
+           },
+       });
+   };
+
     return (
         <>
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <ConfirmDialog />
                 <DashboardTitle
                     title="Konselor"
                     desc="Semua daftar konselor tersedia."
@@ -81,7 +121,7 @@ function Index({ counselors, filters }: Props) {
                             <Table.Cell>Harga</Table.Cell>
                             <Table.Cell>Rating</Table.Cell>
                             <Table.Cell>Konsultasi</Table.Cell>
-                            <Table.Cell>Status</Table.Cell>
+                            <Table.Cell>Visibility</Table.Cell>
                             <Table.Cell>Aksi</Table.Cell>
                         </Table.Row>
                     </Table.Head>
@@ -183,13 +223,11 @@ function Index({ counselors, filters }: Props) {
 
                                     <Table.Cell>
                                         <Badge
-                                            variant={
-                                                row.status === 'active'
-                                                    ? 'default'
-                                                    : 'secondary'
+                                            className={
+                                                VISIBILITY[row.visibility]
                                             }
                                         >
-                                            {row.status_label}
+                                            {row.visibility_label}
                                         </Badge>
                                     </Table.Cell>
 
@@ -204,29 +242,19 @@ function Index({ counselors, filters }: Props) {
                                                 <Pencil className="h-3.5 w-3.5" />
                                                 Edit
                                             </Link>
-                                            <button
+                                            <Button
+                                                onClick={() => {
+                                                    onDelete(row);
+                                                }}
                                                 type="button"
-                                                onClick={() =>
-                                                    handleToggleStatus(row.slug)
-                                                }
-                                                className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium hover:bg-muted ${
-                                                    row.status === 'active'
-                                                        ? 'border-destructive/30 text-destructive'
-                                                        : 'border-border text-foreground'
-                                                }`}
+                                                size="sm"
+                                                mode="outlined"
+                                                variant="red"
+                                                className={'cursor-pointer'}
                                             >
-                                                {row.status === 'active' ? (
-                                                    <>
-                                                        <PowerOff className="h-3.5 w-3.5" />
-                                                        Nonaktifkan
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Power className="h-3.5 w-3.5" />
-                                                        Aktifkan
-                                                    </>
-                                                )}
-                                            </button>
+                                                <Trash className="h-3.5 w-3.5" />
+                                                Hapus
+                                            </Button>
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>

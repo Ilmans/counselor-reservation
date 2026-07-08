@@ -25,6 +25,7 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::put('/admin/{counselor}/edit/schedules', [AdminCounselorController::class, 'updateSchedule']);
     Route::get('/admin/counselor/create',[AdminCounselorController::class,'create']);
     Route::post('/admin/counselor/store',[AdminCounselorController::class,'store']);
+    Route::delete('/admin/{counselor}/delete',[AdminCounselorController::class,'delete']);
 
     Route::get('/admin/search/user',[AdminUserSearchController::class,'search']);
 

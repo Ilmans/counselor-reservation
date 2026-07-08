@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react';
 
 import Wrapper from '@/layouts/wrapper';
-import type { Counselor, Paginated } from '@/types/counselor';
-import type { COUNSELOR_FILTER } from '@/types/filter';
-import CounselorList from './components/counselor-list';
+import type {  CounselorList, Paginated } from '@/types/counselor';
+
+import type { FILTERS } from '@/types/filter';
+import CounselorGrid from './components/counselor-grid';
 import Filter from './components/filter';
 
 
 type Props = {
-    counselors: Paginated<Counselor>;
-    filters: COUNSELOR_FILTER;
+    counselors: Paginated<CounselorList>;
+    filters: FILTERS;
 };
 export default function Index({ counselors, filters }: Props) {
 
@@ -17,7 +18,7 @@ export default function Index({ counselors, filters }: Props) {
         <>
 
             <Filter filters={filters} />
-            <CounselorList counselors={counselors} />
+            <CounselorGrid counselors={counselors} />
         </>
     );
 }

@@ -28,10 +28,10 @@ class AdminCounselorController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only('status', 'search', 'category');
-        $status = $request->filled('status') ? (array) $request->status : ['active', 'inactive'];
+        $filters = $request->only('visibility', 'search', 'category');
+        $visibilities = $request->filled('visibility') ? (array) $request->visibility : ['active', 'inactive'];
         $counselors = CounselorListResource::collection(
-            $this->counselorRepo->getAllCounselors($status, 12, $request->category, $request->search)
+            $this->counselorRepo->getAllCounselors($visibilities, 12, $request->category, $request->search)
         );
         return inertia('Admin/counselor/index', compact('counselors', 'filters'));
     }
@@ -103,6 +103,34 @@ class AdminCounselorController extends Controller
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Jadwal konsultasi berhasil diperbarui. Perubahan ini hanya berlaku untuk sesi baru; sesi yang sudah dikonfirmasi tidak terpengaruh.',
+            'code' => rand(1, 5),
+        ]);
+    }
+
+    //soft deletes
+    public function delete(Counselor $counselor)
+    {
+        $hasActiveConsultations = $counselor->consultations()
+            ->whereNotIn('status', [
+                'cancelled',
+                'rejected',
+                'completed',
+            ])
+            ->exists();
+
+        if ($hasActiveConsultations) {
+            return redirect()->back()->with('toast', [
+                'type' => 'error',
+                'message' => 'Konselor tidak dapat dihapus karena masih memiliki konsultasi yang sedang berjalan.',
+                'code' => rand(1, 5),
+            ]);
+        }
+
+        $counselor->delete();
+
+        return redirect()->back()->with('toast', [
+            'type' => 'success',
+            'message' => 'Data konselor berhasil dihapus.',
             'code' => rand(1, 5),
         ]);
     }

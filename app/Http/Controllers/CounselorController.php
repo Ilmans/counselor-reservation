@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CounselorListResource;
 use App\Repositories\CounselorRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +15,7 @@ class CounselorController extends Controller
     {
         $search = $request->query('search');
         $counselors = Inertia::scroll(
-            fn() => $this->repo->getAllCounselors($category, $search)
+            fn() => CounselorListResource::collection($this->repo->getAllCounselors(['active'], 6, $category, $search))
         );
         $filters = [
             'category' => $category,

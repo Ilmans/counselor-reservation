@@ -1,14 +1,5 @@
 import { MONTH_NAMES } from './constant';
 
-export const counselorPricingLabel = (
-    pricing_type: 'free' | 'paid',
-    price_per_hour: string,
-) => {
-    return pricing_type === 'free'
-        ? 'Gratis'
-        : 'Rp ' + parseInt(price_per_hour, 10).toLocaleString('id-ID') + '/jam';
-};
-
 export function toDateStr(date: Date): string {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');

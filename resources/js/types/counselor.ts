@@ -1,6 +1,19 @@
 //new
 export type CounselorPricingType = 'free' | 'hourly';
 export type CounselorStatus = 'active' | 'inactive';
+export interface CounselorNextSchedule {
+    id: number;
+
+    day_of_week: number;
+    day_label: string;
+
+    open_time: string;
+    close_time: string;
+    time_label: string;
+
+    method: "online" | "offline" | "both";
+    method_label: string;
+}
 export interface CounselorList {
     id: number;
     slug: string;
@@ -20,8 +33,13 @@ export interface CounselorList {
     status: CounselorStatus;
     status_label: string;
 
+    visibility: "active" | "inactive";
+    visibility_label: string;
+
     consultations_count: number;
     feedbacks_avg_rating: number | null;
+    next_schedule: CounselorNextSchedule | null;
+
 }
 
 //old temporary

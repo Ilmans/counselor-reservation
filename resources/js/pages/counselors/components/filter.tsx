@@ -54,7 +54,7 @@ function Filter({ filters }: Props) {
                 {/* Page heading */}
                 <div className="mb-8">
                     <div className="mb-2 flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                        <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-primary" />
                         <span className="text-xs font-medium tracking-[0.06em] text-muted-foreground uppercase">
                             Cari Konselor
                         </span>
@@ -66,11 +66,16 @@ function Filter({ filters }: Props) {
                             yang paling pas.
                         </span>
                     </h1>
+                    <p className="mt-3 max-w-md text-sm font-light text-muted-foreground">
+                        Ruang aman untuk mulai bicara, kapan pun kamu siap —
+                        cari berdasarkan spesialisasi, atau lihat semua konselor
+                        yang tersedia.
+                    </p>
                 </div>
 
                 {/* Search bar */}
                 <div className="relative mb-4">
-                    <div className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground">
+                    <div className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground transition-colors">
                         <SearchIcon />
                     </div>
                     <input
@@ -78,7 +83,7 @@ function Filter({ filters }: Props) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Cari nama atau spesialisasi…"
-                        className="w-full rounded-full border border-border bg-card py-3 pr-11 pl-11 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 focus:outline-none"
+                        className="w-full rounded-full border border-border bg-card py-3 pr-11 pl-11 text-sm text-foreground shadow-sm transition-all duration-200 placeholder:text-muted-foreground focus:border-primary focus:shadow-md focus:ring-2 focus:ring-primary/15 focus:outline-none"
                     />
                     {search && (
                         <button
@@ -99,7 +104,7 @@ function Filter({ filters }: Props) {
                             as="button"
                             onClick={() => applyFilter({ category: '' })}
                             mode={!filters?.category ? 'filled' : 'outlined'}
-                            className="shrink-0 cursor-pointer rounded-full text-sm"
+                            className="shrink-0 cursor-pointer rounded-full text-sm transition-all duration-200"
                         >
                             Semua
                         </Button>
@@ -116,7 +121,7 @@ function Filter({ filters }: Props) {
                                         ? 'filled'
                                         : 'outlined'
                                 }
-                                className="shrink-0 cursor-pointer rounded-full text-sm"
+                                className="shrink-0 cursor-pointer rounded-full text-sm transition-all duration-200"
                             >
                                 {cat.name}
                             </Button>
@@ -133,7 +138,7 @@ function Filter({ filters }: Props) {
                             setSearch('');
                             applyFilter({ category: '', search: '' });
                         }}
-                        className="mt-3 text-xs font-medium text-muted-foreground underline-offset-2 hover:text-primary hover:underline"
+                        className="mt-3 text-xs font-medium text-muted-foreground underline-offset-2 transition-colors hover:text-primary hover:underline"
                     >
                         Hapus semua filter
                     </button>

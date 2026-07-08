@@ -17,10 +17,15 @@ class CounselorRepository
     }
 
 
-    public function getAllCounselors(array $statusses, $perPage = 12, ?string $category, ?string $search = null)
+    public function getAllCounselors(array $visibilities, $perPage = 12, ?string $category, ?string $search = null)
     {
-        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_path', 'pricing_type', 'price_per_hour', 'status','created_at')
-            ->with(['categories', 'specialization'])
+        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_path', 'pricing_type', 'price_per_hour', 'visibility', 'created_at')
+            ->with([
+                'categories',
+                'specialization',
+                'schedules' => fn($q) => $q->where('is_active', true)
+
+            ])
             ->withCount('consultations')
             ->withAvg('feedbacks', 'rating')
             ->when($category, function ($query, $slug) {
@@ -28,7 +33,7 @@ class CounselorRepository
                     $q->where('slug', $slug);
                 });
             })
-            ->whereIn('status',$statusses)
+            ->whereIn('visibility', $visibilities)
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")

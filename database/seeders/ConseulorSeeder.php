@@ -50,7 +50,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 150000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Sudirman No. 45', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
             ],
             [
@@ -66,7 +66,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'free',
                 'price_per_hour' => 0,
                 'session_duration_minutes' => 45,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Dipatiukur No. 12', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40132', 'maps_url' => null],
             ],
             [
@@ -82,7 +82,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 200000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Gatot Subroto Kav. 18', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12930', 'maps_url' => null],
             ],
             [
@@ -98,7 +98,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 175000,
                 'session_duration_minutes' => 90,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Pemuda No. 78', 'city' => 'Semarang', 'province' => 'Jawa Tengah', 'postal_code' => '50132', 'maps_url' => null],
             ],
             [
@@ -114,7 +114,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'free',
                 'price_per_hour' => 0,
                 'session_duration_minutes' => 45,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Colombo No. 1', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55281', 'maps_url' => null],
             ],
             [
@@ -130,7 +130,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 160000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Raya Darmo No. 23', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60241', 'maps_url' => null],
             ],
             [
@@ -146,7 +146,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 125000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. AP Pettarani No. 55', 'city' => 'Makassar', 'province' => 'Sulawesi Selatan', 'postal_code' => '90222', 'maps_url' => null],
             ],
             [
@@ -162,7 +162,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 180000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Sudirman No. 102', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
             ],
             [
@@ -178,7 +178,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'free',
                 'price_per_hour' => 0,
                 'session_duration_minutes' => 45,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Setiabudhi No. 34', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40143', 'maps_url' => null],
             ],
             [
@@ -194,7 +194,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 190000,
                 'session_duration_minutes' => 60,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. HR Rasuna Said Kav. 62', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12940', 'maps_url' => null],
             ],
             [
@@ -210,7 +210,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'paid',
                 'price_per_hour' => 155000,
                 'session_duration_minutes' => 90,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Basuki Rahmat No. 89', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60271', 'maps_url' => null],
             ],
             [
@@ -226,7 +226,7 @@ class ConseulorSeeder extends Seeder
                 'pricing_type' => 'free',
                 'price_per_hour' => 0,
                 'session_duration_minutes' => 45,
-                'status' => 'active',
+                'visibility' => 'active',
                 'address' => ['address' => 'Jl. Malioboro No. 56', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55213', 'maps_url' => null],
             ],
         ];

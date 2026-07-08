@@ -47,6 +47,7 @@ class CounselorResource extends JsonResource
             'pricing_type'               => $this->pricing_type,
             'price_per_hour'             => $this->price_per_hour,
             'session_duration_minutes'   => $this->session_duration_minutes,
+            'visibility'                     => $this->visibility,
             'status'                     => $this->status,
             'created_at'                 => $this->created_at,
             'updated_at'                 => $this->updated_at,

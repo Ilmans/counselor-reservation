@@ -5,14 +5,18 @@ namespace App\Models;
 use App\Helpers\ScheduleHelpers;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Counselor extends Model
 {
-    protected $appends = ['next_schedule'];
+
+    use SoftDeletes;
+    
     protected $guarded = ['id'];
 
-    public function user(){
-        return $this->hasOne(User::class,'id','user_id');
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
     public function specialization()
     {
@@ -49,21 +53,5 @@ class Counselor extends Model
             'id',
             'id'
         );
-    }
-
-
-    protected function nextSchedule(): Attribute
-    {
-        return Attribute::make(function () {
-            $schedules = $this->schedules()
-                ->where('is_active', true)->select('open_time', 'close_time', 'day_of_week', 'method')
-                ->orderBy('day_of_week')
-                ->get();
-
-            $next = ScheduleHelpers::findUpcomingSchedule($schedules)
-                ?? ScheduleHelpers::wrapToNextWeek($schedules);
-
-            return $next;
-        });
     }
 }

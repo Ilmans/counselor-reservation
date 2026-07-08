@@ -27,6 +27,8 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
 
     Route::get('/counselor/settings',[CounselorSettingController::class,'index']);
     Route::post('/counselor/{counselor}/setting/profile',[CounselorSettingController::class,'updateProfile']);
+    Route::post('/counselor/{counselor}/setting/address',[CounselorSettingController::class,'updateAddress']);
+    Route::post('/counselor/{counselor}/setting/services',[CounselorSettingController::class,'updateServices']);
 
 });
 Route::get('/tes', function () {

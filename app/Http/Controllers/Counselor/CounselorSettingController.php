@@ -19,6 +19,7 @@ class CounselorSettingController extends Controller
     {
         $counselorId = Auth::user()->counselor->id;
         $counselor = new CounselorResource($this->counselorRepo->findCounselor($counselorId));
+
         return inertia('Counselor/settings/index', compact('counselor'));
     }
 
@@ -50,6 +51,51 @@ class CounselorSettingController extends Controller
             'type' => 'success',
             'message' => "Profile konselor berhasil di perbarui.",
             'code' => rand(1, 5)
+        ]);
+    }
+
+    public function updateAddress(Request $request, Counselor $counselor)
+    {
+        $validated = $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'address'     => ['required', 'string'],
+            'city'        => ['required', 'string', 'max:255'],
+            'province'    => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:10'],
+            'maps_url'    => ['nullable', 'url', 'max:2048'],
+        ]);
+
+        $this->counselorRepo->updateAddress($counselor, $validated);
+
+        return back()->with('toast', [
+            'type' => 'success',
+            'message' => 'Alamat praktik berhasil diperbarui.',
+            'code' => rand(1, 5),
+        ]);
+    }
+
+    public function updateServices(Request $request, Counselor $counselor)
+    {
+        
+        $validated = $request->validate([
+            'pricing_type'                => ['required', Rule::in(['free', 'paid'])],
+            'price_per_hour'               => ['required_if:pricing_type,paid', 'nullable', 'min:0'],
+            'session_duration_minutes'     => ['required', 'integer', 'min:15', 'max:180'],
+            'specialization_id'            => ['required', 'exists:specializations,id'],
+            'category_ids'                 => ['required', 'array', 'min:1', 'max:4'],
+            'category_ids.*'               => ['integer', 'exists:categories,id'],
+        ]);
+
+        if ($validated['pricing_type'] === 'free') {
+            $validated['price_per_hour'] = 0;
+        }
+
+        $this->counselorRepo->updateService($counselor, $validated);
+
+        return back()->with('toast', [
+            'type' => 'success',
+            'message' => 'Layanan & harga berhasil diperbarui.',
+            'code' => rand(1, 5),
         ]);
     }
 }

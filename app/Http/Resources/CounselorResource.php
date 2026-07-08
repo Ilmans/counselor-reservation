@@ -20,6 +20,16 @@ class CounselorResource extends JsonResource
             'user_id'                    => $this->user_id,
             'specialization_id'          => $this->specialization_id,
             'address_id'                 => $this->address_id,
+            'address' => new CounselorAddressResource(
+                $this->whenLoaded('address')
+            ),
+            'categories' => $this->whenLoaded('categories', function () {
+                return $this->categories->map(fn($category) => [
+                    'id'   => $category->id,
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                ]);
+            }),
             'name'                       => $this->name,
             'slug'                       => $this->slug,
             'experience_years'           => $this->experience_years,

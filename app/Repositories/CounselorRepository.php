@@ -50,7 +50,7 @@ class CounselorRepository
 
     public function findCounselor(int $id)
     {
-        return Counselor::find($id);
+        return Counselor::with(['address', 'categories'])->find($id);
     }
 
 
@@ -71,5 +71,21 @@ class CounselorRepository
     {
         $counselor->update($data);
         return $counselor->fresh();
+    }
+
+    public function updateAddress(Counselor $counselor, array $data): Counselor
+    {
+        $counselor->address()->update($data);
+        return $counselor->fresh('address');
+    }
+
+    public function updateService(Counselor $counselor, array $data): Counselor
+    {
+        $categoryIds = $data['category_ids'];
+        unset($data['category_ids']);
+        $counselor->update($data);
+        $counselor->categories()->sync($categoryIds);
+
+        return $counselor->fresh('categories');
     }
 }

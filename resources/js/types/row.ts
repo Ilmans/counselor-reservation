@@ -1,8 +1,11 @@
+import type { Category, CounselorAddress } from './counselor';
+
 export type CounselorRow = {
     id: number;
     user_id: number | null;
     specialization_id: number;
     address_id: number;
+    address: CounselorAddress;
     name: string;
     slug: string;
     experience_years: number;
@@ -16,4 +19,5 @@ export type CounselorRow = {
     status: 'active' | 'inactive';
     created_at: string | null;
     updated_at: string | null;
+    categories : Category[]
 };

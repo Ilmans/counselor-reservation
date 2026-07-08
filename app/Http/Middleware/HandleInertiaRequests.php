@@ -6,6 +6,7 @@ use App\Repositories\CounselorRepository;
 use App\Support\AppContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache as FacadesCache;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 use Pest\Plugins\Cache;
 
@@ -48,9 +49,18 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'app' => AppContext::make(),
             'auth' => [
-                'user' => fn() => $request->user()?->loadMissing([
-                    'counselor.specialization:id,name',
-                ]),
+                'user' => fn() => $request->user()
+                    ? tap(
+                        $request->user()->loadMissing([
+                            'counselor.specialization:id,name',
+                        ]),
+                        function ($user) {
+                            $user->avatar_url = $user->avatar_path
+                                ? Storage::disk('public')->url($user->avatar_path)
+                                : null;
+                        }
+                    )
+                    : null,
             ],
             'categories' => $categories,
             'alert' => fn() => $request->session()->get('alert'),

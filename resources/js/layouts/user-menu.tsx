@@ -1,9 +1,13 @@
 import { Link, router } from '@inertiajs/react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChevronDown, LayoutDashboard, LogOut, Settings, User } from 'lucide-react';
-import type { User as UserAuth } from '@/types';
-import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
+import {
+    ChevronDown,
+    LayoutDashboard,
+    LogOut,
+    Settings,
+} from 'lucide-react';
 import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
+import type { User as UserAuth } from '@/types';
 
 export const UserMenu = ({ user }: { user: UserAuth }) => {
     const initials = user.name
@@ -17,9 +21,18 @@ export const UserMenu = ({ user }: { user: UserAuth }) => {
         <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
                 <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors outline-none hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[11px] font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
-                        {initials}
-                    </div>
+                    {user.avatar_url ? (
+                        <img
+                            loading="lazy"
+                            src={user.avatar_url}
+                            alt={user.name}
+                            className="h-7 w-7 shrink-0 rounded-full object-cover"
+                        />
+                    ) : (
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[11px] font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
+                            {initials}
+                        </div>
+                    )}
                     <span className="hidden text-[13px] font-medium text-zinc-800 sm:block dark:text-zinc-200">
                         {user.name.split(' ')[0]}
                     </span>

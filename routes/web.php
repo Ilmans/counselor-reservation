@@ -9,6 +9,7 @@ use App\Http\Controllers\Counselor\ScheduleController;
 use App\Http\Controllers\CounselorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/invoice/{invoice}/payment-method', [InvoiceController::class, 'updatePaymentMethod']);
     Route::get('/invoice/{reference}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/invoice/{id}/download', [InvoiceController::class, 'downloadPdf']);
+
+    Route::get('/profile/setting', [ProfileSettingController::class, 'index']);
+    Route::post('/profile/setting',[ProfileSettingController::class,'update']);
 });
 Route::post('/logout', [LoginController::class, 'destroy']);
 

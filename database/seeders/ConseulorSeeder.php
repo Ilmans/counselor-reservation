@@ -255,7 +255,7 @@ class ConseulorSeeder extends Seeder
                 'name'       => $counselor['name'],
                 'email'      => $counselor['email'],
                 'whatsapp'   => $counselor['whatsapp'],
-                'image'      => null,
+                'avatar_path'      => null,
                 'age'        => 20,
                 'gender'     => "L",
                 'role'       => 'counselor',

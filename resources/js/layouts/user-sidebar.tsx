@@ -1,7 +1,8 @@
 import { JSX } from 'react';
 import { Link, router } from '@inertiajs/react';
+import ProfileSettingController from '@/actions/App/Http/Controllers/ProfileSettingController';
 
-type AccountSection = 'reservasi' | 'invoice' | 'pengaturan';
+type AccountSection = 'reservasi' | 'invoice' | 'setting';
 
 const NAV_ITEMS: {
     key: AccountSection;
@@ -46,9 +47,9 @@ const NAV_ITEMS: {
         ),
     },
     {
-        key: 'pengaturan',
+        key: 'setting',
         label: 'Pengaturan',
-        href: '/settings',
+        href: ProfileSettingController.index.url(),
         icon: (
             <svg
                 width="16"
@@ -78,7 +79,7 @@ export function UserSidebar({ active }: { active: AccountSection }) {
                         const target = NAV_ITEMS.find(
                             (item) => item.key === e.target.value,
                         );
-                        
+
                         if (target) router.visit(target.href);
                     }}
                     className="w-full appearance-none rounded-lg border border-border bg-card px-3 py-2.5 pr-9 text-[13px] font-medium text-foreground outline-none focus:border-primary"

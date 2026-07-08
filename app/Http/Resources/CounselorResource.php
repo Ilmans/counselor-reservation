@@ -39,6 +39,11 @@ class CounselorResource extends JsonResource
             'photo_url'                  => $this->photo_url
                 ? Storage::url($this->photo_url)
                 : null,
+            'photo' => $this->photo_url
+                ? (filter_var($this->photo_url, FILTER_VALIDATE_URL)
+                    ? $this->photo_url
+                    : Storage::disk('public')->url($this->photo_url))
+                : null,
             'pricing_type'               => $this->pricing_type,
             'price_per_hour'             => $this->price_per_hour,
             'session_duration_minutes'   => $this->session_duration_minutes,

@@ -59,8 +59,12 @@ class HandleInertiaRequests extends Middleware
                             $user->avatar_url = $user->avatar_path
                                 ? Storage::disk('public')->url($user->avatar_path)
                                 : null;
-                            $user->counselor->photo = $user->counselor->photo_url ?   Storage::disk('public')->url($user->counselor->photo_url)
-                                : null;
+                            try {
+                                $user->counselor->photo = $user->counselor->photo_url ?   Storage::disk('public')->url($user->counselor->photo_url)
+                                    : null;
+                            } catch (\Throwable $th) {
+                                //throw $th;
+                            }
                         }
                     )
                     : null,

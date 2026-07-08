@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__ . '/admin.php';
 
 Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::get('/counselor/dashboard', [DashboardController::class, 'index']);
@@ -31,9 +32,7 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::post('/counselor/{counselor}/setting/services',[CounselorSettingController::class,'updateServices']);
 
 });
-Route::get('/tes', function () {
-    return inertia('tes');
-});
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name("login");
     Route::post('/login', [LoginController::class, 'store']);
@@ -53,8 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/setting', [ProfileSettingController::class, 'index']);
     Route::post('/profile/setting',[ProfileSettingController::class,'update']);
 });
-Route::post('/logout', [LoginController::class, 'destroy']);
 
+Route::post('/logout', [LoginController::class, 'destroy']);
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/about-us', [HomeController::class, 'about']);
 Route::get('/counselors/{category?}', [CounselorController::class, 'index']);

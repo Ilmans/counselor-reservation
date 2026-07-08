@@ -1,8 +1,3 @@
-import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
-import CounselorSettingController from '@/actions/App/Http/Controllers/Counselor/CounselorSettingController';
-import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
-import ReviewController from '@/actions/App/Http/Controllers/Counselor/ReviewController';
-import ScheduleController from '@/actions/App/Http/Controllers/Counselor/ScheduleController';
 import { Link, usePage } from '@inertiajs/react';
 import {
     Home,
@@ -14,9 +9,34 @@ import {
     Settings,
     LogOut,
     X,
+    ChevronDown,
+    MarsStroke,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { useState } from 'react';
+import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
+import CounselorSettingController from '@/actions/App/Http/Controllers/Counselor/CounselorSettingController';
+import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
+import ReviewController from '@/actions/App/Http/Controllers/Counselor/ReviewController';
+import ScheduleController from '@/actions/App/Http/Controllers/Counselor/ScheduleController';
+import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
 
-const NAV_ITEMS = [
+type NavChild = {
+    key: string;
+    label: string;
+    url: string;
+};
+
+type NavItem = {
+    key: string;
+    label: string;
+    icon: LucideIcon;
+    badge?: number;
+    url?: string;
+    children?: NavChild[];
+};
+
+const COUNSELOR_NAV_ITEMS: NavItem[] = [
     {
         key: 'dashboard',
         label: 'Beranda',
@@ -36,7 +56,6 @@ const NAV_ITEMS = [
         icon: CalendarDays,
         url: ScheduleController.index.url(),
     },
-    // { key: 'klien', label: 'Klien', icon: Users },
     {
         key: 'reviews',
         label: 'Ulasan',
@@ -52,15 +71,60 @@ const NAV_ITEMS = [
     },
 ];
 
+// Sesuaikan url/import controller admin kamu di sini
+const ADMIN_NAV_ITEMS: NavItem[] = [
+    {
+        key: 'dashboard',
+        label: 'Beranda',
+        icon: Home,
+        url: '/admin/dashboard',
+    },
+    {
+        key: 'master',
+        label: 'Master',
+        icon: MarsStroke,
+        children: [
+            {
+                key: 'manage-counselors',
+                label: 'Konselor',
+                url: AdminCounselorController.index.url(),
+            },
+            {
+                key: 'manajemen-kategori',
+                label: 'Kategori',
+                url: '/admin/categories',
+            },
+        ],
+    },
+    {
+        key: 'reviews',
+        label: 'Ulasan',
+        icon: Star,
+        url: '/admin/reviews',
+    },
+    { key: 'keuangan', label: 'Keuangan', icon: Wallet, url: '/admin/finance' },
+];
+
 export default function DashboardSidebar({
     isDesktop,
     visible,
     onClose,
     activeKey,
+    isAdmin = true,
 }: any) {
     const { props } = usePage();
     const user = props?.auth.user;
     const app = props.app;
+
+    const navItems = isAdmin ? ADMIN_NAV_ITEMS : COUNSELOR_NAV_ITEMS;
+
+    // Auto-expand parent kalau salah satu child-nya aktif
+    const initialExpanded = navItems.find((item) =>
+        item.children?.some((child) => child.key === activeKey),
+    )?.key;
+    const [expandedKey, setExpandedKey] = useState<string | undefined>(
+        initialExpanded,
+    );
 
     return (
         <aside
@@ -89,15 +153,65 @@ export default function DashboardSidebar({
 
             {/* Navigasi */}
             <nav className="mt-2 flex-1 space-y-1 overflow-y-auto px-3">
-                {NAV_ITEMS.map((item) => {
-                    const isActive = activeKey == item.key;
+                {navItems.map((item) => {
                     const Icon = item.icon;
+                    const hasChildren = !!item.children?.length;
+                    const isParentActive = hasChildren
+                        ? item.children!.some((c) => c.key === activeKey)
+                        : activeKey === item.key;
+                    const isExpanded = expandedKey === item.key;
+
+                    if (hasChildren) {
+                        return (
+                            <div key={item.key}>
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setExpandedKey((prev) =>
+                                            prev === item.key
+                                                ? undefined
+                                                : item.key,
+                                        )
+                                    }
+                                    className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isParentActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted'} `}
+                                >
+                                    <span className="flex cursor-pointer items-center gap-2.5">
+                                        <Icon size={16} strokeWidth={2} />
+                                        {item.label}
+                                    </span>
+                                    <ChevronDown
+                                        size={14}
+                                        className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                                    />
+                                </button>
+
+                                {isExpanded && (
+                                    <div className="mt-1 ml-4 space-y-1 border-l border-border pl-3">
+                                        {item.children!.map((child) => {
+                                            const isChildActive =
+                                                activeKey === child.key;
+
+                                            return (
+                                                <Link
+                                                    href={child.url}
+                                                    key={child.key}
+                                                    className={`block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${isChildActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted'} `}
+                                                >
+                                                    {child.label}
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    }
 
                     return (
                         <Link
-                            href={item.url}
+                            href={item.url!}
                             key={item.key}
-                            className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted'} `}
+                            className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isParentActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-muted'} `}
                         >
                             <span className="flex cursor-pointer items-center gap-2.5">
                                 <Icon size={16} strokeWidth={2} />
@@ -113,34 +227,35 @@ export default function DashboardSidebar({
                 })}
             </nav>
 
-            {/* User & logout */}
+            {/* User & logout — bagian user disembunyikan untuk admin */}
             <div className="border-t border-border px-3 pt-3 pb-4">
-                <div className="flex items-center gap-2.5 rounded-xl px-2 py-1.5">
-                    <div className="relative shrink-0">
-                        {user.counselor.photo ? (
-                            <img
-                                loading="lazy"
-                                src={user.counselor.photo}
-                                alt={user.name}
-                                className="h-7 w-7 shrink-0 rounded-full object-cover"
-                            />
-                        ) : (
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                                BE
-                            </div>
-                        )}
-
-                        <span className="pulse-dot absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
+                {!isAdmin && (
+                    <div className="flex items-center gap-2.5 rounded-xl px-2 py-1.5">
+                        <div className="relative shrink-0">
+                            {user.counselor.photo ? (
+                                <img
+                                    loading="lazy"
+                                    src={user.counselor.photo}
+                                    alt={user.name}
+                                    className="h-7 w-7 shrink-0 rounded-full object-cover"
+                                />
+                            ) : (
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                                    BE
+                                </div>
+                            )}
+                            <span className="pulse-dot absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold">
+                                {user.name}
+                            </p>
+                            <p className="truncate text-xs text-muted-foreground">
+                                {user.counselor.specialization.name}
+                            </p>
+                        </div>
                     </div>
-                    <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold">
-                            {user.name}
-                        </p>
-                        <p className="truncate text-xs text-muted-foreground">
-                            {user.counselor.specialization.name}
-                        </p>
-                    </div>
-                </div>
+                )}
                 <button className="mt-1 flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted">
                     <LogOut size={16} />
                     Keluar

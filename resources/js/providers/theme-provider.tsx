@@ -22,7 +22,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 function ThemeProvider({
     children,
-    defaultTheme = 'system',
+    defaultTheme = 'light',
     storageKey = 'iut',
     ...props
 }: ThemeProviderProps) {

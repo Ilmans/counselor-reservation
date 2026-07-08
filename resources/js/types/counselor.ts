@@ -1,3 +1,31 @@
+//new
+export type CounselorPricingType = 'free' | 'hourly';
+export type CounselorStatus = 'active' | 'inactive';
+export interface CounselorList {
+    id: number;
+    slug: string;
+    name: string;
+    email: string;
+    whatsapp: string;
+
+    photo_url: string | null;
+    photo: string | null;
+
+    specialization: string | null;
+    categories: string;
+
+    pricing_type: CounselorPricingType;
+    price_per_hour: number | null;
+
+    status: CounselorStatus;
+    status_label: string;
+
+    consultations_count: number;
+    feedbacks_avg_rating: number | null;
+}
+
+//old temporary
+
 export type BaseCounselor = {
     id: number;
     slug: string;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark'=> ($appearance ?? 'system') == 'dark'])>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -23,8 +23,9 @@
 
     <script>
         (function() {
-            var theme = localStorage.getItem('tenang-theme');
-            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            var theme = localStorage.getItem('tenang-theme3');
+
+            if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
         })();

@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import DashboardHeader from './dashboard-header';
 import DashboardSidebar from './dashboard-sidebar';
 
-export default function DashboardWrapper({ children, activeKey }: any) {
+export default function AdminWrapper({ children, activeKey }: any) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [notifOpen, setNotifOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(() =>
@@ -51,7 +51,6 @@ export default function DashboardWrapper({ children, activeKey }: any) {
             return;
         }
 
-
         toast.error('Cek kembali data yang Anda input.');
     }, [errors]);
 
@@ -74,6 +73,7 @@ export default function DashboardWrapper({ children, activeKey }: any) {
 
                 <DashboardSidebar
                     isDesktop={isDesktop}
+                    isAdmin={true}
                     visible={sidebarVisible}
                     onClose={() => setSidebarOpen(false)}
                     activeKey={activeKey}

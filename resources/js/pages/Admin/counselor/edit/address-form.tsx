@@ -3,7 +3,7 @@ import CounselorSettingController from '@/actions/App/Http/Controllers/Counselor
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { CounselorAddress } from '@/types/counselor';
-import { FormEvent } from 'react';
+import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
 
 interface Props {
     address: CounselorAddress;
@@ -19,9 +19,9 @@ function AddressForm({ address, counselorId }: Props) {
         maps_url: address.maps_url,
     });
 
-    const onSubmit = (e: FormEvent) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
-        post(CounselorSettingController.updateAddress.url(counselorId), {
+        post(AdminCounselorController.updateAddress.url(counselorId), {
             preserveScroll: true,
             forceFormData: true,
         });

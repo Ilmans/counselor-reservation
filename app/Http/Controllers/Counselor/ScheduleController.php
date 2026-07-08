@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Counselor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\Repositories\ScheduleRepository;
 use App\Services\CounselorScheduleService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
@@ -25,21 +25,11 @@ class ScheduleController extends Controller
         return inertia('Counselor/schedule/index', compact('schedules', 'calendar'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateScheduleRequest $request)
     {
         $counselorId = Auth::user()->counselor->id;
-
-        $validated = $request->validate([
-            'schedules' => ['required', 'array', 'size:7'],
-            'schedules.*.day_of_week' => ['required', 'integer', 'between:0,6', 'distinct'],
-            'schedules.*.open_time' => ['required', 'date_format:H:i:s'],
-            'schedules.*.close_time' => ['required', 'date_format:H:i:s', 'after:schedules.*.open_time'],
-            'schedules.*.method' => ['required', 'in:online,offline,both'],
-            'schedules.*.is_active' => ['required', 'boolean'],
-        ]);
-
+        $validated = $request->validated();
         $this->scheduleRepository->upsertCounselorSchedule($counselorId, $validated['schedules']);
-
         return redirect()
             ->back()
             ->with('alert', [

@@ -12,6 +12,7 @@ export type User = {
         specialization: {
             name: string;
         };
+        photo : string;
     };
     created_at: string;
     updated_at: string;

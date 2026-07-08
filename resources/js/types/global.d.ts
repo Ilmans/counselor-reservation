@@ -1,5 +1,6 @@
 import type { Auth } from '@/types/auth';
 import type { AppData } from './app';
+import type { Specialization } from './counselor';
 import type { Category } from '@/types/category';
 
 declare module '@inertiajs/core' {
@@ -10,6 +11,7 @@ declare module '@inertiajs/core' {
 
             sidebarOpen: boolean;
             categories: Category[]; // 🔥 tambahin ini
+            specializations : Specialization[]
             alert: {
                 type: 'error' | 'success' | 'warning' | 'info';
                 message: string;

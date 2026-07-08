@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
         $repo = app(CounselorRepository::class);
 
         $categories = $repo->getAllCategories();
+        $specializations = $repo->getAllSpecialization();
 
 
         return [
@@ -58,11 +59,14 @@ class HandleInertiaRequests extends Middleware
                             $user->avatar_url = $user->avatar_path
                                 ? Storage::disk('public')->url($user->avatar_path)
                                 : null;
+                            $user->counselor->photo = $user->counselor->photo_url ?   Storage::disk('public')->url($user->counselor->photo_url)
+                                : null;
                         }
                     )
                     : null,
             ],
             'categories' => $categories,
+            'specializations' => $specializations,
             'alert' => fn() => $request->session()->get('alert'),
             'toast' => fn() => $request->session()->get('toast'),
         ];

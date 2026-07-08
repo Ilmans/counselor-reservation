@@ -16,14 +16,13 @@ export type BaseCounselor = {
 };
 export type Counselor = BaseCounselor & {
     categories: Category[];
-
 };
 
 export type CounselorDetailPage = BaseCounselor &
     Counselor & {
         bio: string;
         address: CounselorAddress;
-        schedules : Schedule[]
+        schedules: Schedule[];
     };
 export type Schedule = {
     close_time: string;
@@ -36,7 +35,7 @@ export type Schedule = {
 
 export type CounselorAddress = {
     id: number;
-    name : string;
+    name: string;
     address: string;
     city: string;
     province: string | null;
@@ -53,6 +52,7 @@ export type Category = {
 export type Specialization = {
     id: number;
     name: string;
+    description?: string;
 };
 
 export type Paginated<T> = {

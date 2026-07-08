@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
+use App\Http\Controllers\Counselor\CounselorSettingController;
 use App\Http\Controllers\Counselor\DashboardController;
 use App\Http\Controllers\Counselor\ReviewController;
 use App\Http\Controllers\Counselor\ScheduleController;
@@ -23,6 +24,10 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::put('/counselor/schedules', [ScheduleController::class, 'update']);
 
     Route::get('/counselor/reviews', [ReviewController::class, 'index']);
+
+    Route::get('/counselor/settings',[CounselorSettingController::class,'index']);
+    Route::post('/counselor/{counselor}/setting/profile',[CounselorSettingController::class,'updateProfile']);
+
 });
 Route::get('/tes', function () {
     return inertia('tes');

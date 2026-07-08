@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from '@/providers/theme-provider';
 import DashboardHeader from './dashboard-header';
 import DashboardSidebar from './dashboard-sidebar';
+import toast, { Toaster } from 'react-hot-toast';
+import { usePage } from '@inertiajs/react';
 
-export default function DashboardWrapper({ children ,activeKey}: any) {
+export default function DashboardWrapper({ children, activeKey }: any) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [notifOpen, setNotifOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(() =>
@@ -20,8 +22,42 @@ export default function DashboardWrapper({ children ,activeKey}: any) {
 
     const sidebarVisible = isDesktop || sidebarOpen;
 
+    const { toast: flashToast, errors } = usePage().props as any;
+
+    // Flash Toast
+    useEffect(() => {
+        if (!flashToast) {
+            return;
+        }
+        
+        const { type, message } = flashToast;
+
+        if (type && (toast as any)[type]) {
+            (toast as any)[type](message);
+        } else {
+            toast(message);
+        }
+    }, [flashToast]);
+
+    // Validation Error Toast
+    useEffect(() => {
+        if (!errors) {
+            return;
+        }
+
+        const hasErrors = Object.keys(errors).length > 0;
+
+        if (!hasErrors) {
+            return;
+        }
+
+
+        toast.error('Cek kembali data yang Anda input.');
+    }, [errors]);
+
     return (
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <Toaster position="top-center" />
             <div className="flex min-h-screen w-full bg-background font-sans text-foreground">
                 {!isDesktop && sidebarOpen && (
                     <div
@@ -40,8 +76,7 @@ export default function DashboardWrapper({ children ,activeKey}: any) {
                     isDesktop={isDesktop}
                     visible={sidebarVisible}
                     onClose={() => setSidebarOpen(false)}
-                    activeKey = {activeKey}
-
+                    activeKey={activeKey}
                 />
 
                 <div className="flex min-w-0 flex-1 flex-col">

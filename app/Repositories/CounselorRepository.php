@@ -1,25 +1,21 @@
 <?php
 
 namespace App\Repositories;
+
 use App\Models\Category;
 use App\Models\Counselor;
+use App\Models\Specialization;
 
 class CounselorRepository
 {
 
-// SCALABLE,FOR RESERVATION
+    // SCALABLE,FOR RESERVATION
     public function getCounselorPrice(int $id): int
     {
         return Counselor::where('id', $id)
             ->value('price_per_hour') ?? 0;
     }
 
-    public function getAllCategories()
-    {
-        return Category::select('id', 'name', 'slug')
-            ->orderBy('name')
-            ->get();
-    }
 
     public function getAllCounselors(?string $category, ?string $search = null)
     {
@@ -52,7 +48,28 @@ class CounselorRepository
             ->whereSlug($slug)->first();
     }
 
+    public function findCounselor(int $id)
+    {
+        return Counselor::find($id);
+    }
 
 
+    public function getAllCategories()
+    {
+        return Category::select('id', 'name', 'slug')
+            ->orderBy('name')
+            ->get();
+    }
 
+    public function getAllSpecialization()
+    {
+        return Specialization::select('id', 'name', 'description')->orderBy('name')
+            ->get();
+    }
+
+    public function updateProfile(Counselor $counselor, array $data): Counselor
+    {
+        $counselor->update($data);
+        return $counselor->fresh();
+    }
 }

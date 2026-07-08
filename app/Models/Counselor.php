@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Counselor extends Model
 {
     protected $appends = ['next_schedule'];
-
+    protected $guarded = ['id'];
 
     public function user(){
         return $this->hasOne(User::class,'id','user_id');

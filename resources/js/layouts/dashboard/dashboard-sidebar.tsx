@@ -1,4 +1,5 @@
 import ConsultationController from '@/actions/App/Http/Controllers/Counselor/ConsultationController';
+import CounselorSettingController from '@/actions/App/Http/Controllers/Counselor/CounselorSettingController';
 import DashboardController from '@/actions/App/Http/Controllers/Counselor/DashboardController';
 import ReviewController from '@/actions/App/Http/Controllers/Counselor/ReviewController';
 import ScheduleController from '@/actions/App/Http/Controllers/Counselor/ScheduleController';
@@ -43,7 +44,12 @@ const NAV_ITEMS = [
         url: ReviewController.index.url(),
     },
     { key: 'keuangan', label: 'Keuangan', icon: Wallet },
-    { key: 'profil', label: 'Profil & Layanan', icon: Settings },
+    {
+        key: 'settings',
+        label: 'Profil & Layanan',
+        icon: Settings,
+        url: CounselorSettingController.index.url(),
+    },
 ];
 
 export default function DashboardSidebar({
@@ -111,9 +117,19 @@ export default function DashboardSidebar({
             <div className="border-t border-border px-3 pt-3 pb-4">
                 <div className="flex items-center gap-2.5 rounded-xl px-2 py-1.5">
                     <div className="relative shrink-0">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                            BE
-                        </div>
+                        {user.counselor.photo ? (
+                            <img
+                                loading="lazy"
+                                src={user.counselor.photo}
+                                alt={user.name}
+                                className="h-7 w-7 shrink-0 rounded-full object-cover"
+                            />
+                        ) : (
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                                BE
+                            </div>
+                        )}
+
                         <span className="pulse-dot absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
                     </div>
                     <div className="min-w-0 flex-1">

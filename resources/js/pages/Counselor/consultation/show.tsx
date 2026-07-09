@@ -10,12 +10,14 @@ import { PhoneCall, ShieldCheck } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
 import { AlertCard } from '@/components/ui/alert';
 
+
+
 interface Props {
     consultation: ConsultationDetail;
 }
 function Show({ consultation }: Props) {
     const { alert } = usePage().props;
-    
+
     return (
         <>
             {alert && (
@@ -29,12 +31,7 @@ function Show({ consultation }: Props) {
                     <StatusHero consultation={consultation} />
                     <InfoConsultation consultation={consultation} />
                     <div className="rounded-2xl border border-border bg-card p-4">
-                        <p className="mb-3 flex items-center gap-2 font-serif text-base text-foreground">
-                            Catatan Konsultasi
-                            <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-normal text-muted-foreground">
-                                3
-                            </span>
-                        </p>
+
 
                         <ConsultationNotes notes={consultation.notes} />
 

@@ -25,7 +25,7 @@ interface ProfileFormData {
     email: string;
     whatsapp: string;
     bio: string;
-    status: 'active' | 'inactive';
+    visibility: 'active' | 'inactive';
     photo: File | null;
 }
 
@@ -42,7 +42,7 @@ function ProfileForm({ counselor }: Props) {
             email: counselor.email,
             whatsapp: counselor.whatsapp,
             bio: counselor.bio,
-            status: counselor.status,
+            visibility: counselor.visibility,
             photo: null,
         });
 
@@ -53,7 +53,7 @@ function ProfileForm({ counselor }: Props) {
         post(CounselorSettingController.updateProfile.url(counselor.id), {
             forceFormData: true,
             preserveScroll: true,
-            only : ["toast","counselor"]
+            only: ['toast', 'counselor'],
         });
     }
 
@@ -71,9 +71,7 @@ function ProfileForm({ counselor }: Props) {
 
             <div className="mt-4">
                 <AvatarUpload
-                    currentAvatarUrl={
-                        data.photo ? undefined : counselor.photo_path
-                    }
+                    currentAvatarUrl={counselor.photo}
                     onChange={(file) => setData('photo', file)}
                     error={errors.photo}
                 />
@@ -113,15 +111,15 @@ function ProfileForm({ counselor }: Props) {
                     error={errors.experience_years}
                 />
                 <Select
-                    label="Status Profil"
-                    value={data.status}
+                    label="Visibilitas Profil"
+                    value={data.visibility}
                     onChange={(e) =>
                         setData(
-                            'status',
+                            'visibility',
                             e.target.value as 'active' | 'inactive',
                         )
                     }
-                    error={errors.status}
+                    error={errors.visibility}
                     options={[
                         {
                             label: 'Aktif — tampil di pencarian',

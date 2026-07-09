@@ -80,6 +80,20 @@ class ConsultationRepository
             ->withQueryString();
     }
 
+    public function getAllConsultationsForAdmin(
+        ?array $statuses,
+        ?string $search = null,
+        ?string $date = null,
+        ?string $method = null,
+        int $perPage = 12
+    ) {
+        return $this->baseQuery($statuses, $search, $date, $method)
+            ->with(['user', 'counselor.specialization', 'invoice'])
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+
 
 
     // needs for schedule formatter, get only date and time betweenspesific start and end date
@@ -124,5 +138,21 @@ class ConsultationRepository
     private function generateReference(): string
     {
         return 'RSV-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
+    }
+
+
+    public function updateConsultationStatus(Consultation $consultation, string $status, ?string $note = null): Consultation
+    {
+        $consultation->update(['status' => $status]);
+
+        if (in_array($status, ['cancelled', 'rejected']) && $note) {
+            $consultation->notes()->create([
+                'type' => 'cancellation',
+                'visibility' => 'shared',
+                'content' => $note,
+            ]);
+        }
+
+        return $consultation->fresh(['user', 'counselor.specialization', 'notes', 'feedback', 'invoice']);
     }
 }

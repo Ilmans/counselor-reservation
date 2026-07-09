@@ -11,6 +11,7 @@ import {
     X,
     ChevronDown,
     MarsStroke,
+    Calendar1Icon,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -22,6 +23,7 @@ import ScheduleController from '@/actions/App/Http/Controllers/Counselor/Schedul
 import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
 import ManageUserController from '@/actions/App/Http/Controllers/Admin/ManageUserController';
 import AdminMasterDataController from '@/actions/App/Http/Controllers/Admin/AdminMasterDataController';
+import AdminConsultationController from '@/actions/App/Http/Controllers/Admin/AdminConsultationController';
 
 type NavChild = {
     key: string;
@@ -109,10 +111,10 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
         ],
     },
     {
-        key: 'reviews',
-        label: 'Ulasan',
-        icon: Star,
-        url: '/admin/reviews',
+        key: 'manage-consultations',
+        label: 'Data Konsultasi',
+        icon: Calendar1Icon,
+        url: AdminConsultationController.index.url(),
     },
     { key: 'keuangan', label: 'Keuangan', icon: Wallet, url: '/admin/finance' },
 ];

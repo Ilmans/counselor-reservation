@@ -17,7 +17,7 @@ class ConsultationDetailResource extends ConsultationListResource
 
         return array_merge(parent::toArray($request), [
             'status_group'   => $this->resolveStatusGroup($this->status),
-            'queue_position' => $this->status === 'in_queue' ? $this->queue_position : null,
+            'queue_position' => $this->status === 'in_queue' ? $this->queue_position : '- selesai',
 
             'schedule' => [
                 'date'     => Carbon::parse($this->consultation_date)->translatedFormat('l, j F Y'),

@@ -30,7 +30,7 @@ class ProfileCounselorRequest extends FormRequest
             'email'             => ['required', 'email', 'max:255'],
             'whatsapp'          => ['required', 'string', 'max:20'],
             'bio'               => ['required', 'string'],
-            'status'            => ['required', Rule::in(['active', 'inactive'])],
+            'visibility'            => ['required', Rule::in(['active', 'inactive'])],
             'photo'             => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }

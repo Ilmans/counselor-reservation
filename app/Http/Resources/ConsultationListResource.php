@@ -7,6 +7,7 @@ use App\Constants\StatusConstant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ConsultationListResource extends JsonResource
 {
@@ -33,7 +34,11 @@ class ConsultationListResource extends JsonResource
             'counselor' => $this->whenLoaded('counselor', fn() => [
                 'name'           => $this->counselor->name,
                 'slug'           => $this->counselor->slug,
-                'photo_path'      => $this->counselor->photo_path,
+                'photo' => $this->counselor->photo_path
+                    ? (filter_var($this->counselor->photo_path, FILTER_VALIDATE_URL)
+                        ? $this->counselor->photo_path
+                        : Storage::disk('public')->url($this->counselor->photo_path))
+                    : null,
                 'specialization' => $this->counselor->specialization->name ?? '-',
                 'whatsapp'       => $this->counselor->whatsapp,
             ]),

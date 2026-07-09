@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import DashboardWrapper from '@/layouts/dashboard/dashboard-wrapper';
+
+import AdminWrapper from '@/layouts/dashboard/admin-wrapper';
 
 function Index() {
     return <div>Index</div>;
@@ -8,5 +9,5 @@ function Index() {
 export default Index;
 
 Index.layout = (page: ReactNode) => (
-    <DashboardWrapper children={page} activeKey="dashboard" />
+    <AdminWrapper children={page} activeKey="dashboard" />
 );

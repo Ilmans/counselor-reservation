@@ -37,6 +37,7 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
         Route::post('/reject', [ManageStatusConsultationController::class, 'reject'])->name('consultation.reject');
         Route::post('/start', [ManageStatusConsultationController::class, 'start'])->name('consultation.start');
         Route::post('/complete', [ManageStatusConsultationController::class, 'complete'])->name('consultation.complete');
+        Route::post('/notes', [ManageStatusConsultationController::class, 'storeNote'])->name('consultation.notes.store');
     });
 });
 

@@ -5,7 +5,8 @@ import type {
     ConsultationNoteVisibility,
 } from '@/types/consultation';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
-
+import ManageStatusConsultationController from '@/actions/App/Http/Controllers/Counselor/ManageStatusConsultationController';
+import { router } from '@inertiajs/react';
 interface Props {
     consultationId: number;
     onSaved?: () => void;
@@ -38,29 +39,46 @@ function NotesForm({ consultationId, onSaved }: Props) {
 
     async function handleSubmit() {
         const trimmed = content.trim();
+
         if (!trimmed || trimmed === '<p><br></p>') {
             setError('Catatan tidak boleh kosong.');
             return;
         }
+
+        const plainText = trimmed.replace(/<[^>]*>/g, '').trim();
+        if (plainText.length < 20) {
+            setError('Catatan terlalu singkat, minimal 20 karakter.');
+            return;
+        }
+
         setError(null);
         setProcessing(true);
 
-        // TODO: router.post(route('consultation.notes.store', consultationId), {
-        //     type: kategori,
-        //     visibility: visibilitas,
-        //     content,
-        // }, {
-        //     preserveScroll: true,
-        //     onSuccess: () => resetForm(),
-        //     onFinish: () => setProcessing(false),
-        // });
+        router.post(
+            ManageStatusConsultationController.storeNote.url(consultationId),
+            {
+                type: kategori,
+                visibility: visibilitas,
+                content,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: (page) => {
+                    const alert = (page.props as any).flash?.alert;
 
-        console.log('[CatatanForm] submit note', {
-            consultationId,
-            type: kategori,
-            visibility: visibilitas,
-            content,
-        });
+                    // backend selalu balik 'success' via back()->with('alert', ...)
+                    // jadi cara bedain gagal/berhasil ya dari type-nya di sini
+                    if (alert?.type === 'error') {
+                        setError(alert.msg);
+                        return;
+                    }
+
+                    resetForm();
+                    onSaved?.();
+                },
+                onFinish: () => setProcessing(false),
+            },
+        );
 
         setProcessing(false);
         resetForm();

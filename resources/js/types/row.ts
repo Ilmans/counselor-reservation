@@ -13,16 +13,16 @@ export type CounselorRow = {
     whatsapp: string;
     bio: string;
     photo_path: string;
-    photo : string;
+    photo: string;
     pricing_type: 'paid' | 'free';
     price_per_hour: string | null;
     session_duration_minutes: number;
-    status: 'active' | 'inactive';
+    visibility: 'active' | 'inactive';
+    status: string;
     created_at: string | null;
     updated_at: string | null;
-    categories : Category[]
+    categories: Category[];
 };
-
 
 export interface UserList {
     id: number;

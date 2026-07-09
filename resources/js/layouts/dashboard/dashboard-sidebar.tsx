@@ -14,6 +14,9 @@ import {
     Calendar1Icon,
     StarIcon,
     CreditCardIcon,
+    User,
+    Tags,
+    SubscriptIcon,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -28,6 +31,7 @@ import AdminMasterDataController from '@/actions/App/Http/Controllers/Admin/Admi
 import AdminConsultationController from '@/actions/App/Http/Controllers/Admin/AdminConsultationController';
 import AdminReviewController from '@/actions/App/Http/Controllers/Admin/AdminReviewController';
 import AdminInvoiceController from '@/actions/App/Http/Controllers/Admin/AdminInvoiceController';
+import AdminPaymentMethodController from '@/actions/App/Http/Controllers/Admin/AdminPaymentMethodController';
 
 type NavChild = {
     key: string;
@@ -80,6 +84,7 @@ const COUNSELOR_NAV_ITEMS: NavItem[] = [
 ];
 
 // Sesuaikan url/import controller admin kamu di sini
+// Sesuaikan url/import controller admin kamu di sini
 const ADMIN_NAV_ITEMS: NavItem[] = [
     {
         key: 'dashboard',
@@ -88,31 +93,34 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
         url: '/admin/dashboard',
     },
     {
-        key: 'master',
-        label: 'Master',
+        key: 'manage-counselors',
+        label: 'Konselor',
+        icon: Users,
+        url: AdminCounselorController.index.url(),
+    },
+    {
+        key: 'manage-users',
+        label: 'User',
+        icon: User,
+        url: ManageUserController.index.url(),
+    },
+    {
+        key: 'manage-categories',
+        label: 'Kategori',
+        icon: Tags,
+        url: AdminMasterDataController.indexCategory.url(),
+    },
+    {
+        key: 'manage-specializations',
+        label: 'Spesialisasi',
         icon: MarsStroke,
-        children: [
-            {
-                key: 'manage-counselors',
-                label: 'Konselor',
-                url: AdminCounselorController.index.url(),
-            },
-            {
-                key: 'manage-users',
-                label: 'User',
-                url: ManageUserController.index.url(),
-            },
-            {
-                key: 'manage-categories',
-                label: 'Kategori',
-                url: AdminMasterDataController.indexCategory.url(),
-            },
-            {
-                key: 'manage-specializations',
-                label: 'Spesialisasi',
-                url: AdminMasterDataController.indexSpecialization.url(),
-            },
-        ],
+        url: AdminMasterDataController.indexSpecialization.url(),
+    },
+    {
+        key: 'manage-payment-methods',
+        label: 'Metode Pembayaran',
+        icon: SubscriptIcon,
+        url: AdminPaymentMethodController.index.url(),
     },
     {
         key: 'manage-consultations',
@@ -132,7 +140,12 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
         icon: StarIcon,
         url: AdminReviewController.index.url(),
     },
-    { key: 'keuangan', label: 'Keuangan', icon: Wallet, url: '/admin/finance' },
+    {
+        key: 'keuangan',
+        label: 'Keuangan',
+        icon: Wallet,
+        url: '/admin/finance',
+    },
 ];
 
 export default function DashboardSidebar({

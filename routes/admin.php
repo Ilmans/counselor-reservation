@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminConsultationController;
 use App\Http\Controllers\Admin\AdminCounselorController;
 use App\Http\Controllers\Admin\AdminInvoiceController;
 use App\Http\Controllers\Admin\AdminMasterDataController;
+use App\Http\Controllers\Admin\AdminPaymentMethodController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminUserSearchController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -68,5 +69,12 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::put('/admin/invoices/{invoice}/mark-as-paid', [AdminInvoiceController::class, 'markAsPaid'])->name('invoices.mark-as-paid');
     Route::delete('/admin/invoices/{invoice}', [AdminInvoiceController::class, 'delete'])->name('invoices.delete');
 
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('payment-methods', [AdminPaymentMethodController::class, 'index'])->name('payment-methods');
+        Route::post('payment-methods', [AdminPaymentMethodController::class, 'store'])->name('payment-methods.store');
+        Route::put('payment-methods/{paymentMethod}', [AdminPaymentMethodController::class, 'update'])->name('payment-methods.update');
+        Route::delete('payment-methods/{paymentMethod}', [AdminPaymentMethodController::class, 'delete'])->name('payment-methods.delete');
+    });
     // Route::put('consultations/{consultation}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.update-status');
 });

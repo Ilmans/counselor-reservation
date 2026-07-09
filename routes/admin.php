@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminConsultationController;
 use App\Http\Controllers\Admin\AdminCounselorController;
+use App\Http\Controllers\Admin\AdminInvoiceController;
 use App\Http\Controllers\Admin\AdminMasterDataController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminUserSearchController;
@@ -61,5 +62,11 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 
     Route::get('/admin/reviews', [AdminReviewController::class, 'index'])->name('reviews');
     Route::delete('/admin/reviews/{feedback}', [AdminReviewController::class, 'delete'])->name('reviews.delete');
+
+
+    Route::get('/admin/invoices', [AdminInvoiceController::class, 'index'])->name('invoices');
+    Route::put('/admin/invoices/{invoice}/mark-as-paid', [AdminInvoiceController::class, 'markAsPaid'])->name('invoices.mark-as-paid');
+    Route::delete('/admin/invoices/{invoice}', [AdminInvoiceController::class, 'delete'])->name('invoices.delete');
+
     // Route::put('consultations/{consultation}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.update-status');
 });

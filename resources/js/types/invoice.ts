@@ -30,19 +30,25 @@ export interface SelectedPaymentMethod {
     selected_at: string;
 }
 
-
-
 export interface Invoice {
     id: number;
     reference: string;
     counselor_name: string;
     date: string;
     amount: string;
-    amount_formatted : string;
-    expired_at : string;
+    amount_formatted: string;
+    expired_at: string;
     status: InvoiceStatus;
     status_label: string;
     created_at: string;
+    user?: {
+        name: string;
+        email: string;
+    };
+    consultation?: {
+        reference: string;
+        counselor_name: string;
+    };
 }
 
 // export interface InvoiceData {

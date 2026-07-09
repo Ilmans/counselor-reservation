@@ -19,3 +19,13 @@ export const CONSULTATION_STATUS_CLASSES: Record<string, string> = {
     cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
     rejected: 'bg-red-100 text-red-800 border-red-200',
 };
+
+
+export const INVOICE_STATUS_CLASSES: Record<string, string> = {
+    pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    paid: 'bg-green-100 text-green-800 border-green-200',
+    expired: 'bg-gray-100 text-gray-800 border-gray-200',
+    failed: 'bg-red-100 text-red-800 border-red-200',
+    cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
+    refunded: 'bg-blue-100 text-blue-800 border-blue-200',
+};

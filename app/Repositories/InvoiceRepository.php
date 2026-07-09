@@ -71,4 +71,40 @@ class InvoiceRepository
             ->where('is_active', true)
             ->first();
     }
+
+
+    public function getAllInvoicesForAdmin(
+        ?string $status = null,
+        ?string $search = null,
+        int $perPage = 10
+    ) {
+        return Invoice::query()
+            ->with(['user', 'consultation.counselor'])
+            ->when($status, fn($query) => $query->where('status', $status))
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('reference', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($uq) use ($search) {
+                            $uq->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+    public function markAsPaid(Invoice $invoice): Invoice
+    {
+        $invoice->update([
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
+
+        return $invoice->fresh();
+    }
+
+    public function deleteInvoice(Invoice $invoice): void
+    {
+        $invoice->delete();
+    }
 }

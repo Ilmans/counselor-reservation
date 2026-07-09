@@ -13,6 +13,7 @@ import {
     MarsStroke,
     Calendar1Icon,
     StarIcon,
+    CreditCardIcon,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -26,6 +27,7 @@ import ManageUserController from '@/actions/App/Http/Controllers/Admin/ManageUse
 import AdminMasterDataController from '@/actions/App/Http/Controllers/Admin/AdminMasterDataController';
 import AdminConsultationController from '@/actions/App/Http/Controllers/Admin/AdminConsultationController';
 import AdminReviewController from '@/actions/App/Http/Controllers/Admin/AdminReviewController';
+import AdminInvoiceController from '@/actions/App/Http/Controllers/Admin/AdminInvoiceController';
 
 type NavChild = {
     key: string;
@@ -117,6 +119,12 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
         label: 'Data Konsultasi',
         icon: Calendar1Icon,
         url: AdminConsultationController.index.url(),
+    },
+    {
+        key: 'manage-invoices',
+        label: 'Data Invoice',
+        icon: CreditCardIcon,
+        url: AdminInvoiceController.index.url(),
     },
     {
         key: 'manage-reviews',

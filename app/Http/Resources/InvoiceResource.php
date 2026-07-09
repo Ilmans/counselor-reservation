@@ -20,6 +20,15 @@ class InvoiceResource extends JsonResource
             'created_at'       => optional($this->created_at)?->translatedFormat('j F Y'),
             'expired_at'       => optional($this->expired_at)?->translatedFormat('j F Y'),
             'paid_at'          => optional($this->paid_at)?->translatedFormat('j F Y'),
+            'user' => $this->whenLoaded('user', fn() => [
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+            ]),
+
+            'consultation' => $this->whenLoaded('consultation', fn() => [
+                'reference' => $this->consultation->reference,
+                'counselor_name' => $this->consultation->counselor->name ?? '-',
+            ]),
         ];
     }
 }

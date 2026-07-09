@@ -34,9 +34,26 @@ class ReviewRepository
             ->withQueryString();
     }
 
-
     public function findFeedback(int $consultationId)
     {
         return ConsultationFeedback::where('consultation_id', $consultationId)->first();
+    }
+
+    /**
+     * Dipakai buat rating summary di halaman detail konselor
+     * (bar breakdown 5..1 bintang). Selalu balikin 5 key (5,4,3,2,1)
+     * biar frontend gampang render tanpa mikirin key yang hilang.
+     */
+    public function getRatingBreakdown(int $counselorId): array
+    {
+        $counts = ConsultationFeedback::query()
+            ->whereHas('consultation', fn($query) => $query->where('counselor_id', $counselorId))
+            ->selectRaw('rating, count(*) as total')
+            ->groupBy('rating')
+            ->pluck('total', 'rating');
+
+        return collect(range(5, 1))
+            ->mapWithKeys(fn($star) => [$star => (int) ($counts[$star] ?? 0)])
+            ->toArray();
     }
 }

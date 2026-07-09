@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 
 use App\Constants\StatusConstant;
+use App\Support\Formatter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class ConsultationDetailResource extends ConsultationListResource
                 ),
             ],
             'method' => $this->method,
-            'method_label' => $this->method === 'online' ? 'Online' : 'Tatap Muka',
+            'method_label' => Formatter::methodLabel($this->method),
             'is_anonymous' => (bool) $this->is_anonymous,
             'is_first'     => (bool) $this->client_first_experience,
             'categories'   => $this->categories,
@@ -55,7 +56,7 @@ class ConsultationDetailResource extends ConsultationListResource
                     'type'       => $note->type,
                     'visibility' => $note->visibility,
                     'content'    => $note->content,
-                    'created_at' => $note->created_at,
+                    'created_at' =>  Carbon::parse($note->created_at)->translatedFormat('l, j F Y')
                 ])
             ),
 

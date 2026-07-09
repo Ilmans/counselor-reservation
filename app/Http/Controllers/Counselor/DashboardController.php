@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $counselorId = Auth::user()->counselor->id;
+
         return inertia('Counselor/dashboard/index', [
             'statistics' => $this->getCounselorStatistic($counselorId),
             'rating' => $this->getCounselorRatingStatistic($counselorId),

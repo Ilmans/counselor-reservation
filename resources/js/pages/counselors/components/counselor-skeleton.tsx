@@ -1,26 +1,22 @@
 function CounselorCardSkeleton({ delay = 0 }: { delay?: number }) {
     return (
         <div
-            className="skeleton-breathe rounded-2xl border border-border/60 bg-card p-6 shadow-sm"
+            className="skeleton-breathe relative overflow-hidden rounded-[28px] border border-border/60 bg-card p-6 shadow-sm"
             style={{ animationDelay: `${delay}ms` }}
         >
-            {/* Baris 1: Foto + Info + Tombol */}
+            {/* Foto + Info */}
             <div className="flex items-start gap-3.5">
-                <div className="h-12 w-12 flex-shrink-0 animate-pulse rounded-xl bg-muted" />
-                <div className="min-w-0 flex-1 space-y-2 py-0.5">
+                <div className="h-14 w-14 flex-shrink-0 animate-pulse rounded-2xl bg-muted" />
+                <div className="min-w-0 flex-1 space-y-2 pt-1.5">
                     <div className="h-3.5 w-2/3 animate-pulse rounded-full bg-muted" />
                     <div className="h-3 w-1/3 animate-pulse rounded-full bg-muted/70" />
                 </div>
-                <div className="h-8 w-24 flex-shrink-0 animate-pulse rounded-full bg-muted" />
             </div>
 
-            {/* Baris 2: Rating */}
-            <div className="mt-3 flex items-center gap-2">
-                <div className="h-3.5 w-24 animate-pulse rounded-full bg-muted/70" />
-                <div className="h-3.5 w-16 animate-pulse rounded-full bg-muted/50" />
-            </div>
+            {/* Rating */}
+            <div className="mt-3 h-3.5 w-28 animate-pulse rounded-full bg-muted/70" />
 
-            {/* Baris 3: Kategori */}
+            {/* Kategori */}
             <div className="mt-3 flex flex-wrap gap-1.5">
                 <div className="h-6 w-16 animate-pulse rounded-full bg-primary/8" />
                 <div className="h-6 w-20 animate-pulse rounded-full bg-primary/8" />
@@ -29,17 +25,20 @@ function CounselorCardSkeleton({ delay = 0 }: { delay?: number }) {
             {/* Divider */}
             <div className="my-4 border-t border-border" />
 
-            {/* Baris 4: Jadwal + Harga */}
-            <div className="flex items-center justify-between gap-4">
-                <div className="min-w-0 space-y-1.5">
+            {/* Jadwal + Harga */}
+            <div className="flex items-end justify-between gap-3">
+                <div className="min-w-0 flex-1 space-y-1.5">
                     <div className="h-2.5 w-20 animate-pulse rounded-full bg-muted/60" />
-                    <div className="h-4 w-32 animate-pulse rounded-full bg-muted" />
+                    <div className="h-6 w-36 animate-pulse rounded-full bg-muted" />
                 </div>
                 <div className="flex-shrink-0 space-y-1.5 text-right">
                     <div className="ml-auto h-2.5 w-12 animate-pulse rounded-full bg-muted/60" />
-                    <div className="ml-auto h-5 w-20 animate-pulse rounded-full bg-muted" />
+                    <div className="ml-auto h-6 w-16 animate-pulse rounded-full bg-muted" />
                 </div>
             </div>
+
+            {/* CTA bar */}
+            <div className="mt-5 h-11 w-full animate-pulse rounded-full bg-muted" />
         </div>
     );
 }
@@ -48,9 +47,10 @@ type Props = {
     count?: number;
 };
 
-// Skeleton grid tampil sambil data asli di-fetch. Kartu "bernapas" pelan &
-// bergantian (bukan shimmer serentak) — biar nuansa loading-nya ikut tenang,
-// selaras sama tema konseling, bukan berkesan buru-buru.
+// Skeleton grid tampil pas first load (demo) DAN pas ganti kategori/search
+// beneran (dipicu isLoading dari Filter via router.get onStart/onFinish).
+// Kartu "bernapas" pelan & bergantian per kartu, bukan shimmer serentak —
+// biar loading state-nya kerasa tenang, selaras tema web konseling.
 function CounselorGridSkeleton({ count = 6 }: Props) {
     return (
         <>

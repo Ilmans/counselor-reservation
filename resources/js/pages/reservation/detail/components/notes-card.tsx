@@ -26,6 +26,10 @@ const NOTE_TYPE_META: Record<
         label: 'Tindak lanjut',
         badge: 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400',
     },
+    cancellation: {
+        label: 'Pembatalan',
+        badge: 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400',
+    },
 };
 
 const DEFAULT_VISIBLE = 3;

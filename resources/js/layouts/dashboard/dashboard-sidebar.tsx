@@ -20,6 +20,8 @@ import DashboardController from '@/actions/App/Http/Controllers/Counselor/Dashbo
 import ReviewController from '@/actions/App/Http/Controllers/Counselor/ReviewController';
 import ScheduleController from '@/actions/App/Http/Controllers/Counselor/ScheduleController';
 import AdminCounselorController from '@/actions/App/Http/Controllers/Admin/AdminCounselorController';
+import ManageUserController from '@/actions/App/Http/Controllers/Admin/ManageUserController';
+import AdminMasterDataController from '@/actions/App/Http/Controllers/Admin/AdminMasterDataController';
 
 type NavChild = {
     key: string;
@@ -47,7 +49,7 @@ const COUNSELOR_NAV_ITEMS: NavItem[] = [
         key: 'consultations',
         label: 'Konsultasi',
         icon: ClipboardList,
-        badge: 3,
+
         url: ConsultationController.index.url(),
     },
     {
@@ -90,9 +92,19 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
                 url: AdminCounselorController.index.url(),
             },
             {
-                key: 'manajemen-kategori',
+                key: 'manage-users',
+                label: 'User',
+                url: ManageUserController.index.url(),
+            },
+            {
+                key: 'manage-categories',
                 label: 'Kategori',
-                url: '/admin/categories',
+                url: AdminMasterDataController.indexCategory.url(),
+            },
+            {
+                key: 'manage-specializations',
+                label: 'Spesialisasi',
+                url: AdminMasterDataController.indexSpecialization.url(),
             },
         ],
     },

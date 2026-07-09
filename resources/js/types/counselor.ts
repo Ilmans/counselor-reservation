@@ -42,41 +42,48 @@ export interface CounselorList {
 
 }
 
-//old temporary
-
-export type BaseCounselor = {
+export type CounselorDetail = {
     id: number;
+    bio:string;
     slug: string;
     name: string;
-    email: string;
-    whatsapp: string;
-    photo_path: string;
-    experience_years: number;
-    pricing_type: 'paid' | 'free'; // bisa ditambah kalau ada varian lain
-    price_per_hour: string; // dari backend masih string "150000.00"
-    status: 'active' | 'inactive';
-    next_schedule: Schedule;
-    consultations_count: number;
-    feedbacks_avg_rating: number;
-    specialization: string;
-};
-export type Counselor = BaseCounselor & {
-    categories: Category[];
-};
-
-export type CounselorDetailPage = BaseCounselor &
-    Counselor & {
-        bio: string;
-        address: CounselorAddress;
-        schedules: Schedule[];
+    photo: string | null;
+    specialization: {
+        id: number;
+        name: string;
+        description: string | null;
+    } | null;
+    categories: {
+        id: number;
+        name: string;
+        slug: string;
+    }[];
+    rating: number;
+    total_reviews: number;
+    total_consultations: number;
+    pricing: {
+        type: 'free' | 'paid';
+        is_free: boolean;
+        amount: number;
+        label: string;
     };
-export type Schedule = {
-    close_time: string;
-    open_time: string;
-    day_of_week: number;
-    is_active: boolean;
-    method: 'online' | 'offline' | 'both';
-    date: string;
+
+    address: {
+        full_address: string | null;
+        city: string | null;
+        province: string | null;
+    } | null;
+    schedules: {
+        id: number;
+        day: number;
+        day_label: string;
+        open_time: string;
+        close_time: string;
+        method: string;
+        method_label: string;
+        is_active: boolean;
+    }[];
+    member_since: string | null;
 };
 
 export type CounselorAddress = {

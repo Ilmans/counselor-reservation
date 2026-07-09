@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CounselorDetailResource;
 use App\Http\Resources\CounselorListResource;
+use App\Http\Resources\CounselorResource;
+use App\Http\Resources\ReviewListResource;
 use App\Repositories\CounselorRepository;
+use App\Repositories\ReviewRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CounselorController extends Controller
 {
-    public function __construct(protected CounselorRepository $repo) {}
+    public function __construct(protected CounselorRepository $repo,protected ReviewRepository $reviewRepo) {}
 
     public function index(Request $request, ?string $category = null)
     {
@@ -29,6 +33,18 @@ class CounselorController extends Controller
     public function details(string $counselor)
     {
         $counselor = $this->repo->getCounselorBySlug($counselor);
-        return inertia('counselors/details', compact('counselor'));
+        abort_if(! $counselor, 404);
+
+        $reviews = Inertia::scroll(
+            fn() => ReviewListResource::collection(
+                $this->reviewRepo->getCounselorReviews(counselorId: $counselor->id, perPage: 6)
+            )
+        );
+
+        return inertia('counselors/details', [
+            'counselor' => new CounselorDetailResource($counselor),
+            'reviews' => $reviews,
+            'rating_breakdown' => $this->reviewRepo->getRatingBreakdown($counselor->id),
+        ]);
     }
 }

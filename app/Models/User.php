@@ -33,10 +33,11 @@ class User extends Authenticatable
 
     public function consultations()
     {
-        return $this->hasMany("consultations");
+        return $this->hasMany(Consultation::class);
     }
 
-    public function counselor(){
+    public function counselor()
+    {
         return $this->hasOne(Counselor::class);
     }
 }

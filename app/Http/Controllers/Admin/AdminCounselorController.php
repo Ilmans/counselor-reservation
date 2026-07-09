@@ -10,6 +10,7 @@ use App\Http\Resources\CounselorListResource;
 use App\Http\Resources\CounselorResource;
 use App\Models\Counselor;
 use App\Models\CounselorAddress;
+use App\Models\User;
 use App\Repositories\CounselorRepository;
 use App\Repositories\ScheduleRepository;
 use Illuminate\Http\Request;
@@ -46,9 +47,9 @@ class AdminCounselorController extends Controller
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $request) {
-
+            $user = User::findOrFail($validated['user_id']);
+            $user->update(['role' => 'counselor']);
             $address = CounselorAddress::create($validated['address']);
-
             $photoPath = $request->hasFile('photo')
                 ? $request->file('photo')->store('counselors', 'public')
                 : null;
@@ -60,7 +61,6 @@ class AdminCounselorController extends Controller
                 'photo',
                 'schedules',
             ]);
-
             $counselor = Counselor::create([
                 ...$profileOnly,
                 'user_id' => $validated['user_id'],
@@ -68,7 +68,6 @@ class AdminCounselorController extends Controller
                 'photo_path' => $photoPath,
                 'slug' => Str::slug($validated['name']),
             ]);
-
             $counselor->categories()->sync($validated['category_ids']);
 
             if (!empty($validated['schedules'])) {

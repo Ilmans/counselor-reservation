@@ -80,7 +80,9 @@ function Index({ consultations, filters }: Props) {
                                 <Table.Row key={row.reference}>
                                     <Table.Cell>
                                         <p className="font-medium text-foreground">
-                                            {row.user.name}
+                                            {row.is_anonymous
+                                                ? 'Anonim.'
+                                                : row.user.name}
                                         </p>
 
                                         <p className="mt-0.5 max-w-[220px] truncate text-[11px] text-muted-foreground">

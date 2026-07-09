@@ -23,6 +23,7 @@ class CounselorListResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'whatsapp' => $this->whatsapp,
+
             'photo_path' => $this->photo_path,
             'photo' => $this->photo_path
                 ? (filter_var($this->photo_path, FILTER_VALIDATE_URL)

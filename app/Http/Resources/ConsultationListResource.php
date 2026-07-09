@@ -22,6 +22,7 @@ class ConsultationListResource extends JsonResource
             'time'     => Carbon::parse($this->estimated_time)->format('H:i') . ' WIB',
             'mode'     => $this->method === 'online' ? 'Online' : 'Tatap Muka',
             'duration' => $this->duration . " menit",
+            'is_anonymous' => $this->is_anonymous,
 
             'price' => $this->whenLoaded(
                 'invoice',
@@ -38,9 +39,18 @@ class ConsultationListResource extends JsonResource
             ]),
 
             'user' => $this->whenLoaded('user', fn() => [
-                'name'     => $this->user->name,
-                'email'    => $this->user->email,
-                'whatsapp' => $this->user->whatsapp,
+                'name'      => $this->user->name,
+                'email'     => $this->user->email,
+                'whatsapp'  => $this->user->whatsapp,
+                'gender'    => match ($this->user->gender) {
+                    'L' => 'Laki-laki',
+                    'P' => 'Perempuan',
+                    default => '-',
+                },
+                'age'       => $this->user->birth_date
+                    ? Carbon::parse($this->user->birth_date)->age
+                    : null,
+                'since'     => 'Sejak ' . $this->user->created_at->translatedFormat('F Y'),
             ]),
 
             'pra_note' => $this->whenLoaded(

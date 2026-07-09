@@ -22,3 +22,18 @@ export type CounselorRow = {
     updated_at: string | null;
     categories : Category[]
 };
+
+
+export interface UserList {
+    id: number;
+    name: string;
+    email: string;
+    whatsapp: string | null;
+    avatar_path: string | null;
+    avatar: string | null;
+    age: number;
+    gender: 'L' | 'P';
+    role: 'user' | 'counselor' | 'admin';
+    consultations_count: number;
+    created_at: string;
+}

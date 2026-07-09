@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Counselor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ConsultationDetailResource;
 use App\Http\Resources\ConsultationListResource;
 use App\Repositories\ConsultationRepository;
 use Illuminate\Http\Request;
@@ -31,9 +32,11 @@ class ConsultationController extends Controller
         return inertia('Counselor/consultation/index', compact('consultations', 'filters'));
     }
 
-    public function show(Request $request)
+    public function show(Request $request, string $reference)
     {
-        return inertia('Counselor/consultation/show');
+        $consultation = new ConsultationDetailResource($this->repo->findByReference($reference));
+        abort_if($consultation->counselor_id != Auth::user()->counselor->id, 403);
+        return inertia('Counselor/consultation/show', compact('consultation'));
     }
 
     public function storeReview(Request $request, string $reference)

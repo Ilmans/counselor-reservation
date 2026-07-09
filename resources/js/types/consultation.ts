@@ -26,6 +26,9 @@ export interface UserMini {
     name: string;
     email: string;
     whatsapp: string;
+    age: string;
+    gender: string;
+    since: string;
 }
 
 // hasil ConsultationListResource
@@ -36,6 +39,7 @@ export interface Consultation {
     reference: string;
     status: ConsultationStatus;
     status_label: string;
+    is_anonymous: boolean;
     date: string;
     time: string;
     mode: 'Online' | 'Tatap Muka';
@@ -58,7 +62,8 @@ export type ConsultationNoteType =
     | 'pre_session'
     | 'session'
     | 'summary'
-    | 'follow_up';
+    | 'follow_up'
+    | 'cancellation';
 
 export type ConsultationNoteVisibility = 'shared' | 'counselor_only';
 

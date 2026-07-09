@@ -77,6 +77,7 @@ export default function DashboardWrapper({ children, activeKey }: any) {
                     visible={sidebarVisible}
                     onClose={() => setSidebarOpen(false)}
                     activeKey={activeKey}
+                    isAdmin={false}
                 />
 
                 <div className="flex min-w-0 flex-1 flex-col">

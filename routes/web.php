@@ -5,6 +5,7 @@ use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\CounselorSettingController;
 use App\Http\Controllers\Counselor\DashboardController;
+use App\Http\Controllers\Counselor\ManageStatusConsultationController;
 use App\Http\Controllers\Counselor\ReviewController;
 use App\Http\Controllers\Counselor\ScheduleController;
 use App\Http\Controllers\CounselorController;
@@ -26,11 +27,17 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
 
     Route::get('/counselor/reviews', [ReviewController::class, 'index']);
 
-    Route::get('/counselor/settings',[CounselorSettingController::class,'index']);
-    Route::post('/counselor/{counselor}/setting/profile',[CounselorSettingController::class,'updateProfile']);
-    Route::post('/counselor/{counselor}/setting/address',[CounselorSettingController::class,'updateAddress']);
-    Route::post('/counselor/{counselor}/setting/services',[CounselorSettingController::class,'updateServices']);
+    Route::get('/counselor/settings', [CounselorSettingController::class, 'index']);
+    Route::post('/counselor/{counselor}/setting/profile', [CounselorSettingController::class, 'updateProfile']);
+    Route::post('/counselor/{counselor}/setting/address', [CounselorSettingController::class, 'updateAddress']);
+    Route::post('/counselor/{counselor}/setting/services', [CounselorSettingController::class, 'updateServices']);
 
+    Route::prefix('counselor/consultations/{consultation}')->group(function () {
+        Route::post('/approve', [ManageStatusConsultationController::class, 'approve'])->name('consultation.approve');
+        Route::post('/reject', [ManageStatusConsultationController::class, 'reject'])->name('consultation.reject');
+        Route::post('/start', [ManageStatusConsultationController::class, 'start'])->name('consultation.start');
+        Route::post('/complete', [ManageStatusConsultationController::class, 'complete'])->name('consultation.complete');
+    });
 });
 
 Route::middleware('guest')->group(function () {
@@ -50,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/{id}/download', [InvoiceController::class, 'downloadPdf']);
 
     Route::get('/profile/setting', [ProfileSettingController::class, 'index']);
-    Route::post('/profile/setting',[ProfileSettingController::class,'update']);
+    Route::post('/profile/setting', [ProfileSettingController::class, 'update']);
 });
 
 Route::post('/logout', [LoginController::class, 'destroy']);

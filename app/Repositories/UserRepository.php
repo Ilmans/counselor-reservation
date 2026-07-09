@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserRepository
 {
@@ -44,5 +45,55 @@ class UserRepository
             ->orderBy('name')
             ->limit($limit)
             ->get();
+    }
+
+    //crud
+    public function getAllUsers(array $roles, int $perPage = 12, ?string $search = null)
+    {
+        return User::select('id', 'name', 'email', 'whatsapp', 'avatar_path', 'age', 'gender', 'role', 'created_at')
+            ->withCount('consultations')
+            ->whereIn('role', $roles)
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderByDesc('created_at')
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    public function createUser(array $data): User
+    {
+        if (!empty($data['avatar'])) {
+            $data['avatar_path'] = $data['avatar']->store('avatars', 'public');
+        }
+        unset($data['avatar']);
+        $data['password'] = bcrypt($data['password']);
+        return User::create($data);
+    }
+
+    public function updateUser(User $user, array $data): User
+    {
+        if (!empty($data['avatar'])) {
+            if ($user->avatar_path) {
+                Storage::disk('public')->delete($user->avatar_path);
+            }
+            $data['avatar_path'] = $data['avatar']->store('avatars', 'public');
+        }
+        unset($data['avatar']);
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
+        $user->update($data);
+        return $user->fresh();
+    }
+
+    public function deleteUser(User $user): void
+    {
+        $user->delete();
     }
 }

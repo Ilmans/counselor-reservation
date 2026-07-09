@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCounselorController;
+use App\Http\Controllers\Admin\AdminMasterDataController;
 use App\Http\Controllers\Admin\AdminUserSearchController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ManageUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -17,6 +19,8 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+    Route::get('/admin/users',[ManageUserController::class,'index']);
+
     Route::get('/admin/counselors', [AdminCounselorController::class, 'index'])->name('admin.counselors');
     Route::get('/admin/{id}/edit', [AdminCounselorController::class, 'edit']);
     Route::post('/admin/{counselor}/edit/profile', [AdminCounselorController::class, 'updateProfile']);
@@ -29,5 +33,21 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 
     Route::get('/admin/search/user',[AdminUserSearchController::class,'search']);
 
+    Route::get('/admin/users', [ManageUserController::class, 'index'])->name('users');
+    Route::post('/admin/users', [ManageUserController::class, 'store'])->name('users.store');
+    Route::post('/admin/users/{user}', [ManageUserController::class, 'update'])->name('users.update');
+    Route::delete('/admin/users/{user}', [ManageUserController::class, 'delete'])->name('users.delete');
+
+    // Category
+    Route::get('/admin/categories', [AdminMasterDataController::class, 'indexCategory'])->name('categories');
+    Route::post('categories', [AdminMasterDataController::class, 'storeCategory'])->name('categories.store');
+    Route::post('categories/{category}', [AdminMasterDataController::class, 'updateCategory'])->name('categories.update');
+    Route::delete('categories/{category}', [AdminMasterDataController::class, 'deleteCategory'])->name('categories.delete');
+
+    // Specialization
+    Route::get('specializations', [AdminMasterDataController::class, 'indexSpecialization'])->name('specializations');
+    Route::post('specializations', [AdminMasterDataController::class, 'storeSpecialization'])->name('specializations.store');
+    Route::post('specializations/{specialization}', [AdminMasterDataController::class, 'updateSpecialization'])->name('specializations.update');
+    Route::delete('specializations/{specialization}', [AdminMasterDataController::class, 'deleteSpecialization'])->name('specializations.delete');
     // route admin lain menyusul di sini
 });

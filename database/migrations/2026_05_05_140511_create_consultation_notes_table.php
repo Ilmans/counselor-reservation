@@ -23,6 +23,7 @@ return new class extends Migration
                 'session',     // Catatan proses konsultasi saat sesi berlangsung
                 'summary',     // Ringkasan hasil konsultasi dan saran untuk klien
                 'follow_up',   // Catatan tindak lanjut setelah sesi selesai
+                'cancellation'
             ]);
 
             $table->enum('visibility', [

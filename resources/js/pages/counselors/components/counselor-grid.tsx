@@ -1,29 +1,18 @@
 import { InfiniteScroll } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import { Button } from '@/components/ui/button';
 import type { CounselorList, Paginated } from '@/types/counselor';
 import CounselorCard from './counselor-card';
 import CounselorGridSkeleton from './counselor-skeleton';
 
 type Props = {
     counselors: Paginated<CounselorList>;
+    isLoading?: boolean;
 };
 
-function CounselorGrid({ counselors }: Props) {
+function CounselorGrid({ counselors, isLoading = false }: Props) {
     const infiniteRef = useRef<any>(null);
     const total = counselors.total ?? counselors.data.length;
-
-    // NOTE: ini fake loading state buat nunjukin visual skeleton-nya aja
-    // (delay statis 900ms). Di production, ganti ini dengan sinyal loading
-    // asli, misal `router.on('start' | 'finish', ...)` dari Inertia, atau
-    // state loading dari InfiniteScroll kalau tersedia.
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), 900);
-        return () => clearTimeout(timer);
-    }, []);
 
     return (
         <main className="px-6 pb-20">
@@ -36,14 +25,30 @@ function CounselorGrid({ counselors }: Props) {
                             `${total} Konselor Tersedia`
                         )}
                     </p>
-                    <select
-                        disabled={isLoading}
-                        className="w-full cursor-pointer rounded-full border border-border bg-card px-4 py-2.5 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-                    >
-                        <option>Urut: Rating tertinggi</option>
-                        <option>Urut: Harga terendah</option>
-                        <option>Urut: Tersedia hari ini</option>
-                    </select>
+
+                    <div className="relative w-full sm:w-auto">
+                        <select
+                            disabled={isLoading}
+                            className="w-full cursor-pointer appearance-none rounded-full border border-border bg-card py-2.5 pr-9 pl-4 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                        >
+                            <option>Urut: Rating tertinggi</option>
+                            <option>Urut: Harga terendah</option>
+                            <option>Urut: Tersedia hari ini</option>
+                        </select>
+                        <svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            className="pointer-events-none absolute top-1/2 right-3.5 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                        >
+                            <path
+                                d="M4 6l4 4 4-4"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    </div>
                 </div>
 
                 {isLoading ? (
@@ -84,16 +89,30 @@ function CounselorGrid({ counselors }: Props) {
                             ))}
                         </InfiniteScroll>
 
-                        {counselors.current_page < counselors.last_page && (
+                        {counselors.meta.current_page < counselors.meta.last_page && (
                             <div className="mt-10 flex justify-center">
-                                <Button
+                                <button
+                                    type="button"
                                     onClick={() =>
                                         infiniteRef.current?.fetchNext()
                                     }
-                                    className="cursor-pointer rounded-full text-sm"
+                                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-6 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
                                 >
-                                    Tampilkan lebih banyak ↓
-                                </Button>
+                                    Tampilkan lebih banyak
+                                    <svg
+                                        viewBox="0 0 16 16"
+                                        fill="none"
+                                        className="h-3.5 w-3.5"
+                                    >
+                                        <path
+                                            d="M4 6l4 4 4-4"
+                                            stroke="currentColor"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </button>
                             </div>
                         )}
                     </div>

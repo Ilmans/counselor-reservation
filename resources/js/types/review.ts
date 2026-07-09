@@ -9,3 +9,6 @@ export interface Review {
     date: string;
     created_at: string;
 }
+
+// key = "5" | "4" | "3" | "2" | "1" (angka bintang)
+export type RatingBreakdown = Record<string, number>;

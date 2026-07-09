@@ -48,7 +48,7 @@ export default function DashboardHeader({
             <div className="ml-auto flex shrink-0 items-center gap-2">
                 <ThemeSwitcher />
 
-                <NotificationBell open={notifOpen} onToggle={onToggleNotif} />
+                {/* <NotificationBell open={notifOpen} onToggle={onToggleNotif} /> */}
             </div>
         </header>
     );

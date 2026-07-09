@@ -3,23 +3,33 @@
 namespace App\Http\Controllers\Counselor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ScheduleResource;
 use App\Models\Consultation;
 use App\Models\ConsultationFeedback;
+use App\Repositories\ScheduleRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function __construct(protected ScheduleRepository $scheduleRepository) {}
+
     public function index(Request $request)
-    {
-        $counselorId = Auth::user()->counselor->id;
+{
+    $counselorId = Auth::user()->counselor->id;
 
-        return inertia('Counselor/dashboard/index', [
-            'statistics' => $this->getCounselorStatistic($counselorId),
-            'rating' => $this->getCounselorRatingStatistic($counselorId),
-        ]);
-    }
-
+    return inertia('Counselor/dashboard/index', [
+        'statistics' => $this->getCounselorStatistic($counselorId),
+        'rating' => $this->getCounselorRatingStatistic($counselorId),
+        'todayQueue' => $this->getTodayQueue($counselorId),
+        'pendingConfirmations' => $this->getPendingConfirmations($counselorId),
+        'schedules' => ScheduleResource::collection(
+            $this->scheduleRepository->getCounselorSchedule($counselorId)
+        ),
+        'reviews' => $this->getRecentReviews($counselorId),
+    ]);
+}
 
     public function getCounselorStatistic(int $counselorId): array
     {
@@ -64,5 +74,71 @@ class DashboardController extends Controller
 ")
             ->first()
             ?->toArray() ?? [];
+    }
+
+        private function getTodayQueue(int $counselorId): array
+    {
+        $today = now()->toDateString();
+
+        return Consultation::query()
+            ->where('counselor_id', $counselorId)
+            ->whereDate('consultation_date', $today)
+            ->whereNotIn('status', ['cancelled', 'rejected'])
+            ->with('user')
+            ->orderBy('estimated_time')
+            ->get()
+            ->map(fn($c) => $this->mapConsultation($c))
+            ->values()
+            ->all();
+    }
+
+    private function getPendingConfirmations(int $counselorId, int $limit = 3): array
+    {
+        return Consultation::query()
+            ->where('counselor_id', $counselorId)
+            ->where('status', 'pending_confirmation')
+            ->with('user')
+            ->orderBy('consultation_date')
+            ->orderBy('estimated_time')
+            ->limit($limit)
+            ->get()
+            ->map(fn($c) => $this->mapConsultation($c, includeDate: true))
+            ->values()
+            ->all();
+    }
+
+    private function mapConsultation(Consultation $c, bool $includeDate = false): array
+    {
+        return [
+            'id' => $c->id,
+            'reference' => $c->reference,
+            'date' => $includeDate ? Carbon::parse($c->consultation_date)->translatedFormat('D, j M') : null,
+            'time' => Carbon::parse($c->estimated_time)->format('H:i'),
+            'client' => $c->is_anonymous ? null : $c->user->name,
+            'is_anonymous' => $c->is_anonymous,
+            'category' => $c->categories,
+            'method' => $c->method,
+            'status' => $c->status,
+            'status_label' => \App\Constants\StatusConstant::STATUS_LABELS[$c->status] ?? $c->status,
+        ];
+    }
+
+    private function getRecentReviews(int $counselorId, int $limit = 3): array
+    {
+        return ConsultationFeedback::query()
+            ->whereHas('consultation', fn($q) => $q->where('counselor_id', $counselorId))
+            ->with('consultation.user')
+            ->latest()
+            ->limit($limit)
+            ->get()
+            ->map(fn($f) => [
+                'name' => $f->is_anonymous ? null : $f->consultation->user->name,
+                'is_anonymous' => $f->is_anonymous,
+                'rating' => $f->rating,
+                'comment' => $f->comment,
+                'when' => $f->created_at->diffForHumans(),
+            ])
+            ->values()
+            ->all();
     }
 }

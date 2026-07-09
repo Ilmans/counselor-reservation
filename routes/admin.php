@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminConsultationController;
 use App\Http\Controllers\Admin\AdminCounselorController;
 use App\Http\Controllers\Admin\AdminMasterDataController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminUserSearchController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManageUserController;
@@ -57,5 +58,8 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::post('consultations/{consultation}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.update-status');
     Route::delete('/admin/consultations/{consultation}', [AdminConsultationController::class, 'delete'])->name('consultations.delete');
 
+
+    Route::get('/admin/reviews', [AdminReviewController::class, 'index'])->name('reviews');
+    Route::delete('/admin/reviews/{feedback}', [AdminReviewController::class, 'delete'])->name('reviews.delete');
     // Route::put('consultations/{consultation}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.update-status');
 });

@@ -56,4 +56,38 @@ class ReviewRepository
             ->mapWithKeys(fn($star) => [$star => (int) ($counts[$star] ?? 0)])
             ->toArray();
     }
+
+
+    public function getAllReviewsForAdmin(
+        ?int $rating = null,
+        ?string $search = null,
+        ?string $date = null,
+        int $perPage = 10
+    ) {
+        return ConsultationFeedback::query()
+            ->with(['consultation.user', 'consultation.counselor'])
+            ->whereHas('consultation', function ($query) use ($search) {
+                if ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('reference', 'like', "%{$search}%")
+                            ->orWhereHas('user', function ($uq) use ($search) {
+                                $uq->where('name', 'like', "%{$search}%");
+                            })
+                            ->orWhereHas('counselor', function ($cq) use ($search) {
+                                $cq->where('name', 'like', "%{$search}%");
+                            });
+                    });
+                }
+            })
+            ->when($rating, fn($query) => $query->where('rating', $rating))
+            ->when($date, fn($query) => $query->whereDate('created_at', $date))
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    public function deleteReview(ConsultationFeedback $feedback): void
+    {
+        $feedback->delete();
+    }
 }

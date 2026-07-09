@@ -26,6 +26,11 @@ class ReviewListResource extends JsonResource
             'reference' => $this->consultation->reference,
             'date' => $this->consultation->date,
             'created_at' => $this->created_at->format('d M Y'),
+
+            'counselor' => $this->whenLoaded('consultation', fn() => $this->consultation->counselor ? [
+                'name' => $this->consultation->counselor->name,
+                'slug' => $this->consultation->counselor->slug,
+            ] : null),
         ];
     }
 }

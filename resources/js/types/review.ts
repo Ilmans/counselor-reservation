@@ -8,6 +8,10 @@ export interface Review {
     reference: string;
     date: string;
     created_at: string;
+    counselor?: {
+        name: string;
+        slug: string;
+    };
 }
 
 // key = "5" | "4" | "3" | "2" | "1" (angka bintang)

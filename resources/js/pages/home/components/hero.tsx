@@ -1,9 +1,10 @@
+import CounselorController from '@/actions/App/Http/Controllers/CounselorController';
 import { Link } from '@inertiajs/react';
 import React from 'react';
 
 function Hero() {
     return (
-        <div className="relative  overflow-hidden px-6 pt-16 pb-20 sm:pt-20">
+        <div className="relative overflow-hidden px-6 pt-16 pb-20 sm:pt-20">
             <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
                 {/* Teks */}
                 <div>
@@ -27,7 +28,7 @@ function Hero() {
 
                     <div className="mt-7 flex flex-wrap items-center gap-3">
                         <Link
-                            href="/"
+                            href={CounselorController.index.url()}
                             className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                         >
                             Cari Konselor

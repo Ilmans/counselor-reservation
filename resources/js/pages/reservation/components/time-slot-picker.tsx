@@ -14,8 +14,6 @@ export default function TimeSlotPicker({
     selected,
     onSelect,
 }: Props) {
-
-
     return (
         <section className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800/80 dark:bg-[#111113]">
             <p className="text-[10px] font-medium tracking-[0.08em] text-zinc-400 uppercase dark:text-zinc-600">
@@ -32,21 +30,22 @@ export default function TimeSlotPicker({
             ) : (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                     {slots.map((slot) => {
-                        const isAvail = slot.enabled
+                        const isAvail = slot.enabled;
                         const isSelected = selected === slot.time;
 
                         return (
                             <button
                                 key={slot.time}
+                                type="button"
                                 disabled={!isAvail}
                                 onClick={() => onSelect(slot.time)}
                                 className={[
-                                    'flex flex-col  items-center gap-1 rounded-xl border py-3 transition-colors',
+                                    'flex flex-col items-center gap-1 rounded-xl border py-3 transition-all duration-150',
                                     !isAvail
                                         ? 'cursor-not-allowed border-zinc-100 bg-zinc-50 dark:border-zinc-800/50 dark:bg-zinc-900/20'
                                         : isSelected
-                                          ? 'border-zinc-900 cursor-pointer bg-zinc-900 dark:border-zinc-100 dark:bg-zinc-100'
-                                          : 'border-zinc-200 cursor-pointer bg-white hover:border-zinc-300 dark:border-zinc-800 dark:bg-[#111113]',
+                                          ? 'cursor-pointer border-zinc-900 bg-zinc-900 dark:border-zinc-100 dark:bg-zinc-100'
+                                          : 'cursor-pointer border-zinc-200 bg-white hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm dark:border-zinc-800 dark:bg-[#111113]',
                                 ].join(' ')}
                             >
                                 <span
@@ -79,7 +78,7 @@ export default function TimeSlotPicker({
                                                   : 'text-emerald-500'
                                         }`}
                                     >
-                                        {!isAvail ? slot.reason : "Tersedia"}
+                                        {!isAvail ? slot.reason : 'Tersedia'}
                                     </span>
                                 </div>
                             </button>

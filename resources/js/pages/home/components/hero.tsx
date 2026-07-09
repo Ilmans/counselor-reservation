@@ -17,7 +17,7 @@ function Hero() {
                     <h1 className="mb-4 font-serif text-5xl leading-[1.1] font-normal tracking-[-0.02em] text-foreground md:text-6xl">
                         Temukan konselor
                         <br />
-                        <span className="text-primary italic">
+                        <span className=" italic text-brand-gradient">
                             yang tepat untuk kamu.
                         </span>
                     </h1>

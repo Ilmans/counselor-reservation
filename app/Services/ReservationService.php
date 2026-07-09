@@ -47,7 +47,7 @@ class ReservationService
     {
         $consultation = $this->consultationRepository->findByReference($reference, $userId);
         abort_if(!$consultation || $consultation->user_id != Auth::id(), 404);
-        
+
         $feedback = $this->reviewRepo->findFeedback($consultation->id);
 
         return [
@@ -59,27 +59,17 @@ class ReservationService
 
     public function store(array $data, bool $isLoggedIn)
     {
-        if ($isLoggedIn) {
-            $user = Auth::user();
-        } else {
-            $isBooked = $this->consultationRepository
-                ->isSlotBooked($data['counselor'], $data['date'], $data['time']);
 
-            if ($isBooked) {
-                throw ValidationException::withMessages([
-                    'time' => 'Slot waktu ini sudah penuh, silakan pilih jam lain.',
-                ]);
-            }
+        $user = Auth::user();
+        $isBooked = $this->consultationRepository
+            ->isSlotBooked($data['counselor'], $data['date'], $data['time']);
 
-            $user = $this->userRepo->createAndLogin(
-                $data['full_name'],
-                $data['email'],
-                $data['whatsapp'],
-                $data['age'],
-                $data['gender'],
-                bcrypt(Str::random(12))
-            );
+        if ($isBooked) {
+            throw ValidationException::withMessages([
+                'time' => 'Slot waktu ini sudah penuh, silakan pilih jam lain.',
+            ]);
         }
+
 
         $queuePosition =
             $this->consultationRepository->countQueueForDate(
@@ -119,6 +109,4 @@ class ReservationService
         }
         return $consultation->reference;
     }
-
-
 }

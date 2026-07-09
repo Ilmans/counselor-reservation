@@ -1,7 +1,9 @@
 export interface AppData {
-    name : string;
+    name: string;
+    desc: string;
     greeting: string;
     date: AppDate;
+    logo: string;
 }
 
 export interface AppDate {

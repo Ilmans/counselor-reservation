@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { CounselorDetailPage } from '@/types/counselor';
 import { GENDER_OPTIONS, SESSION_FIRST_OPTIONS } from '@/utils/constant';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 
 type Props = {
     counselor: CounselorDetailPage;
@@ -42,11 +43,6 @@ export default function Form({
         time: selectedSlot ?? '',
         method: sessionMode ?? '',
         is_anonymous: false,
-        full_name: user?.name ?? '',
-        age: user?.age,
-        whatsapp: user?.whatsapp ?? '',
-        email: user?.email ?? '',
-        gender: user?.gender ?? '',
         concerns: '',
         is_first: '',
         notes: '',
@@ -150,107 +146,25 @@ export default function Form({
                 </div>
 
                 {/* ── Data Diri ── */}
-
                 <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-medium tracking-[0.08em] text-zinc-400 uppercase dark:text-zinc-600">
-                            Data Diri
-                        </p>
-                        {isLoggedIn && (
-                            <span className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
-                                Diisi otomatis dari akunmu
-                            </span>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <Input
-                            label="Nama Lengkap"
-                            placeholder="Masukkan nama lengkap"
-                            value={data.full_name}
-                            onChange={(e) =>
-                                setData('full_name', e.target.value)
-                            }
-                            error={errors.full_name}
-                            readOnly={isReadOnly(data.full_name)}
-                        />
-                        <Input
-                            label="Usia"
-                            type="number"
-                            placeholder="Misal: 25"
-                            min={12}
-                            max={99}
-                            value={data.age}
-                            onChange={(e) => setData('age', e.target.value)}
-                            error={errors.age}
-                            readOnly={isReadOnly(data.age)}
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <Input
-                            label="Nomor WhatsApp"
-                            type="tel"
-                            placeholder="+62 812 xxxx xxxx"
-                            value={data.whatsapp}
-                            onChange={(e) =>
-                                setData('whatsapp', e.target.value)
-                            }
-                            error={errors.whatsapp}
-                            hint="Untuk konfirmasi sesi"
-                            readOnly={isReadOnly(data.whatsapp)}
-                        />
-                        <Input
-                            label="Email"
-                            type="email"
-                            placeholder="email@contoh.com"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            error={errors.email}
-                            readOnly={isReadOnly(data.email)}
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <ToggleGroup
-                            label="Jenis Kelamin"
-                            options={GENDER_OPTIONS}
-                            value={data.gender}
-                            onChange={(v) => setData('gender', v)}
-                            error={errors.gender}
-                        />
-                        <ToggleGroup
-                            label="Sesi Pertama?"
-                            options={SESSION_FIRST_OPTIONS}
-                            value={data.is_first}
-                            onChange={(v) => setData('is_first', v)}
-                            error={errors.is_first}
-                        />
-                    </div>
+                    <ToggleGroup
+                        label="Apakah pernah konsultasi psikolog sebelumnya?"
+                        options={SESSION_FIRST_OPTIONS}
+                        value={data.is_first}
+                        onChange={(v) => setData('is_first', v)}
+                        error={errors.is_first}
+                    />
                 </div>
 
                 {/* ── Catatan ── */}
-                <div className={'mt-4'}>
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-medium tracking-[0.06em] text-zinc-500 uppercase dark:text-zinc-500">
-                            Ceritakan Situasimu{' '}
-                            <span className="text-zinc-400 normal-case">
-                                (opsional)
-                            </span>
-                        </label>
-                        <textarea
-                            rows={4}
-                            placeholder="Deskripsikan secara singkat apa yang ingin kamu bahas…"
-                            value={data.notes}
-                            onChange={(e) => setData('notes', e.target.value)}
-                            className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-3 py-2 text-[13px] text-zinc-900 placeholder-zinc-400 transition-colors outline-none focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-600 dark:focus:border-zinc-600"
-                        />
-                        {errors.notes && (
-                            <p className="text-[11px] text-red-500">
-                                {errors.notes}
-                            </p>
-                        )}
-                    </div>
+                <div className="mt-4">
+                    <RichTextEditor
+                        label="Ceritakan Situasimu (opsional)"
+                        placeholder="Deskripsikan secara singkat apa yang ingin kamu bahas…"
+                        value={data.notes}
+                        onChange={(html) => setData('notes', html)}
+                        error={errors.notes}
+                    />
                 </div>
             </section>
 

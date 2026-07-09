@@ -16,6 +16,7 @@ import { Table } from '@/components/ui/table';
 import DashboardWrapper from '@/layouts/dashboard/dashboard-wrapper';
 import type { FILTERS } from '@/types/filter';
 import Filters from './components/filters';
+import PageHead from '@/components/page-head';
 const breadcumbs = [
     {
         label: 'Beranda',
@@ -37,6 +38,7 @@ interface Props {
 function Index({ consultations, filters }: Props) {
     return (
         <>
+            <PageHead title="Daftar Konsultasi" />
             <Breadcrumb items={breadcumbs} />
             <div className="rounded-xl border border-border bg-card">
                 <div className="border-b border-border p-4">

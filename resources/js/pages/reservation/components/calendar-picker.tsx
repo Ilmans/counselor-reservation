@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type {  ScheduleOverview } from '@/types/schedule';
+import type { ScheduleOverview } from '@/types/schedule';
 import { DAY_NAMES } from '@/utils/constant';
 import { buildCalendarWeeks, buildMonthLabel, toDateStr } from '@/utils/helper';
 
@@ -15,7 +15,6 @@ export default function CalendarPicker({
     selectedDate,
     onSelect,
 }: Props) {
-
     const today = useMemo(() => {
         const d = new Date();
         d.setHours(0, 0, 0, 0);
@@ -37,7 +36,6 @@ export default function CalendarPicker({
                 rangeEnd: overview.endDate,
             };
         }
-
 
         const start = new Date(overview.startDate);
         const end = new Date(overview.endDate);
@@ -66,7 +64,7 @@ export default function CalendarPicker({
                 </span>
             </div>
 
-            {/* day  */}
+            {/* Nama hari */}
             <div className="mb-1 grid grid-cols-7 text-center">
                 {DAY_NAMES.map((d) => (
                     <div
@@ -85,8 +83,7 @@ export default function CalendarPicker({
                         {week.map((date, di) => {
                             const dateStr = toDateStr(date);
                             const percentage =
-                                overview.avaibility[dateStr]?.percentage;
-                            const pct = Number(percentage);
+                                overview.avaibility[dateStr]?.percentage ?? 0;
 
                             const inRange =
                                 rangeStart &&
@@ -95,7 +92,7 @@ export default function CalendarPicker({
                                 date <= rangeEnd;
                             const isAvail =
                                 availableDates.has(dateStr) && date >= today;
-                            const isFull = isAvail && (percentage ?? 0) >= 100;
+                            const isFull = isAvail && percentage >= 100;
                             const isSelected = selectedDate === dateStr;
                             const isToday =
                                 date.toDateString() === today.toDateString();
@@ -103,10 +100,12 @@ export default function CalendarPicker({
                             return (
                                 <button
                                     key={di}
+                                    type="button"
                                     disabled={!isAvail || isFull}
                                     onClick={() => onSelect(dateStr)}
+                                    aria-label={`${dateStr}${isFull ? ' (penuh)' : ''}`}
                                     className={[
-                                        'relative flex h-9 w-full flex-col items-center justify-center rounded-lg text-[12px] font-medium transition-colors',
+                                        'relative flex h-9 w-full flex-col items-center justify-center rounded-lg text-[12px] font-medium transition-all duration-150',
                                         !inRange
                                             ? 'pointer-events-none invisible'
                                             : '',
@@ -114,7 +113,7 @@ export default function CalendarPicker({
                                             ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                                             : isFull || !isAvail
                                               ? 'cursor-not-allowed text-zinc-300 dark:text-zinc-700'
-                                              : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800',
+                                              : 'cursor-pointer text-zinc-700 hover:scale-[1.04] hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800',
                                     ].join(' ')}
                                 >
                                     <span
@@ -130,9 +129,9 @@ export default function CalendarPicker({
                                     {isAvail && !isSelected && (
                                         <span
                                             className={`absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full ${
-                                                pct >= 100
+                                                percentage >= 100
                                                     ? 'bg-red-400'
-                                                    : pct >= 50
+                                                    : percentage >= 50
                                                       ? 'bg-yellow-400'
                                                       : 'bg-emerald-400'
                                             }`}

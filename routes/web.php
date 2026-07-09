@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\CounselorSettingController;
@@ -44,9 +45,14 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name("login");
     Route::post('/login', [LoginController::class, 'store']);
+
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/reservation/appointment/{counselor?}', [ReservationController::class, 'create']);
+
     Route::get('/my-reservations', [ReservationController::class, 'index']);
     Route::get('/my-invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/my-reservations/{reference}', [ReservationController::class, 'show'])->name('reservations.detail');
@@ -67,5 +73,5 @@ Route::get('/about-us', [HomeController::class, 'about']);
 Route::get('/counselors/{category?}', [CounselorController::class, 'index']);
 Route::get('/psikolog/{couonselor?}', [CounselorController::class, 'details']);
 
-Route::get('/reservation/{counselor?}', [ReservationController::class, 'create']);
+
 Route::post('reservation', [ReservationController::class, 'store']);

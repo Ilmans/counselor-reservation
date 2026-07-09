@@ -1,7 +1,8 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import React from 'react';
 
 const Footer = () => {
+    const { app } = usePage().props;
     return (
         <footer className="border-t border-border">
             <div className="px-6 py-12">
@@ -27,38 +28,21 @@ const Footer = () => {
                 {/* Brand + link columns */}
                 <div className="flex flex-col justify-between gap-8 md:flex-row">
                     <div>
-                        <div className="mb-3 flex items-center gap-2.5">
-                            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-primary">
-                                <svg
-                                    width={12}
-                                    height={12}
-                                    viewBox="0 0 14 14"
-                                    fill="none"
-                                    className="text-primary-foreground"
-                                >
-                                    <circle
-                                        cx={7}
-                                        cy={7}
-                                        r="5.5"
-                                        stroke="currentColor"
-                                        strokeWidth="1.2"
-                                        opacity={0.6}
-                                    />
-                                    <path
-                                        d="M7 4.5v3l1.5 1.5"
-                                        stroke="currentColor"
-                                        strokeWidth="1.2"
-                                        strokeLinecap="round"
-                                    />
-                                </svg>
-                            </div>
-                            <span className="font-serif text-base font-medium text-foreground">
-                                Tenang
+                        <div className="mb-4 flex items-center gap-3">
+                            <img
+                                src="/images/logo.png"
+                                alt={app.name}
+                                className="h-10 w-10 object-contain"
+                                draggable={false}
+                            />
+
+                            <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
+                                {app.name}
                             </span>
                         </div>
+
                         <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-                            Platform reservasi konseling yang menghubungkan kamu
-                            dengan konselor profesional tersertifikasi.
+                            {app.desc}
                         </p>
                     </div>
 
@@ -121,7 +105,8 @@ const Footer = () => {
 
                 <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
                     <p className="text-[13px] text-muted-foreground/70">
-                        Tenang {new Date().getFullYear()}. Semua hak dilindungi.
+                        {app.name} {new Date().getFullYear()}. Semua hak
+                        dilindungi.
                     </p>
                     <p className="text-[13px] text-muted-foreground/70">
                         Dibuat dengan niat baik - Indonesia

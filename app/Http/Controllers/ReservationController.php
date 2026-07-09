@@ -50,13 +50,8 @@ class ReservationController extends Controller
             'method'       => ['required', 'in:online,offline'],
             'is_anonymous' => ['required', 'boolean'],
             'concerns'     => ['required', 'string'],
-            'full_name'    => ['required', 'string', 'max:255'],
-            'age'          => ['required', 'integer', 'min:12', 'max:99'],
-            'whatsapp'     => ['required', 'string', 'max:20'],
-            'email'        => ['required', 'email', 'max:255'],
-            'gender'       => ['required', 'in:L,P'],
             'is_first'     => ['required', 'boolean'],
-            'notes'        => ['nullable', 'string', 'max:1000'],
+            'notes'        => ['required', 'string', 'max:1000'],
         ]);
 
         $reference = $this->service->store($data, $isLoggedIn);

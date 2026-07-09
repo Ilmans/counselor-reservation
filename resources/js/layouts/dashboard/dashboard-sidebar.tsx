@@ -175,14 +175,21 @@ export default function DashboardSidebar({
         >
             {/* Brand */}
             <div className="flex items-center justify-between px-5 py-5">
-                <div className="flex min-w-0 items-center gap-2.5">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                        <span className="font-serif text-sm">T</span>
-                    </div>
-                    <span className="truncate font-serif text-base">
+                <Link
+                    href={isAdmin ? '/admin/dashboard' : '/counselor/dashboard'}
+                    className="flex shrink-0 items-center gap-3"
+                >
+                    <img
+                        src={app.logo}
+                        alt={app.name}
+                        className="h-9 w-auto object-contain"
+                        draggable={false}
+                    />
+
+                    <span className="font-serif text-base font-semibold tracking-tight text-foreground">
                         {app.name}
                     </span>
-                </div>
+                </Link>
                 {!isDesktop && (
                     <button
                         className="shrink-0 text-muted-foreground"

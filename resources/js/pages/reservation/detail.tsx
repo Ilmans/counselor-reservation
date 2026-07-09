@@ -14,6 +14,8 @@ import ScheduleCard from './detail/components/schedule-card';
 import SessionInfoCard from './detail/components/session-info';
 import StatusHero from './detail/components/status-hero';
 import SummaryCard from './detail/components/summary-card';
+import PageHead from '@/components/page-head';
+import consultation from '@/routes/consultation';
 
 type Props = {
     reservation: ConsultationDetail;
@@ -48,66 +50,69 @@ export default function Detail({ reservation: r, feedback }: Props) {
     }
 
     return (
-        <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-            <div className="mx-auto max-w-5xl px-4 py-6 lg:px-6 lg:py-10">
-                <Breadcrumb items={breadcumbs} />
+        <>
+            <PageHead title={`Detail konsultasi ${r.reference}`} />
+            <div className="min-h-screen bg-background font-sans text-foreground antialiased">
+                <div className="mx-auto max-w-5xl px-4 py-6 lg:px-6 lg:py-10">
+                    <Breadcrumb items={breadcumbs} />
 
-                <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
-                    <div className="min-w-0 space-y-4">
-                        {r.needs_payment && r.invoice && (
-                            <PaymentAlert invoice={r.invoice} />
-                        )}
+                    <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
+                        <div className="min-w-0 space-y-4">
+                            {r.needs_payment && r.invoice && (
+                                <PaymentAlert invoice={r.invoice} />
+                            )}
 
-                        <StatusHero
-                            r={r}
-                            feedback={feedback}
-                            onOpenCancel={() => setCancelOpen(true)}
-                            onOpenReview={() => setReviewOpen(true)}
-                        />
+                            <StatusHero
+                                r={r}
+                                feedback={feedback}
+                                onOpenCancel={() => setCancelOpen(true)}
+                                onOpenReview={() => setReviewOpen(true)}
+                            />
 
-                        <ScheduleCard r={r} />
+                            <ScheduleCard r={r} />
 
-                        <SessionInfoCard
-                            r={r}
-                            isConfirmedOrLater={isConfirmedOrLater}
-                        />
+                            <SessionInfoCard
+                                r={r}
+                                isConfirmedOrLater={isConfirmedOrLater}
+                            />
 
-                        <NotesCard
-                            notes={r.notes}
-                            excludeNoteId={excludedNoteId}
-                        />
+                            <NotesCard
+                                notes={r.notes}
+                                excludeNoteId={excludedNoteId}
+                            />
 
-                        {!isBroken && r.status !== 'completed' && (
-                            <p className="text-center text-xs text-muted-foreground">
-                                Ada yang perlu ditanyakan?{' '}
-                                <Link
-                                    href="/support"
-                                    className="font-medium text-foreground underline underline-offset-2"
-                                >
-                                    Hubungi tim kami
-                                </Link>
-                            </p>
-                        )}
+                            {!isBroken && r.status !== 'completed' && (
+                                <p className="text-center text-xs text-muted-foreground">
+                                    Ada yang perlu ditanyakan?{' '}
+                                    <Link
+                                        href="/support"
+                                        className="font-medium text-foreground underline underline-offset-2"
+                                    >
+                                        Hubungi tim kami
+                                    </Link>
+                                </p>
+                            )}
+                        </div>
+
+                        <aside className="lg:sticky lg:top-24">
+                            <SummaryCard r={r} showContact={showContact} />
+                        </aside>
                     </div>
-
-                    <aside className="lg:sticky lg:top-24">
-                        <SummaryCard r={r} showContact={showContact} />
-                    </aside>
                 </div>
-            </div>
 
-            <CancelReservationModal
-                reservation={r}
-                open={cancelOpen}
-                onClose={() => setCancelOpen(false)}
-            />
-            <ReviewModal
-                reservation={r}
-                open={reviewOpen}
-                onClose={() => setReviewOpen(false)}
-                onSuccess={handleReviewSuccess}
-            />
-        </div>
+                <CancelReservationModal
+                    reservation={r}
+                    open={cancelOpen}
+                    onClose={() => setCancelOpen(false)}
+                />
+                <ReviewModal
+                    reservation={r}
+                    open={reviewOpen}
+                    onClose={() => setReviewOpen(false)}
+                    onSuccess={handleReviewSuccess}
+                />
+            </div>
+        </>
     );
 }
 

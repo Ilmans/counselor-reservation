@@ -4,19 +4,20 @@ import CounselorController from '@/actions/App/Http/Controllers/CounselorControl
 import Breadcrumb from '@/components/breadcumb';
 import Wrapper from '@/layouts/wrapper';
 import type { CounselorDetailPage } from '@/types/counselor';
-import type {  ScheduleOverview } from '@/types/schedule';
-import CalendarPicker from './components/calendar-picker';
-import CounselorCard from './components/cunselor-card';
+import type { ScheduleOverview } from '@/types/schedule';
 import Form from './components/form';
 import SessionModePicker from './components/session-mode-picker';
 import StatusInformation from './components/status-information';
 import TimeSlotPicker from './components/time-slot-picker';
+import BookingSummary from './components/booking-summary';
+import CounselorCard from './components/cunselor-card';
+import CalendarPicker from './components/calendar-picker';
+import PageHead from '@/components/page-head';
 
 type Props = {
     counselor: CounselorDetailPage;
     overview: ScheduleOverview;
 };
-
 
 export default function Create({ counselor, overview }: Props) {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -56,49 +57,57 @@ export default function Create({ counselor, overview }: Props) {
     ];
 
     return (
-        <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-[#0d0d0f] dark:text-zinc-200">
-            <div className="mx-auto max-w-4xl px-4 py-8">
-                <Breadcrumb items={breadcumbs} />
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-                    <aside className="lg:col-span-1">
-                        <CounselorCard counselor={counselor} />
-                        <StatusInformation />
-                    </aside>
-
-                    <main className="flex flex-col gap-5 lg:col-span-2">
-                        <CalendarPicker
-                            overview={overview}
-                            selectedDate={selectedDate}
-                            onSelect={handleSelectDate}
-                        />
-                        {selectedDate && current && (
-                            <TimeSlotPicker
-                                date={selectedDate}
-                                slots={current.slots}
-                                selected={selectedSlot}
-                                onSelect={setSelectedSlot}
+        <>
+            <PageHead title="Reservasi" />
+            <div className="min-h-screen font-sans text-zinc-900 antialiased dark:bg-[#0d0d0f] dark:text-zinc-200">
+                <div className="mx-auto max-w-4xl px-4 py-8">
+                    <Breadcrumb items={breadcumbs} />
+                    <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                        <aside className="flex flex-col gap-5 lg:sticky lg:top-8 lg:col-span-1 lg:self-start">
+                            <CounselorCard counselor={counselor} />
+                            <BookingSummary
+                                selectedDate={selectedDate}
+                                selectedSlot={selectedSlot}
+                                sessionMode={sessionMode}
                             />
-                        )}
+                            <StatusInformation />
+                        </aside>
 
-                        {selectedDate && current && (
-                            <SessionModePicker
-                                date={selectedDate}
-                                method={current.method}
-                                selected={sessionMode}
-                                onSelect={handleSelectMode}
+                        <main className="flex flex-col gap-5 lg:col-span-2">
+                            <CalendarPicker
+                                overview={overview}
+                                selectedDate={selectedDate}
+                                onSelect={handleSelectDate}
                             />
-                        )}
+                            {selectedDate && current && (
+                                <TimeSlotPicker
+                                    date={selectedDate}
+                                    slots={current.slots}
+                                    selected={selectedSlot}
+                                    onSelect={setSelectedSlot}
+                                />
+                            )}
 
-                        <Form
-                            counselor={counselor}
-                            selectedDate={selectedDate}
-                            selectedSlot={selectedSlot}
-                            sessionMode={sessionMode}
-                        />
-                    </main>
+                            {selectedDate && current && (
+                                <SessionModePicker
+                                    date={selectedDate}
+                                    method={current.method}
+                                    selected={sessionMode}
+                                    onSelect={handleSelectMode}
+                                />
+                            )}
+
+                            <Form
+                                counselor={counselor}
+                                selectedDate={selectedDate}
+                                selectedSlot={selectedSlot}
+                                sessionMode={sessionMode}
+                            />
+                        </main>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

@@ -11,7 +11,10 @@ class AppContext
         $now = Carbon::now();
 
         return [
-            'name' => "Tenang.",
+            'name' => "Tenang.Id",
+            'desc' => " Platform reservasi konseling yang menghubungkan kamu
+                            dengan konselor profesional tersertifikasi.",
+            'logo' => asset('images/logo.png'),
             'date' => [
                 'day' => $now->translatedFormat('l'),
                 'date' => $now->translatedFormat('d F Y'),

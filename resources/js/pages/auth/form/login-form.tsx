@@ -1,15 +1,15 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
+import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
 import GoogleIcon from '@/components/icons/google-icon';
 import { Button } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
 import { Input } from '@/components/ui/input';
-import {  AlertCard } from '@/components/ui/alert';
-import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
+import { AlertCard } from '@/components/ui/alert';
 
 function LoginForm() {
     const { alert } = usePage().props;
 
-    const { data, setData, post, errors } = useForm({
+    const { data, setData, post, errors, processing } = useForm({
         email: '',
         password: '',
     });
@@ -25,7 +25,9 @@ function LoginForm() {
 
     return (
         <form method="post" onSubmit={onSubmit} className="flex flex-col gap-5">
-            {alert && <AlertCard variant={alert.type}>{alert.message}</AlertCard>}
+            {alert && (
+                <AlertCard variant={alert.type}>{alert.message}</AlertCard>
+            )}
 
             <Input
                 label="Email"
@@ -59,6 +61,7 @@ function LoginForm() {
 
             <Button
                 type="submit"
+                disabled={processing}
                 className="w-full cursor-pointer justify-center py-2.5 text-[13px]"
             >
                 Masuk
@@ -67,17 +70,22 @@ function LoginForm() {
             <Divider label="atau" />
 
             <Button
+                loading={processing}
                 mode="outlined"
                 className="w-full cursor-pointer justify-center gap-2.5 px-4 py-2.5 text-[12px]"
             >
                 <GoogleIcon />
                 Lanjutkan dengan Google
             </Button>
+
             <p className="text-center text-[11px] text-zinc-400 dark:text-zinc-600">
                 Belum punya akun?{' '}
-                <button className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200">
+                <Link
+                    href="/register"
+                    className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                >
                     Daftar gratis
-                </button>
+                </Link>
             </p>
         </form>
     );

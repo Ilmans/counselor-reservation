@@ -37,7 +37,6 @@ export default function SessionModePicker({
             </p>
 
             {isSingle && singleOption ? (
-                // Hanya satu pilihan → info saja
                 <div className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-700 dark:bg-zinc-900/30">
                     <span className="text-base">{singleOption.icon}</span>
                     <div>
@@ -54,7 +53,6 @@ export default function SessionModePicker({
                     </span>
                 </div>
             ) : (
-                // Dua pilihan → bisa dipilih
                 <div className="grid grid-cols-2 gap-2">
                     {OPTIONS.map((opt) => (
                         <label

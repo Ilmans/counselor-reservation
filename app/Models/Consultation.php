@@ -30,5 +30,16 @@ class Consultation extends Model
         return $this->hasOne(Invoice::class);
     }
     // di dalam App\Models\Consultation
-  
+
+
+    public function chat()
+    {
+        return $this->hasOne(ConsultationChat::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(ConsultationChatMessage::class);
+    }
+
 }

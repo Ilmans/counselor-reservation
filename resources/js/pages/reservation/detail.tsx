@@ -16,6 +16,8 @@ import StatusHero from './detail/components/status-hero';
 import SummaryCard from './detail/components/summary-card';
 import PageHead from '@/components/page-head';
 import consultation from '@/routes/consultation';
+import ConsultationChatCard from '@/components/interactive/consultation-chat-card';
+import ConsultationChatWidget from '@/components/interactive/consultation-chat-widget';
 
 type Props = {
     reservation: ConsultationDetail;
@@ -112,6 +114,14 @@ export default function Detail({ reservation: r, feedback }: Props) {
                     onSuccess={handleReviewSuccess}
                 />
             </div>
+
+            <ConsultationChatWidget
+                consultationStatus={r.status}
+                consultationId={r.id}
+                currentSenderType="user"
+                consultationReference={r.reference}
+                statusLabel={r.status_label}
+            />
         </>
     );
 }

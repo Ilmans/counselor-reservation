@@ -1,4 +1,9 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { configureEcho } from '@laravel/echo-react';
+
+configureEcho({
+    broadcaster: 'pusher',
+});
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

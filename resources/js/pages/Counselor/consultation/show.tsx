@@ -9,14 +9,13 @@ import NotesForm from './components/detail/notes-form';
 import { PhoneCall, ShieldCheck } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
 import { AlertCard } from '@/components/ui/alert';
-
-
+import ConsultationChatWidget from '@/components/interactive/consultation-chat-widget';
 
 interface Props {
     consultation: ConsultationDetail;
 }
 function Show({ consultation }: Props) {
-    const { alert } = usePage().props;
+    const { alert, auth } = usePage().props;
 
     return (
         <>
@@ -31,8 +30,6 @@ function Show({ consultation }: Props) {
                     <StatusHero consultation={consultation} />
                     <InfoConsultation consultation={consultation} />
                     <div className="rounded-2xl border border-border bg-card p-4">
-
-
                         <ConsultationNotes notes={consultation.notes} />
 
                         <div className="mt-4">
@@ -113,6 +110,14 @@ function Show({ consultation }: Props) {
                     </div>
                 </aside>
             </div>
+
+            <ConsultationChatWidget
+                consultationStatus={consultation.status}
+                consultationId={consultation.id}
+                currentSenderType="counselor"
+                consultationReference={consultation.reference}
+                statusLabel={consultation.status_label}
+            />
         </>
     );
 }

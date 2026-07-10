@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Consultation;
+use App\Observers\ConsultationObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('counselor', fn($user) => $user->role === 'counselor');
 
         Gate::define('user', fn($user) => $user->role === 'user');
+
+        Consultation::observe(ConsultationObserver::class);
     }
 
     /**

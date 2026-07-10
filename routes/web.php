@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Chat\ConsultationChatController;
 use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\CounselorSettingController;
@@ -82,3 +83,13 @@ Route::get('/psikolog/{couonselor?}', [CounselorController::class, 'details']);
 
 
 Route::post('reservation', [ReservationController::class, 'store']);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/consultations/{consultation}/chat/messages', [ConsultationChatController::class, 'index'])
+        ->name('consultations.chat.index');
+    Route::post('/consultations/{consultation}/chat/messages', [ConsultationChatController::class, 'store'])
+        ->name('consultations.chat.store');
+    Route::patch('/consultations/{consultation}/chat/messages/read', [ConsultationChatController::class, 'markRead'])
+        ->name('consultations.chat.read');
+});

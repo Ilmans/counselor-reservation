@@ -30,6 +30,7 @@ class ConsultationRepository
             'user',
             'counselor.specialization',
             'counselor.address',
+            'counselor.slug',
             'notes',
             'invoice',
         ])->where('reference', $reference)

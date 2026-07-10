@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Counselor;
 
+use App\Constants\CacheKey;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ConsultationDetailResource;
 use App\Http\Resources\ConsultationListResource;
 use App\Repositories\ConsultationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ConsultationController extends Controller
 {
@@ -74,6 +76,7 @@ class ConsultationController extends Controller
 
         $consultation->feedback()->create($validated);
 
+        Cache::forget(CacheKey::counselorBySlug($consultation->counselor->slug));
         return back()->with('toast', [
             'type'    => 'success',
             'message' => 'Ulasan berhasil dikirim. Terima kasih!',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\CacheKey;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryListResource;
 use App\Http\Resources\SpecializationListResource;
@@ -9,6 +10,7 @@ use App\Models\Category;
 use App\Models\Specialization;
 use App\Repositories\MasterDataRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -35,6 +37,7 @@ class AdminMasterDataController extends Controller
 
         $this->repo->createCategory($validated);
 
+        Cache::forget(CacheKey::CATEGORIES);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Kategori berhasil ditambahkan.',
@@ -49,6 +52,7 @@ class AdminMasterDataController extends Controller
 
         $this->repo->updateCategory($category, $validated);
 
+        Cache::forget(CacheKey::CATEGORIES);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Kategori berhasil diperbarui.',
@@ -66,6 +70,7 @@ class AdminMasterDataController extends Controller
 
         $this->repo->deleteCategory($category);
 
+        Cache::forget(CacheKey::CATEGORIES);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Kategori berhasil dihapus.',
@@ -90,6 +95,7 @@ class AdminMasterDataController extends Controller
 
         $this->repo->createSpecialization($validated);
 
+        Cache::forget(CacheKey::SPECIALIZATIONS);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Spesialisasi berhasil ditambahkan.',
@@ -104,7 +110,7 @@ class AdminMasterDataController extends Controller
         ]);
 
         $this->repo->updateSpecialization($specialization, $validated);
-
+        Cache::forget(CacheKey::SPECIALIZATIONS);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Spesialisasi berhasil diperbarui.',
@@ -121,7 +127,7 @@ class AdminMasterDataController extends Controller
         }
 
         $this->repo->deleteSpecialization($specialization);
-
+        Cache::forget(CacheKey::SPECIALIZATIONS);
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Spesialisasi berhasil dihapus.',

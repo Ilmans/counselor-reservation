@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Concerns;
 
+use App\Constants\CacheKey;
 use App\Http\Requests\ProfileCounselorRequest;
 use App\Http\Requests\UpdateAddressCounselorRequest;
 use App\Http\Requests\UpdateServicesCounselorRequest;
 use App\Models\Counselor;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 trait ManagesCounselorProfile
 {
+
+
     public function updateProfile(ProfileCounselorRequest $request, Counselor $counselor)
     {
         $validated = $request->validated();
@@ -23,7 +27,7 @@ trait ManagesCounselorProfile
         unset($validated['photo']);
 
         $this->counselorRepo->updateProfile($counselor, $validated);
-
+        Cache::forget(CacheKey::counselorBySlug($counselor->slug));
         return back()->with('toast', [
             'type' => 'success',
             'message' => 'Profile konselor berhasil di perbarui.',
@@ -36,6 +40,7 @@ trait ManagesCounselorProfile
         $validated = $request->validated();
         $this->counselorRepo->updateAddress($counselor, $validated);
 
+        Cache::forget(CacheKey::counselorBySlug($counselor->slug));
         return back()->with('toast', [
             'type' => 'success',
             'message' => 'Alamat praktik berhasil diperbarui.',
@@ -52,6 +57,8 @@ trait ManagesCounselorProfile
         }
 
         $this->counselorRepo->updateService($counselor, $validated);
+        
+        Cache::forget(CacheKey::counselorBySlug($counselor->slug));
         return back()->with('toast', [
             'type' => 'success',
             'message' => 'Layanan & harga berhasil diperbarui.',

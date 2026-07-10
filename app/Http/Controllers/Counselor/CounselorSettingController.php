@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Counselor;
 
+use App\Constants\CacheKey;
 use App\Http\Controllers\Concerns\ManagesCounselorProfile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CounselorResource;
@@ -11,6 +12,7 @@ use App\Models\CounselorWallet;
 use App\Repositories\CounselorRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class CounselorSettingController extends Controller
 {
@@ -23,6 +25,8 @@ class CounselorSettingController extends Controller
         $counselorId = Auth::user()->counselor->id;
         $counselor = new CounselorResource($this->counselorRepo->findCounselor($counselorId));
         $wallet = CounselorWallet::firstOrNew(['counselor_id' => $counselorId]);
+
+        Cache::forget(CacheKey::counselorBySlug($counselor->slug));
         return inertia('Counselor/settings/index', [
             'counselor' => $counselor,
             'wallet' => new WalletResource($wallet),

@@ -10,6 +10,11 @@ class AdminAuthController extends Controller
 {
     public function AdminLogin()
     {
+        // Kalau sudah login sebagai admin, jangan tampilkan form login lagi
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         return inertia('Admin/auth/login');
     }
 
@@ -28,8 +33,8 @@ class AdminAuthController extends Controller
                 'email' => 'Email atau password salah.',
             ]);
         }
-        if (Auth::guard('admin')->user()->role !== 'admin') {
 
+        if (Auth::guard('admin')->user()->role !== 'admin') {
             Auth::guard('admin')->logout();
 
             return back()->withErrors([

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\CacheKey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -36,6 +38,8 @@ class ProfileSettingController extends Controller
         }
         unset($validated['avatar']);
         $user->update($validated);
+
+
         return back()->with('alert', [
             'type' => 'success',
             'message' => 'Detail profile berhasil diperbarui.'

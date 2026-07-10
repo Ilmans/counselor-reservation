@@ -12,10 +12,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManageUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+
     Route::get('/admin/login', [AdminAuthController::class, 'AdminLogin'])->name('admin.login');
     Route::post('/admin/login', [AdminAuthController::class, 'AdminLoginStore'])->name('admin.login.store');
-});
+
 
 
 Route::middleware(['auth:admin', 'can:admin'])->group(function () {

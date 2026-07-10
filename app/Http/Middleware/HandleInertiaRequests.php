@@ -2,13 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Constants\CacheKey;
 use App\Repositories\CounselorRepository;
 use App\Support\AppContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
-use Pest\Plugins\Cache;
+use Illuminate\Support\Facades\Cache;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -42,9 +43,17 @@ class HandleInertiaRequests extends Middleware
     {
         $repo = app(CounselorRepository::class);
 
-        $categories = $repo->getAllCategories();
-        $specializations = $repo->getAllSpecialization();
+        $categories = Cache::remember(
+            CacheKey::CATEGORIES,
+            now()->addDay(),
+            fn() => $repo->getAllCategories()->toArray()
+        );
 
+        $specializations = Cache::remember(
+            CacheKey::SPECIALIZATIONS,
+            now()->addDay(),
+            fn() => $repo->getAllSpecialization()->toArray()
+        );
 
         return [
             ...parent::share($request),
@@ -59,17 +68,17 @@ class HandleInertiaRequests extends Middleware
                             $user->avatar_url = $user->avatar_path
                                 ? Storage::disk('public')->url($user->avatar_path)
                                 : null;
-                        try {
-                            $user->counselor->photo = $user->counselor->photo_path
-                                ? (
-                                    filter_var($user->counselor->photo_path, FILTER_VALIDATE_URL)
-                                    ? $user->counselor->photo_path
-                                    : Storage::disk('public')->url($user->counselor->photo_path)
-                                )
-                                : null;
-                        } catch (\Throwable $th) {
-                            // optional
-                        }
+                            try {
+                                $user->counselor->photo = $user->counselor->photo_path
+                                    ? (
+                                        filter_var($user->counselor->photo_path, FILTER_VALIDATE_URL)
+                                        ? $user->counselor->photo_path
+                                        : Storage::disk('public')->url($user->counselor->photo_path)
+                                    )
+                                    : null;
+                            } catch (\Throwable $th) {
+                                // optional
+                            }
                         }
                     )
                     : null,

@@ -50,4 +50,14 @@ class ManageStatusConsultationController extends Controller
 
         return $this->alert('success', 'Catatan berhasil disimpan.');
     }
+
+    public function updateMeetingLink(Request $request, Consultation $consultation)
+    {
+        $request->validate([
+            'meeting_link' => 'required|url'
+        ]);
+        $consultation->meeting_link = $request->meeting_link;
+        $consultation->update();
+        return back();
+    }
 }

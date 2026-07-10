@@ -18,7 +18,7 @@ export default function Index({ counselors, filters }: Props) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), 900);
+        const timer = setTimeout(() => setIsLoading(false), 300);
 
         return () => clearTimeout(timer);
     }, []);

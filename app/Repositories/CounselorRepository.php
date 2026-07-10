@@ -51,8 +51,9 @@ class CounselorRepository
 
     public function getCounselorBySlug(string $slug)
     {
-        return Counselor::with(['categories', 'specialization', 'address', 'schedules'])
-            ->withCount('consultations')
+        return Counselor::with(['categories', 'specialization', 'address',  'schedules' => fn($q) => $q->where('is_active', true)])
+            ->withAvg('feedbacks', 'rating')
+            ->withCount('consultations','feedbacks')
             ->whereSlug($slug)->first();
     }
 

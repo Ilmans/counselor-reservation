@@ -70,7 +70,7 @@ export function ReservationCard({ reservation }: { reservation: Consultation }) 
                         <Detail label="Mode" value={mode} />
                     </div>
 
-                    {pra_note && (
+                    {/* {pra_note && (
                         <div className="mt-3 rounded-lg bg-muted px-3 py-2">
                             <p className="text-[11px] leading-relaxed text-muted-foreground">
                                 <span className="font-medium text-foreground/80">
@@ -79,7 +79,7 @@ export function ReservationCard({ reservation }: { reservation: Consultation }) 
                                 {pra_note}
                             </p>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

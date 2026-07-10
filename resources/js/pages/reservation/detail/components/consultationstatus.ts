@@ -107,7 +107,7 @@ export function statusDescription(r: ConsultationDetail): string {
             return 'Permintaan reservasimu sudah kami terima dan sedang ditinjau. Kami akan mengabari begitu konselor mengonfirmasi jadwal ini.';
         case 'confirmed':
             return r.queue_position
-                ? `Kamu berada di antrian ke-${r.queue_position} pada ${r.schedule.date}, pukul ${r.schedule.time}. ${arrival} 10 menit lebih awal agar tidak melewati giliranmu.`
+                ? `Kamu berada di antrian ke-${r.queue_position} pada ${r.schedule.date}, dengan estimasi pukul ${r.schedule.time}. ${arrival} 10 menit lebih awal agar tidak melewati giliranmu.`
                 : `Sesimu terjadwal pada ${r.schedule.date}, pukul ${r.schedule.time}. ${arrival} 10 menit lebih awal, ya.`;
         case 'in_queue':
             return `Kamu berada di antrian ke-${r.queue_position} hari ini. Konselor akan menghubungimu sesuai urutan — siapkan dirimu beberapa menit sebelum giliran tiba.`;

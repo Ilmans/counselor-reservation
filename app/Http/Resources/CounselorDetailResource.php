@@ -46,7 +46,7 @@ class CounselorDetailResource extends JsonResource
                     : Formatter::rupiah($this->price_per_hour) . ' / sesi',
             ],
 
-          
+
 
             // NOTE: field full_address/city/province ini ASUMSI — sesuaikan
             // dengan kolom asli di model Address kamu.
@@ -54,6 +54,7 @@ class CounselorDetailResource extends JsonResource
                 'full_address' => $this->address->full_address ?? $this->address->address ?? null,
                 'city' => $this->address->city ?? null,
                 'province' => $this->address->province ?? null,
+                'maps_url' => $this->address->maps_url
             ] : null),
 
             'schedules' => ScheduleResource::collection($this->whenLoaded('schedules')),

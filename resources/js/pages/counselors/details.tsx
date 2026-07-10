@@ -9,8 +9,7 @@ import CounselorHero from './components/details/counselor-hero';
 import CounselorAbout from './components/details/counselor-about';
 import ReviewSummary from './components/details/review-summary';
 import ReviewList from './components/details/review-list';
-import CounselorSchedule from './components/details/counselor-schedule';
-
+import BookingPanel from './components/details/booking-panel';
 
 type Props = {
     counselor: CounselorDetail;
@@ -23,8 +22,6 @@ export default function Details({
     reviews,
     rating_breakdown,
 }: Props) {
-    // Sama kayak halaman list: fake delay 900ms cuma buat nunjukin visual
-    // skeleton di seksi ulasan pas first load (demo).
     const [isLoadingReviews, setIsLoadingReviews] = useState(true);
 
     useEffect(() => {
@@ -38,7 +35,7 @@ export default function Details({
 
             <CounselorHero counselor={counselor} />
 
-            <div className="px-6 pb-20">
+            <div className="px-6 py-10">
                 <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_320px]">
                     <div className="space-y-6">
                         <CounselorAbout counselor={counselor} />
@@ -53,8 +50,8 @@ export default function Details({
                         />
                     </div>
 
-                    <div className="space-y-6">
-                        <CounselorSchedule schedules={counselor.schedules} />
+                    <div>
+                        <BookingPanel counselor={counselor} />
                     </div>
                 </div>
             </div>

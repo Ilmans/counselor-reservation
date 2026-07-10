@@ -17,7 +17,8 @@ class ConsultationDetailResource extends ConsultationListResource
 
         return array_merge(parent::toArray($request), [
             'status_group'   => $this->resolveStatusGroup($this->status),
-            'queue_position' => $this->status === 'in_queue' ? $this->queue_position : '- selesai',
+            'queue_position' =>  $this->queue_position,
+
 
             'schedule' => [
                 'date'     => Carbon::parse($this->consultation_date)->translatedFormat('l, j F Y'),
@@ -50,7 +51,9 @@ class ConsultationDetailResource extends ConsultationListResource
             ),
 
             // di sini 'notes' di-override jadi object lengkap (parent cuma string client note)
-            'notes' => $this->whenLoaded('notes',fn() =>
+            'notes' => $this->whenLoaded(
+                'notes',
+                fn() =>
                 $this->notes->map(fn($note) => [
                     'id'         => $note->id,
                     'type'       => $note->type,

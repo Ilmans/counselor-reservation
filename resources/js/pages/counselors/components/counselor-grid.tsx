@@ -15,7 +15,7 @@ function CounselorGrid({ counselors, isLoading = false }: Props) {
     const total = counselors.total ?? counselors.data.length;
 
     return (
-        <main className="px-6 pb-20">
+        <main className="px-6 mt-4 pb-20">
             <div className="mx-auto max-w-5xl">
                 <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium tracking-[0.04em] text-muted-foreground uppercase">
@@ -27,14 +27,14 @@ function CounselorGrid({ counselors, isLoading = false }: Props) {
                     </p>
 
                     <div className="relative w-full sm:w-auto">
-                        <select
+                        {/* <select
                             disabled={isLoading}
                             className="w-full cursor-pointer appearance-none rounded-full border border-border bg-card py-2.5 pr-9 pl-4 text-sm text-foreground shadow-sm transition-colors focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                         >
                             <option>Urut: Rating tertinggi</option>
                             <option>Urut: Harga terendah</option>
                             <option>Urut: Tersedia hari ini</option>
-                        </select>
+                        </select> */}
                         <svg
                             viewBox="0 0 16 16"
                             fill="none"

@@ -148,7 +148,7 @@ export default function Form({
                 {/* ── Data Diri ── */}
                 <div className="flex flex-col gap-4">
                     <ToggleGroup
-                        label="Apakah pernah konsultasi psikolog sebelumnya?"
+                        label="Apakah ini pengalaman pertama anda berkonsultasi?"
                         options={SESSION_FIRST_OPTIONS}
                         value={data.is_first}
                         onChange={(v) => setData('is_first', v)}
@@ -159,8 +159,8 @@ export default function Form({
                 {/* ── Catatan ── */}
                 <div className="mt-4">
                     <RichTextEditor
-                        label="Ceritakan Situasimu (opsional)"
-                        placeholder="Deskripsikan secara singkat apa yang ingin kamu bahas…"
+                        label="Ceritakan Situasimu "
+                        placeholder="Deskripsikan secara keluhanmu atau apa yang ingin dibahas"
                         value={data.notes}
                         onChange={(html) => setData('notes', html)}
                         error={errors.notes}

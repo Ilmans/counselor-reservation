@@ -72,6 +72,7 @@ export type CounselorDetail = {
         full_address: string | null;
         city: string | null;
         province: string | null;
+        maps_url:string;
     } | null;
     schedules: {
         id: number;

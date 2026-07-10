@@ -5,8 +5,23 @@ type Props = {
 };
 
 function CounselorAbout({ counselor }: Props) {
+    const stats = [
+        counselor.address?.full_address && {
+            label: 'Lokasi',
+            value: counselor.address.full_address,
+        },
+        {
+            label: 'Sesi selesai',
+            value: `${counselor.total_consultations} sesi`,
+        },
+        counselor.member_since && {
+            label: 'Bergabung sejak',
+            value: counselor.member_since,
+        },
+    ].filter(Boolean) as { label: string; value: string }[];
+
     return (
-        <div className="rounded-[28px] border border-border/60 bg-card p-6 shadow-sm">
+        <div className="rounded-lg border border-border bg-card p-6">
             <h2 className="font-serif text-lg font-normal text-foreground">
                 Tentang
             </h2>
@@ -15,38 +30,18 @@ function CounselorAbout({ counselor }: Props) {
                 dangerouslySetInnerHTML={{ __html: counselor.bio }}
             />
 
-            <div className="mt-5 grid grid-cols-1 gap-4 border-t border-border pt-5 sm:grid-cols-3">
-                {counselor.address?.full_address && (
-                    <div>
-                        <p className="text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
-                            Lokasi
-                        </p>
-                        <p className="mt-1 text-sm text-foreground">
-                            {counselor.address.full_address}
-                        </p>
+            <dl className="mt-5 grid grid-cols-1 gap-4 border-t border-border pt-5 sm:grid-cols-3">
+                {stats.map((stat) => (
+                    <div key={stat.label}>
+                        <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                            {stat.label}
+                        </dt>
+                        <dd className="mt-1 text-sm text-foreground">
+                            {stat.value}
+                        </dd>
                     </div>
-                )}
-
-                <div>
-                    <p className="text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
-                        Sesi Selesai
-                    </p>
-                    <p className="mt-1 text-sm text-foreground">
-                        {counselor.total_consultations} sesi
-                    </p>
-                </div>
-
-                {counselor.member_since && (
-                    <div>
-                        <p className="text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
-                            Bergabung Sejak
-                        </p>
-                        <p className="mt-1 text-sm text-foreground">
-                            {counselor.member_since}
-                        </p>
-                    </div>
-                )}
-            </div>
+                ))}
+            </dl>
         </div>
     );
 }

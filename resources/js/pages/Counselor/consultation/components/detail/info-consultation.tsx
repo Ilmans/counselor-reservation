@@ -4,13 +4,18 @@ import {
     ExternalLink,
     Link2,
     MapPin,
+    PenLine,
     Tag,
     Video,
 } from 'lucide-react';
 import { useState } from 'react';
+import { router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useConfirm } from '@/hooks/use-confirm';
 import type { ConsultationDetail } from '@/types/consultation';
+import Modal from '@/components/ui/modal';
+import ManageStatusConsultationController from '@/actions/App/Http/Controllers/Counselor/ManageStatusConsultationController';
 
 interface Props {
     consultation: ConsultationDetail;
@@ -19,6 +24,12 @@ interface Props {
 function InfoConsultation({ consultation }: Props) {
     const [copied, setCopied] = useState(false);
     const { confirm, ConfirmDialog, setProcessing } = useConfirm();
+
+    const [manualOpen, setManualOpen] = useState(false);
+    const [manualLink, setManualLink] = useState('');
+
+    const [manualError, setManualError] = useState<string | null>(null);
+    const [manualProcessing, setManualProcessing] = useState(false);
 
     const isOnline = consultation.method_label === 'Online';
     const duration = consultation.schedule?.duration ?? consultation.duration;
@@ -34,8 +45,7 @@ function InfoConsultation({ consultation }: Props) {
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
         } catch {
-            // clipboard bisa gagal (mis. browser lama / permission),
-            // diamkan saja, tidak kritikal
+            // clipboard bisa gagal, diamkan
         }
     }
 
@@ -43,20 +53,56 @@ function InfoConsultation({ consultation }: Props) {
         confirm({
             title: 'Buat Link Meeting',
             description:
-                'Link Google Meet baru akan dibuat untuk sesi ini. Lanjutkan?',
+                'Link Zoom baru akan dibuat untuk sesi ini. Lanjutkan?',
             confirmLabel: 'Ya, Buat Link',
             cancelLabel: 'Batal',
             variant: 'default',
             onConfirm: async () => {
                 setProcessing(true);
-                // TODO: router.post(route('consultation.generate-link', consultation.id))
-                console.log(
-                    '[InfoConsultation] generate meeting link',
-                    consultation.id,
-                );
-                setProcessing(false);
+                // router.post(
+                //     ManageStatusConsultationController.updateMeetingLink.url(
+                //         consultation.id,
+                //     ),
+                //     {
+                //         meeting_link: manualLink,
+                //     },
+                //     { onFinish: () => setProcessing(false) },
+                // );
             },
         });
+    }
+
+    function closeManual() {
+        setManualOpen(false);
+        setManualLink('');
+        setManualPassword('');
+        setManualError(null);
+    }
+
+    function handleManualSubmit() {
+        if (!manualLink.trim()) {
+            setManualError('Link meeting wajib diisi.');
+            return;
+        }
+
+        setManualProcessing(true);
+        router.post(
+            ManageStatusConsultationController.updateMeetingLink.url(
+                consultation.id,
+            ),
+            {
+                meeting_link: manualLink,
+            },
+            {
+                onSuccess: () => closeManual(),
+                onError: (errors) => {
+                    setManualError(
+                        errors.meeting_link ?? 'Gagal menyimpan link.',
+                    );
+                },
+                onFinish: () => setManualProcessing(false),
+            },
+        );
     }
 
     return (
@@ -111,7 +157,7 @@ function InfoConsultation({ consultation }: Props) {
             {isOnline && (
                 <div className="mt-4 rounded-xl border border-border/70 bg-secondary/30 p-3.5">
                     <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                        <Video size={12} /> Link Google Meet
+                        <Video size={12} /> Link Zoom
                     </p>
 
                     {consultation.meeting_link ? (
@@ -125,8 +171,15 @@ function InfoConsultation({ consultation }: Props) {
                                     mode="filled"
                                     size="sm"
                                     className="!rounded-full"
+                                    asChild
                                 >
-                                    <ExternalLink size={12} /> Buka Link
+                                    <a
+                                        href={consultation.meeting_link}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <ExternalLink size={12} /> Buka Link
+                                    </a>
                                 </Button>
 
                                 <Button
@@ -146,7 +199,7 @@ function InfoConsultation({ consultation }: Props) {
                             <p className="mt-1 text-sm text-muted-foreground">
                                 Link meeting belum dibuat untuk sesi ini.
                             </p>
-                            <div className="mt-2.5">
+                            <div className="mt-2.5 flex flex-wrap gap-2">
                                 <Button
                                     variant="default"
                                     mode="filled"
@@ -154,7 +207,17 @@ function InfoConsultation({ consultation }: Props) {
                                     className="!rounded-full"
                                     onClick={askGenerateLink}
                                 >
-                                    <Link2 size={12} /> Generate Link Meeting
+                                    <Link2 size={12} /> Generate Otomatis
+                                </Button>
+
+                                <Button
+                                    variant="default"
+                                    mode="outlined"
+                                    size="sm"
+                                    className="!rounded-full"
+                                    onClick={() => setManualOpen(true)}
+                                >
+                                    <PenLine size={12} /> Input Manual
                                 </Button>
                             </div>
                         </>
@@ -193,21 +256,55 @@ function InfoConsultation({ consultation }: Props) {
                             . Pastikan lokasi dapat diakses pada jadwal sesi.
                         </p>
                     )}
-
-                    {consultation.location.maps_url && (
-                        <div className="mt-2.5">
-                            <Button
-                                variant="default"
-                                mode="filled"
-                                size="sm"
-                                className="!rounded-full"
-                            >
-                                <ExternalLink size={12} /> Buka Peta
-                            </Button>
-                        </div>
-                    )}
                 </div>
             )}
+
+            {/* ==== Modal input manual ==== */}
+            <Modal open={manualOpen} onClose={closeManual}>
+                <h2 className="font-serif text-base text-foreground">
+                    Input Link Meeting
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground">
+                    Masukkan link meeting yang sudah dibuat secara manual (mis.
+                    Zoom, Google Meet) untuk sesi ini.
+                </p>
+
+                <div className="mt-4 space-y-3">
+                    <div>
+                        <Input
+                            label="Link Meeting"
+                            placeholder="https://zoom.us/j/..."
+                            value={manualLink}
+                            onChange={(e) => {
+                                setManualLink(e.target.value);
+                                if (manualError) setManualError(null);
+                            }}
+                            error={manualError ?? undefined}
+                        />
+                    </div>
+                </div>
+
+                <div className="mt-5 flex items-center justify-end gap-2">
+                    <Button
+                        variant="default"
+                        mode="outlined"
+                        size="sm"
+                        disabled={manualProcessing}
+                        onClick={closeManual}
+                    >
+                        Batal
+                    </Button>
+                    <Button
+                        variant="default"
+                        mode="filled"
+                        size="sm"
+                        loading={manualProcessing}
+                        onClick={handleManualSubmit}
+                    >
+                        <Link2 size={14} /> Simpan Link
+                    </Button>
+                </div>
+            </Modal>
 
             <ConfirmDialog />
         </div>

@@ -13,7 +13,7 @@ use Inertia\Inertia;
 
 class CounselorController extends Controller
 {
-    public function __construct(protected CounselorRepository $repo,protected ReviewRepository $reviewRepo) {}
+    public function __construct(protected CounselorRepository $repo, protected ReviewRepository $reviewRepo) {}
 
     public function index(Request $request, ?string $category = null)
     {
@@ -32,7 +32,7 @@ class CounselorController extends Controller
     /* Detail Counselor page - show details conselor */
     public function details(string $counselor)
     {
-        $counselor = $this->repo->getCounselorBySlug($counselor);
+        $counselor = new CounselorDetailResource($this->repo->getCounselorBySlug($counselor));
         abort_if(! $counselor, 404);
 
         $reviews = Inertia::scroll(

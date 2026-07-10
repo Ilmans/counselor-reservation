@@ -81,7 +81,7 @@ export default function Detail({ reservation: r, feedback }: Props) {
                                 excludeNoteId={excludedNoteId}
                             />
 
-                            {!isBroken && r.status !== 'completed' && (
+                            {r.status !== 'completed' && (
                                 <p className="text-center text-xs text-muted-foreground">
                                     Ada yang perlu ditanyakan?{' '}
                                     <Link

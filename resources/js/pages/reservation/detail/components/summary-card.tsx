@@ -84,7 +84,7 @@ function SummaryCard({
                             </a>
                         )}
 
-                        {showContact && r.counselor.whatsapp && (
+                        {/* {showContact && r.counselor.whatsapp && (
                             <a
                                 href={`https://wa.me/${r.counselor.whatsapp.replace(/\D/g, '')}`}
                                 target="_blank"
@@ -93,7 +93,7 @@ function SummaryCard({
                             >
                                 <MessageCircle size={14} /> Hubungi via WhatsApp
                             </a>
-                        )}
+                        )} */}
                     </div>
                 )}
             </div>
@@ -128,6 +128,35 @@ function SummaryCard({
                     </p>
                 </div>
             </div>
+
+            {r.location?.maps_url && r.method == 'offline' && (
+                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                    <div className="border-b border-border px-4 py-3">
+                        <h3 className="text-sm font-semibold text-foreground">
+                            Lokasi Konsultasi
+                        </h3>
+                    </div>
+
+                    <iframe
+                        src={r.location.maps_url}
+                        className="h-52 w-full"
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
+
+                    <div className="border-t border-border p-3">
+                        <a
+                            href={r.location.maps_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-primary hover:underline"
+                        >
+                            Buka di Google Maps →
+                        </a>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

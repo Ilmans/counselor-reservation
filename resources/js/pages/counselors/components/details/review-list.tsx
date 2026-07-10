@@ -4,8 +4,7 @@ import { useRef } from 'react';
 import type { Paginated } from '@/types/counselor';
 import type { Review } from '@/types/review';
 import ReviewCard from './review-card';
-import ReviewListSkeleton from './reveiw-skeleton';
-
+import ReviewListSkeleton from './review-skeleton';
 
 type Props = {
     reviews: Paginated<Review>;
@@ -21,7 +20,7 @@ function ReviewList({ reviews, isLoading = false }: Props) {
 
     if (reviews.data.length === 0) {
         return (
-            <div className="rounded-[28px] border border-dashed border-border py-14 text-center">
+            <div className="rounded-lg border border-dashed border-border py-14 text-center">
                 <p className="text-sm text-muted-foreground">
                     Belum ada ulasan untuk konselor ini.
                 </p>
@@ -30,13 +29,13 @@ function ReviewList({ reviews, isLoading = false }: Props) {
     }
 
     return (
-        <div>
+        <div className="rounded-lg border border-border bg-card p-6">
             <InfiniteScroll
                 ref={infiniteRef}
                 data="reviews"
                 manual={true}
                 preserveUrl={true}
-                className="space-y-3"
+                className="divide-y divide-border"
             >
                 {reviews.data.map((review) => (
                     <ReviewCard key={review.id} review={review} />
@@ -44,11 +43,11 @@ function ReviewList({ reviews, isLoading = false }: Props) {
             </InfiniteScroll>
 
             {reviews.current_page < reviews.last_page && (
-                <div className="mt-6 flex justify-center">
+                <div className="mt-4 flex justify-center border-t border-border pt-4">
                     <button
                         type="button"
                         onClick={() => infiniteRef.current?.fetchNext()}
-                        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-6 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                        className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-5 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
                     >
                         Muat ulasan lainnya
                         <svg

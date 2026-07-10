@@ -9,13 +9,20 @@ class PaymentMethodResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $metadata = [];
+
+        if (!empty($this->metadata)) {
+            $metadata = json_decode($this->metadata, true) ?? [];
+        }
+
         return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
             'type' => $this->type,
             'is_active' => $this->is_active,
-            'metadata' => $this->metadata,
+            'logo' => $metadata['logo'] ?? null,
+            'metadata' => $metadata,
         ];
     }
 }

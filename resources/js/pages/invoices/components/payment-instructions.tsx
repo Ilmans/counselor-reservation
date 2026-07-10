@@ -1,13 +1,24 @@
+import { useState } from 'react';
 import type { SelectedPaymentMethod } from '@/types/invoice';
 
 export default function PaymentInstructions({
     method,
+    amount,
     onChangeMethod,
 }: {
     method: SelectedPaymentMethod;
+    amount?: string;
     onChangeMethod: () => void;
 }) {
-    console.log(method)
+    const [copied, setCopied] = useState(false);
+
+    function handleCopy() {
+        if (!method.metadata.account_number) return;
+        navigator.clipboard.writeText(method.metadata.account_number);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+    }
+
     return (
         <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/50">
             <div className="flex items-center gap-3">
@@ -18,9 +29,16 @@ export default function PaymentInstructions({
                         className="h-9 w-9 rounded object-contain"
                     />
                 )}
-                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    {method.name}
-                </p>
+                <div>
+                    <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                        {method.name}
+                    </p>
+                    {amount && (
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Bayar tepat {amount}
+                        </p>
+                    )}
+                </div>
             </div>
 
             {method.type === 'qris' ? (
@@ -37,19 +55,28 @@ export default function PaymentInstructions({
                     )}
                 </div>
             ) : (
-                <div className="mt-4 space-y-2 text-sm">
+                <div className="mt-4 space-y-3 text-sm">
                     {method.metadata.account_number && (
-                        <div className="flex items-center justify-between">
-                            <span className="text-zinc-500 dark:text-zinc-400">
-                                No. Rekening
-                            </span>
-                            <span className="font-mono font-semibold text-zinc-900 dark:text-zinc-100">
-                                {method.metadata.account_number}
-                            </span>
+                        <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-zinc-800/50">
+                            <div>
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                    No. Rekening
+                                </p>
+                                <p className="font-mono font-semibold text-zinc-900 dark:text-zinc-100">
+                                    {method.metadata.account_number}
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleCopy}
+                                className="rounded-md border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 transition hover:bg-white dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                            >
+                                {copied ? 'Tersalin' : 'Salin'}
+                            </button>
                         </div>
                     )}
                     {method.metadata.account_name && (
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between px-1">
                             <span className="text-zinc-500 dark:text-zinc-400">
                                 Atas Nama
                             </span>

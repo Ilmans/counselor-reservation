@@ -22,7 +22,6 @@ function BookingPanel({ counselor }: Props) {
 
                     <Link
                         href={ReservationController.create.url(counselor.slug)}
-                        target="_blank"
                         rel="noreferrer"
                         className="mt-4 flex w-full items-center justify-center rounded-md bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition-colors hover:bg-primary"
                     >

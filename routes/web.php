@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/invoice/{invoice}/payment-method', [InvoiceController::class, 'updatePaymentMethod']);
     Route::get('/invoice/{reference}', [InvoiceController::class, 'show'])->name('invoices.show');
-    Route::get('/invoice/{id}/download', [InvoiceController::class, 'downloadPdf']);
+    Route::get('/invoice/{reference}/download', [InvoiceController::class, 'downloadPdf']);
 
     Route::get('/profile/setting', [ProfileSettingController::class, 'index']);
     Route::post('/profile/setting', [ProfileSettingController::class, 'update']);

@@ -7,6 +7,7 @@ import {
     Wallet,
 } from 'lucide-react';
 import type { ConsultationDetail } from '@/types/consultation';
+import InvoiceController from '@/actions/App/Http/Controllers/InvoiceController';
 
 function SummaryCard({
     r,
@@ -66,7 +67,9 @@ function SummaryCard({
 
                         {r.needs_payment && r.invoice && (
                             <Link
-                                href={`/invoice/${r.invoice.id}`}
+                                href={InvoiceController.show.url(
+                                    r.invoice.reference,
+                                )}
                                 className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
                             >
                                 <Wallet size={14} /> Bayar Sekarang

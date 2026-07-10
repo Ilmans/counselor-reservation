@@ -18,6 +18,7 @@ export interface PaymentMethodOption {
     id: number;
     code: string;
     name: string;
+    logo:string;
     type: 'bank_transfer' | 'qris' | string;
     metadata: PaymentMethodMetadata;
 }

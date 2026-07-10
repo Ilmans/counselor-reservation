@@ -38,9 +38,9 @@ class InvoiceController extends Controller
         return back();
     }
 
-    public function downloadPdf(int $id)
+    public function downloadPdf(string $reference)
     {
-        $data = $this->service->getInvoiceDetail($id, Auth::id());
+        $data = $this->service->getInvoiceDetail($reference,Auth::id());
         $invoice = $data['invoice'];
         $pdf = Pdf::loadView('invoice.pdf', ['invoice' => $invoice]);
         return $pdf->download("invoice-{$invoice['reference']}.pdf");

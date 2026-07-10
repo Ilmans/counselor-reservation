@@ -30,6 +30,7 @@ class InvoiceRepository
             'consultation_id' => $data['consultation_id'],
             'amount'          => $data['amount'],
             'status'          => $this->resolveStatus($data['amount']),
+            'expired_at'    => $data['expired_at']
         ]);
     }
 

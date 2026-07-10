@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import type { PaymentMethodOption } from '@/types/invoice';
+import InvoiceController from '@/actions/App/Http/Controllers/InvoiceController';
 
 export default function PaymentMethodPicker({
     invoiceId,
@@ -19,7 +20,7 @@ export default function PaymentMethodPicker({
 
         setSubmitting(true);
         router.post(
-            `/invoice/${invoiceId}/payment-method`,
+            InvoiceController.updatePaymentMethod.url(invoiceId),
             { payment_method_code: selected },
             {
                 preserveScroll: true,
@@ -48,7 +49,7 @@ export default function PaymentMethodPicker({
                         }`}
                     >
                         <img
-                            src={method.metadata.logo}
+                            src={method.logo}
                             alt={method.name}
                             className="h-8 w-8 rounded object-contain"
                         />

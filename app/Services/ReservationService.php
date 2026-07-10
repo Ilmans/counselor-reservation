@@ -98,7 +98,7 @@ class ReservationService
             'user_id'         => $user->id,
             'consultation_id' => $consultation->id,
             'amount'          => $amount,
-            'expired_at'      => now()->addMinutes(10),
+            'expired_at'      => now()->addMinutes(15),
         ]);
 
         if (!empty($data['notes'])) {

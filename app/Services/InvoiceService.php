@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\PaymentMethodResource;
 use App\Models\Invoice;
 use App\Repositories\InvoiceRepository;
 use Carbon\Carbon;
@@ -24,12 +25,13 @@ class InvoiceService
     public function getInvoiceDetail($ref, int $userId): array
     {
         $invoice = $this->invoiceRepository->findForUser($ref, $userId);
+
         abort_if(!$invoice, 404);
         $this->autoExpireIfNeeded($invoice);
         return [
             'invoice'        => $this->formatInvoiceDetail($invoice),
             'paymentMethods' => $invoice->status === 'pending'
-                ? $this->invoiceRepository->getActivePaymentMethods()
+                ? PaymentMethodResource::collection($this->invoiceRepository->getActivePaymentMethods())
                 : [],
         ];
     }
@@ -68,7 +70,14 @@ class InvoiceService
             $invoice->expired_at &&
             Carbon::parse($invoice->expired_at)->isPast()
         ) {
-            $invoice->update(['status' => 'expired']);
+            $invoice->update([
+                'status' => 'expired',
+            ]);
+
+            $invoice->consultation()?->update([
+                'status' => 'cancelled',
+            ]);
+
             $invoice->refresh();
         }
     }
@@ -99,8 +108,9 @@ class InvoiceService
             'status'           => $invoice->status,
             'amount'           => (float) $invoice->amount,
             'amount_formatted' => 'Rp ' . number_format((float) $invoice->amount, 0, ',', '.'),
-            'expired_at'       => optional($invoice->expired_at)->toISOString(),
-            'paid_at'          => optional($invoice->paid_at)->toISOString(),
+            'expired_at'       => $invoice->expired_at,
+            'paid_at'          => $invoice->paid_at,
+            'created_at' => $invoice->created_at?->translatedFormat('d F Y, H:i'),
 
             'payment_method' => $invoice->payment_method ? [
                 'code'     => $invoice->payment_method['code'] ?? null,

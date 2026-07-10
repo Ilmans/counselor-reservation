@@ -15,6 +15,7 @@ import Filters from './components/filter';
 import { CONSULTATION_STATUS_CLASSES } from '@/types/badge';
 import { useConfirm } from '@/hooks/use-confirm';
 import { Button } from '@/components/ui/button';
+import PageHead from '@/components/page-head';
 interface Props {
     consultations: PaginatedData<Consultation>;
     filters: FILTERS;
@@ -53,6 +54,7 @@ function Index({ consultations, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Daftar Konsultasi" />
             <DashboardTitle
                 title="Konsultasi"
                 desc="Semua daftar konsultasi yang berjalan."

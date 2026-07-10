@@ -15,6 +15,7 @@ import type { Review } from '@/types/review';
 import { FILTERS } from '@/types/filter';
 import { useConfirm } from '@/hooks/use-confirm';
 import Filters from './components/review-filter';
+import PageHead from '@/components/page-head';
 
 interface Props {
     reviews: PaginatedData<Review>;
@@ -57,6 +58,7 @@ function Index({ reviews, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Daftar Ulasan" />
             <ConfirmDialog />
             <DashboardTitle title="Review" desc="Semua review konsultasi dari klien." />
 

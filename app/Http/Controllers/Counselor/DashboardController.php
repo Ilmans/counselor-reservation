@@ -10,26 +10,34 @@ use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function __construct(protected ScheduleRepository $scheduleRepository) {}
 
     public function index(Request $request)
-{
-    $counselorId = Auth::user()->counselor->id;
+    {
+        $counselor = Auth::user()->counselor;
+        $counselorId = $counselor->id;
 
-    return inertia('Counselor/dashboard/index', [
-        'statistics' => $this->getCounselorStatistic($counselorId),
-        'rating' => $this->getCounselorRatingStatistic($counselorId),
-        'todayQueue' => $this->getTodayQueue($counselorId),
-        'pendingConfirmations' => $this->getPendingConfirmations($counselorId),
-        'schedules' => ScheduleResource::collection(
-            $this->scheduleRepository->getCounselorSchedule($counselorId)
-        ),
-        'reviews' => $this->getRecentReviews($counselorId),
-    ]);
-}
+        return inertia('Counselor/dashboard/index', [
+            'counselor' => [
+                'pricing_type' => $counselor->pricing_type,
+                'price_per_hour' => $counselor->price_per_hour,
+            ],
+            'statistics' => $this->getCounselorStatistic($counselorId),
+            'rating' => $this->getCounselorRatingStatistic($counselorId),
+            // Selalu dihitung — riwayat invoice paid tidak hilang meski status pricing berubah jadi free
+            'earnings' => $this->getCounselorEarnings($counselorId),
+            'todayQueue' => $this->getTodayQueue($counselorId),
+            'pendingConfirmations' => $this->getPendingConfirmations($counselorId),
+            'schedules' => ScheduleResource::collection(
+                $this->scheduleRepository->getCounselorSchedule($counselorId)
+            ),
+            'reviews' => $this->getRecentReviews($counselorId),
+        ]);
+    }
 
     public function getCounselorStatistic(int $counselorId): array
     {
@@ -76,7 +84,29 @@ class DashboardController extends Controller
             ?->toArray() ?? [];
     }
 
-        private function getTodayQueue(int $counselorId): array
+    private function getCounselorEarnings(int $counselorId): array
+    {
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        $base = DB::table('invoices')
+            ->join('consultations', 'consultations.id', '=', 'invoices.consultation_id')
+            ->where('consultations.counselor_id', $counselorId)
+            ->where('invoices.status', 'paid');
+
+        $thisMonth = (clone $base)
+            ->whereBetween('invoices.paid_at', [$startOfMonth, $endOfMonth])
+            ->sum('invoices.amount');
+
+        $lifetime = (clone $base)->sum('invoices.amount');
+
+        return [
+            'this_month' => (float) $thisMonth,
+            'lifetime' => (float) $lifetime,
+        ];
+    }
+
+    private function getTodayQueue(int $counselorId): array
     {
         $today = now()->toDateString();
 
@@ -92,7 +122,7 @@ class DashboardController extends Controller
             ->all();
     }
 
-    private function getPendingConfirmations(int $counselorId, int $limit = 3): array
+    private function getPendingConfirmations(int $counselorId, int $limit = 5): array
     {
         return Consultation::query()
             ->where('counselor_id', $counselorId)

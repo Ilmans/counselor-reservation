@@ -14,6 +14,7 @@ import type { CategoryList } from '@/types/category';
 import type { FILTERS } from '@/types/filter';
 import { useConfirm } from '@/hooks/use-confirm';
 import CategoryModal from './components/category-modal';
+import PageHead from '@/components/page-head';
 
 interface Props {
     categories: PaginatedData<CategoryList>;
@@ -57,7 +58,9 @@ function Index({ categories, filters }: Props) {
     };
 
     return (
+
         <>
+         <PageHead title="Daftar Kategori" />
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <ConfirmDialog />
                 <DashboardTitle

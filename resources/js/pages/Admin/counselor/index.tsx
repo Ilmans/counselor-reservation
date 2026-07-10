@@ -24,6 +24,7 @@ import FilterCo from './components/filter-co';
 import { Button } from '@/components/ui/button';
 import { VISIBILITY } from '@/types/badge';
 import { useConfirm } from '@/hooks/use-confirm';
+import PageHead from '@/components/page-head';
 
 interface Props {
     counselors: PaginatedData<CounselorList>;
@@ -81,6 +82,7 @@ function Index({ counselors, filters }: Props) {
 
     return (
         <>
+        <PageHead title="Daftar Konselor" />
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <ConfirmDialog />
                 <DashboardTitle

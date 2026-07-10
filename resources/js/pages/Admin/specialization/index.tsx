@@ -14,6 +14,7 @@ import type { SpecializationList } from '@/types/specialization';
 import type { FILTERS } from '@/types/filter';
 import { useConfirm } from '@/hooks/use-confirm';
 import SpecializationModal from './components/specialization-modal';
+import PageHead from '@/components/page-head';
 
 interface Props {
     specializations: PaginatedData<SpecializationList>;
@@ -59,6 +60,7 @@ function Index({ specializations, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Data Spesialisasi" />
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <ConfirmDialog />
                 <DashboardTitle

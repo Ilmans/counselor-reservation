@@ -17,6 +17,7 @@ import { INVOICE_STATUS_CLASSES } from '@/types/badge';
 import { useConfirm } from '@/hooks/use-confirm';
 import AdminConsultationController from '@/actions/App/Http/Controllers/Admin/AdminConsultationController';
 import Filters from './components/invoice-filter';
+import PageHead from '@/components/page-head';
 
 interface Props {
     invoices: PaginatedData<Invoice>;
@@ -64,6 +65,7 @@ function Index({ invoices, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Daftar Invoice" />
             <ConfirmDialog />
             <DashboardTitle
                 title="Invoice"

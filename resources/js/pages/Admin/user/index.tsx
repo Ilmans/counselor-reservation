@@ -18,6 +18,7 @@ import { UserList } from '@/types/row';
 import ManageUserController from '@/actions/App/Http/Controllers/Admin/ManageUserController';
 import FilterUser from './components/filter-user';
 import UserModal from './components/user-modal';
+import PageHead from '@/components/page-head';
 
 interface Props {
     users: PaginatedData<UserList>;
@@ -60,6 +61,7 @@ function Index({ users, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Daftar Pengguna" />
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <ConfirmDialog />
                 <DashboardTitle

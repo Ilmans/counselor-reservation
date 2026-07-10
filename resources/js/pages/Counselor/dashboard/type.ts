@@ -54,6 +54,14 @@ export interface CounselorDashboardProps {
         average_rating: number;
         total_reviews: number;
     };
+    counselor: {
+        pricing_type: 'paid' | 'free';
+        price_per_hour: number | null;
+    };
+    earnings: {
+        this_month: number;
+        lifetime: number;
+    };
     todayQueue: QueueItem[];
     pendingConfirmations: QueueItem[];
     schedules: ScheduleItem[];

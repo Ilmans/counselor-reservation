@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import GoogleIcon from '@/components/icons/google-icon';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,7 @@ const genderOptions = [
 
 function RegisterForm() {
     const { alert } = usePage().props;
+    const [googleNotice, setGoogleNotice] = useState(false);
 
     const { data, setData, post, errors, processing } = useForm({
         name: '',
@@ -33,10 +35,21 @@ function RegisterForm() {
         post(RegisterController.store().url);
     };
 
+    const onGoogleClick = () => {
+        setGoogleNotice(true);
+    };
+
     return (
         <form method="post" onSubmit={onSubmit} className="flex flex-col gap-5">
             {alert && (
                 <AlertCard variant={alert.type}>{alert.message}</AlertCard>
+            )}
+
+            {googleNotice && (
+                <AlertCard variant="warning">
+                    Mohon maaf, Login atau daftar via Google sedang tidak
+                    tersedia.
+                </AlertCard>
             )}
 
             <Input
@@ -138,8 +151,9 @@ function RegisterForm() {
             <Divider label="atau" />
 
             <Button
-                loading={processing}
+                type="button"
                 mode="outlined"
+                onClick={onGoogleClick}
                 className="w-full cursor-pointer justify-center gap-2.5 px-4 py-2.5 text-[12px]"
             >
                 <GoogleIcon />

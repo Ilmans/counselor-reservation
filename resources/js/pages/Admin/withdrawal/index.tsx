@@ -16,6 +16,7 @@ import { AdminWithdrawal } from '@/types/withdrawal';
 import Filters from './components/withdraw-filter';
 import { WITHDRAWAL_STATUS_CLASSES } from '@/types/badge';
 import { useConfirm } from '@/hooks/use-confirm';
+import PageHead from '@/components/page-head';
 
 interface Props {
     withdrawals: PaginatedData<AdminWithdrawal>;
@@ -53,6 +54,7 @@ function Index({ withdrawals, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Daftar Penarikan" />
             <ConfirmDialog />
             <DashboardTitle
                 title="Kelola Penarikan Dana"

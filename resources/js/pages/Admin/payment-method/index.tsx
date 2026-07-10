@@ -15,6 +15,7 @@ import type { PaymentMethodOption } from '@/types/invoice';
 import type { FILTERS } from '@/types/filter';
 import { useConfirm } from '@/hooks/use-confirm';
 import PaymentMethodModal from './components/payment-method-modal';
+import PageHead from '@/components/page-head';
 
 interface Props {
     paymentMethods: PaginatedData<PaymentMethodOption & { is_active: boolean }>;
@@ -64,6 +65,7 @@ function Index({ paymentMethods, filters }: Props) {
 
     return (
         <>
+         <PageHead title="Metode Pembayaran" />
             <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <ConfirmDialog />
                 <DashboardTitle

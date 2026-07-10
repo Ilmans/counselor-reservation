@@ -8,21 +8,26 @@ import CounselorGridSkeleton from './counselor-skeleton';
 type Props = {
     counselors: Paginated<CounselorList>;
     isLoading?: boolean;
+    totalCounselors: number;
 };
 
-function CounselorGrid({ counselors, isLoading = false }: Props) {
+function CounselorGrid({
+    counselors,
+    isLoading = false,
+    totalCounselors,
+}: Props) {
     const infiniteRef = useRef<any>(null);
     const total = counselors.total ?? counselors.data.length;
 
     return (
-        <main className="px-6 mt-4 pb-20">
+        <main className="mt-4 px-6 pb-20">
             <div className="mx-auto max-w-5xl">
                 <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium tracking-[0.04em] text-muted-foreground uppercase">
                         {isLoading ? (
                             <span className="inline-block h-4 w-32 animate-pulse rounded-full bg-muted align-middle" />
                         ) : (
-                            `${total} Konselor Tersedia`
+                            `${totalCounselors} Konselor Tersedia`
                         )}
                     </p>
 
@@ -89,7 +94,8 @@ function CounselorGrid({ counselors, isLoading = false }: Props) {
                             ))}
                         </InfiniteScroll>
 
-                        {counselors.meta.current_page < counselors.meta.last_page && (
+                        {counselors.meta.current_page <
+                            counselors.meta.last_page && (
                             <div className="mt-10 flex justify-center">
                                 <button
                                     type="button"

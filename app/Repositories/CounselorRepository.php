@@ -19,21 +19,34 @@ class CounselorRepository
 
     public function getAllCounselors(array $visibilities, $perPage = 12, ?string $category, ?string $search = null)
     {
-        return Counselor::select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_path', 'pricing_type', 'price_per_hour', 'visibility', 'created_at')
+        return $this->baseCounselorQuery($visibilities, $category, $search)
+            ->select('id', 'slug', 'specialization_id', 'name', 'email', 'whatsapp', 'photo_path', 'pricing_type', 'price_per_hour', 'visibility', 'created_at')
             ->with([
                 'categories',
                 'specialization',
-                'schedules' => fn($q) => $q->where('is_active', true)
-
+                'schedules' => fn($q) => $q->where('is_active', true),
             ])
             ->withCount('consultations')
             ->withAvg('feedbacks', 'rating')
+            ->orderByDesc('created_at')
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    public function countAllCounselors(array $visibilities, ?string $category, ?string $search = null): int
+    {
+        return $this->baseCounselorQuery($visibilities, $category, $search)->count();
+    }
+
+    protected function baseCounselorQuery(array $visibilities, ?string $category, ?string $search)
+    {
+        return Counselor::query()
+            ->whereIn('visibility', $visibilities)
             ->when($category, function ($query, $slug) {
                 $query->whereHas('categories', function ($q) use ($slug) {
                     $q->where('slug', $slug);
                 });
             })
-            ->whereIn('visibility', $visibilities)
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -41,11 +54,7 @@ class CounselorRepository
                             $sq->where('name', 'like', "%{$search}%");
                         });
                 });
-            })
-            ->orderByDesc('created_at') // terbaru
-            ->paginate($perPage)
-
-            ->withQueryString();
+            });
     }
 
 

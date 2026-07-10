@@ -13,6 +13,7 @@ class ConseulorSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
+        $password = Hash::make('11111111');
 
         DB::table('specializations')->insert([
             ['id' => 1, 'name' => 'Psikolog Klinis',        'description' => 'Menangani gangguan mental dan perilaku secara klinis.'],
@@ -36,200 +37,229 @@ class ConseulorSeeder extends Seeder
             ['id' => 10, 'name' => 'Kesehatan Mental Umum',   'slug' => 'kesehatan-mental-umum'],
         ]);
 
-        $counselors = [
-            [
-                'id' => 1,
-                'specialization_id' => 1,
-                'name' => 'Billie Eilish, M.Psi.',
-                'slug' => Str::slug('Billie Eilish M.Psi'),
-                'email' => 'delon.fahry@konselor.com',
-                'whatsapp' => '082100000001',
-                'experience_years' => 8,
-                'bio' => '<p>Saya adalah psikolog klinis dengan lebih dari <strong>8 tahun pengalaman</strong> dalam menangani berbagai gangguan kecemasan dan trauma psikologis. Latar belakang pendidikan saya di bidang psikologi klinis memberikan fondasi kuat untuk memahami kompleksitas kondisi mental klien.</p><p>Pendekatan yang saya gunakan bersifat <em>integratif</em> — menggabungkan terapi kognitif-perilaku (CBT), mindfulness, dan teknik somatic experiencing untuk membantu klien memproses pengalaman traumatis secara menyeluruh. Saya percaya bahwa setiap individu memiliki kekuatan bawaan untuk pulih dan berkembang.</p><p>Selama karier saya, saya telah mendampingi lebih dari 300 klien dari berbagai latar belakang, mulai dari profesional muda hingga lansia. Saya juga aktif sebagai pembicara dalam seminar kesehatan mental di berbagai institusi.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Delon+Fahry',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 150000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Sudirman No. 45', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
-            ],
-            [
-                'id' => 2,
-                'specialization_id' => 3,
-                'name' => 'Nurlaelatunnisa, S.Psi.',
-                'slug' => Str::slug('Nurlaelatunnisa S.Psi'),
-                'email' => 'nurlaelatunnisa@konselor.com',
-                'whatsapp' => '082100000002',
-                'experience_years' => 5,
-                'bio' => '<p>Sebagai konselor remaja, saya mendedikasikan diri untuk mendampingi generasi muda menavigasi tantangan hidup yang semakin kompleks di era digital ini. Dengan pengalaman <strong>5 tahun</strong> bersama ratusan remaja, saya memahami betul tekanan yang mereka hadapi.</p><p>Saya menggunakan pendekatan <em>person-centered</em> yang hangat dan tidak menghakimi, menciptakan ruang aman di mana remaja merasa nyaman untuk berbagi. Selain itu, saya mengintegrasikan teknik narrative therapy untuk membantu klien muda merekonstruksi cerita hidup mereka secara positif.</p><p>Saya juga aktif berkolaborasi dengan sekolah-sekolah di Bandung untuk program kesehatan mental preventif, dan menjadi fasilitator pelatihan kesadaran diri untuk siswa SMA.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Nurlaelatunnisa',
-                'pricing_type' => 'free',
-                'price_per_hour' => 0,
-                'session_duration_minutes' => 45,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Dipatiukur No. 12', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40132', 'maps_url' => null],
-            ],
-            [
-                'id' => 3,
-                'specialization_id' => 6,
-                'name' => 'Muhammad Pahrisal, M.Psi.',
-                'slug' => Str::slug('Muhammad Pahrisal M.Psi'),
-                'email' => 'muhammad.pahrisal@konselor.com',
-                'whatsapp' => '082100000003',
-                'experience_years' => 10,
-                'bio' => '<p>Dengan <strong>10 tahun pengalaman</strong> sebagai psikolog industri, saya telah mendampingi individu dan organisasi dari berbagai sektor — mulai dari startup teknologi hingga perusahaan multinasional Fortune 500. Keahlian saya mencakup manajemen stres kerja, burnout recovery, dan pengembangan karier profesional.</p><p>Saya menggunakan pendekatan berbasis <em>evidence-based psychology</em> yang disesuaikan dengan konteks dunia kerja Indonesia. Pemahaman mendalam tentang budaya kerja lokal memungkinkan saya memberikan solusi yang relevan dan aplikatif.</p><p>Di luar praktik konseling, saya aktif sebagai konsultan HR untuk beberapa perusahaan dan menjadi dosen tamu di program Psikologi Industri Universitas Indonesia.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Muhammad+Pahrisal',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 200000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Gatot Subroto Kav. 18', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12930', 'maps_url' => null],
-            ],
-            [
-                'id' => 4,
-                'specialization_id' => 2,
-                'name' => 'Hendricus Gatot Ariwidayanto, M.Psi.',
-                'slug' => Str::slug('Hendricus Gatot Ariwidayanto M.Psi'),
-                'email' => 'hendricus.gatot@konselor.com',
-                'whatsapp' => '082100000004',
-                'experience_years' => 12,
-                'bio' => '<p>Selama <strong>12 tahun</strong> berpraktik sebagai konselor pernikahan dan keluarga, saya telah mendampingi lebih dari 500 pasangan dan keluarga dalam menavigasi dinamika hubungan yang penuh tantangan. Saya percaya bahwa komunikasi yang sehat adalah fondasi dari setiap hubungan yang bermakna.</p><p>Pendekatan saya menggabungkan <em>Emotionally Focused Therapy (EFT)</em> dengan prinsip-prinsip komunikasi empatik yang saya kembangkan berdasarkan pengalaman klinis bertahun-tahun. Setiap sesi dirancang untuk menciptakan pemahaman bersama dan membangun kembali kepercayaan.</p><p>Saya juga menulis kolom konsultasi keluarga di beberapa media online terkemuka dan menjadi narasumber tetap di program talkshow radio tentang hubungan dan keluarga.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Hendricus+Gatot',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 175000,
-                'session_duration_minutes' => 90,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Pemuda No. 78', 'city' => 'Semarang', 'province' => 'Jawa Tengah', 'postal_code' => '50132', 'maps_url' => null],
-            ],
-            [
-                'id' => 5,
-                'specialization_id' => 4,
-                'name' => 'Enris, S.Pd.',
-                'slug' => Str::slug('Enris S.Pd'),
-                'email' => 'enris@konselor.com',
-                'whatsapp' => '082100000005',
-                'experience_years' => 6,
-                'bio' => '<p>Sebagai psikolog pendidikan dengan <strong>6 tahun pengalaman</strong>, passion saya adalah membantu siswa dan mahasiswa menemukan potensi terbaik mereka. Saya percaya setiap anak memiliki gaya belajar unik yang, jika dipahami dengan benar, bisa menjadi kunci kesuksesan akademik mereka.</p><p>Metode saya berfokus pada identifikasi <em>learning style</em> dan pengembangan strategi belajar yang personal. Saya juga menangani isu motivasi, prokrastinasi akademik, dan kecemasan ujian yang kerap menghambat prestasi siswa.</p><p>Saya bermitra dengan lebih dari 15 sekolah dan universitas di Yogyakarta untuk program bimbingan konseling, dan aktif mengembangkan modul pembelajaran berbasis psikologi positif.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Enris',
-                'pricing_type' => 'free',
-                'price_per_hour' => 0,
-                'session_duration_minutes' => 45,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Colombo No. 1', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55281', 'maps_url' => null],
-            ],
-            [
-                'id' => 6,
-                'specialization_id' => 1,
-                'name' => 'Ririn Kayla Putri, M.Psi.',
-                'slug' => Str::slug('Ririn Kayla Putri M.Psi'),
-                'email' => 'ririn.kayla@konselor.com',
-                'whatsapp' => '082100000006',
-                'experience_years' => 7,
-                'bio' => '<p>Saya adalah psikolog klinis yang berspesialisasi dalam penanganan depresi dan kesehatan mental perempuan. Dengan <strong>7 tahun pengalaman</strong>, saya telah mendampingi ratusan perempuan dari berbagai usia dalam perjalanan mereka menuju kesehatan mental yang optimal.</p><p>Saya menggunakan kombinasi <em>Cognitive Behavioral Therapy (CBT)</em> dan pendekatan feminis yang sensitif gender untuk memastikan klien merasa dipahami dalam konteks kehidupan mereka yang sesungguhnya. Isu seperti postpartum depression, burnout ibu rumah tangga, dan tekanan sosial pada perempuan adalah area keahlian utama saya.</p><p>Selain praktik klinis, saya aktif dalam gerakan destigmatisasi kesehatan mental melalui media sosial dan telah menulis dua buku tentang kesehatan mental perempuan Indonesia.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Ririn+Kayla+Putri',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 160000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Raya Darmo No. 23', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60241', 'maps_url' => null],
-            ],
-            [
-                'id' => 7,
-                'specialization_id' => 5,
-                'name' => 'Ali Alan Wari, S.Psi.',
-                'slug' => Str::slug('Ali Alan Wari S.Psi'),
-                'email' => 'ali.alan@konselor.com',
-                'whatsapp' => '082100000007',
-                'experience_years' => 4,
-                'bio' => '<p>Sebagai konselor karier dengan <strong>4 tahun pengalaman</strong>, saya bersemangat membantu individu menemukan jalur karier yang tidak hanya menguntungkan secara finansial, tetapi juga bermakna secara personal. Saya percaya pekerjaan terbaik adalah yang selaras dengan nilai-nilai dan kekuatan bawaan seseorang.</p><p>Proses konseling saya dimulai dengan asesmen komprehensif menggunakan tools seperti <em>MBTI, StrengthsFinder, dan Holland Code</em> untuk membangun pemahaman mendalam tentang profil klien. Dari sana, kami merancang roadmap karier yang konkret dan realistis.</p><p>Klien saya mulai dari fresh graduate yang bingung memilih jalur pertama, hingga profesional senior yang ingin melakukan career pivot. Saya juga aktif sebagai mentor di beberapa program inkubator startup di Makassar.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Ali+Alan+Wari',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 125000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. AP Pettarani No. 55', 'city' => 'Makassar', 'province' => 'Sulawesi Selatan', 'postal_code' => '90222', 'maps_url' => null],
-            ],
-            [
-                'id' => 8,
-                'specialization_id' => 1,
-                'name' => 'Justin Bieber, M.Psi.',
-                'slug' => Str::slug('Justin Bieber M.Psi'),
-                'email' => 'zulfikri.nurhasan@konselor.com',
-                'whatsapp' => '082100000008',
-                'experience_years' => 9,
-                'bio' => '<p>Dengan <strong>9 tahun pengalaman klinis</strong>, spesialisasi utama saya adalah penanganan trauma kompleks dan PTSD menggunakan pendekatan <em>Trauma-Focused CBT (TF-CBT)</em> dan EMDR (Eye Movement Desensitization and Reprocessing). Saya terlatih untuk bekerja dengan korban berbagai jenis trauma, dari kekerasan hingga kecelakaan.</p><p>Saya percaya bahwa pemulihan dari trauma bukan sekadar menghilangkan gejala, melainkan membantu klien membangun kembali rasa aman, kepercayaan diri, dan koneksi dengan dunia di sekitar mereka. Proses ini membutuhkan kesabaran, kepercayaan, dan keahlian terapi yang terstruktur.</p><p>Saya merupakan anggota aktif Asosiasi Psikolog Indonesia dan telah mempresentasikan riset tentang trauma recovery di beberapa konferensi internasional di Asia Tenggara.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=M+Zulfikri+Nurhasan',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 180000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Sudirman No. 102', 'city' => 'Jakarta Pusat', 'province' => 'DKI Jakarta', 'postal_code' => '10220', 'maps_url' => null],
-            ],
-            [
-                'id' => 9,
-                'specialization_id' => 3,
-                'name' => 'Meisita Khaniza, S.Psi.',
-                'slug' => Str::slug('Meisita Khaniza S.Psi'),
-                'email' => 'meisita.khaniza@konselor.com',
-                'whatsapp' => '082100000009',
-                'experience_years' => 3,
-                'bio' => '<p>Saya adalah konselor muda dengan <strong>3 tahun pengalaman</strong> yang berdedikasi mendampingi generasi Z dalam menghadapi tantangan unik era digital. Sebagai generasi yang tumbuh bersama media sosial, saya memahami secara langsung tekanan yang dirasakan remaja masa kini.</p><p>Fokus utama saya adalah isu <em>identitas diri, body image, cyberbullying, dan kesehatan mental di era media sosial</em>. Saya menggunakan bahasa dan pendekatan yang relatable bagi remaja, menciptakan koneksi yang autentik dalam setiap sesi konseling.</p><p>Saya aktif mengelola komunitas online kesehatan mental remaja dengan lebih dari 10.000 anggota, dan rutin mengadakan webinar gratis tentang self-care dan kesadaran kesehatan mental untuk pelajar.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Meisita+Khaniza',
-                'pricing_type' => 'free',
-                'price_per_hour' => 0,
-                'session_duration_minutes' => 45,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Setiabudhi No. 34', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'postal_code' => '40143', 'maps_url' => null],
-            ],
-            [
-                'id' => 10,
-                'specialization_id' => 6,
-                'name' => 'Reihan Zulfan Nurjaman, M.Psi.',
-                'slug' => Str::slug('Reihan Zulfan Nurjaman M.Psi'),
-                'email' => 'reihan.zulfan@konselor.com',
-                'whatsapp' => '082100000010',
-                'experience_years' => 11,
-                'bio' => '<p>Sebagai psikolog industri senior dengan <strong>11 tahun pengalaman</strong>, saya telah membantu puluhan organisasi dan ratusan individu dalam mengoptimalkan kesejahteraan psikologis di lingkungan kerja. Keahlian saya mencakup manajemen konflik organisasi, pengembangan kepemimpinan, dan program wellness korporat.</p><p>Pendekatan saya bersifat <em>sistemik</em> — tidak hanya melihat individu secara terpisah, tetapi memahami bagaimana dinamika organisasi membentuk kesehatan mental karyawan. Saya percaya organisasi yang sehat dimulai dari individu yang sehat.</p><p>Saya telah merancang dan mengimplementasikan program Employee Assistance Program (EAP) untuk lebih dari 20 perusahaan, dan saat ini menjabat sebagai advisor kesehatan mental di beberapa perusahaan teknologi terkemuka Indonesia.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Reihan+Zulfan',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 190000,
-                'session_duration_minutes' => 60,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. HR Rasuna Said Kav. 62', 'city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta', 'postal_code' => '12940', 'maps_url' => null],
-            ],
-            [
-                'id' => 11,
-                'specialization_id' => 2,
-                'name' => 'Ilman Sunanuddin, S.Psi.',
-                'slug' => Str::slug('Ilman Sunanuddin S.Psi'),
-                'email' => 'ilman.sunanuddin@konselor.com',
-                'whatsapp' => '082100000011',
-                'experience_years' => 7,
-                'bio' => '<p>Dengan <strong>7 tahun pengalaman</strong> sebagai konselor pernikahan, saya telah menyaksikan bagaimana komunikasi yang tulus dan pemahaman mendalam dapat mengubah dinamika hubungan secara luar biasa. Pendekatan saya berakar pada nilai-nilai keluarga Indonesia yang kuat, diselaraskan dengan prinsip psikologi modern.</p><p>Saya menggunakan metode <em>holistik</em> yang mempertimbangkan aspek emosional, spiritual, dan kultural dalam setiap proses konseling. Setiap pasangan dan keluarga memiliki cerita uniknya, dan saya berkomitmen untuk hadir sepenuhnya dalam perjalanan pemulihan mereka.</p><p>Selain konseling individual dan pasangan, saya juga menyelenggarakan retreat keluarga bulanan dan program pra-nikah yang telah diikuti oleh lebih dari 200 pasangan di Surabaya dan sekitarnya.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Ilman+Sunanuddin',
-                'pricing_type' => 'paid',
-                'price_per_hour' => 155000,
-                'session_duration_minutes' => 90,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Basuki Rahmat No. 89', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'postal_code' => '60271', 'maps_url' => null],
-            ],
-            [
-                'id' => 12,
-                'specialization_id' => 4,
-                'name' => 'Karnadi, S.Pd.',
-                'slug' => Str::slug('Karnadi S.Pd'),
-                'email' => 'karnadi@konselor.com',
-                'whatsapp' => '082100000012',
-                'experience_years' => 15,
-                'bio' => '<p>Sebagai psikolog pendidikan dengan <strong>15 tahun pengalaman</strong>, saya adalah salah satu praktisi tertua dan paling berpengalaman di bidang bimbingan belajar dan konseling pendidikan di Indonesia. Perjalanan panjang saya dimulai dari menjadi guru BK di SMA, hingga mendirikan lembaga bimbingan konseling pendidikan sendiri.</p><p>Keahlian utama saya meliputi <em>diagnostik kesulitan belajar, perencanaan akademik jangka panjang, dan konseling pemilihan jurusan perguruan tinggi</em>. Saya menggunakan asesmen psikometri yang komprehensif untuk memberikan rekomendasi yang tepat dan berbasis data.</p><p>Hingga saat ini saya telah mendampingi lebih dari 1.000 siswa dari seluruh Indonesia, banyak di antaranya berhasil masuk universitas impian mereka baik di dalam maupun luar negeri. Saya juga aktif menulis buku panduan belajar yang digunakan di berbagai sekolah menengah.</p>',
-                'photo_path' => 'https://ui-avatars.com/api/?name=Karnadi',
-                'pricing_type' => 'free',
-                'price_per_hour' => 0,
-                'session_duration_minutes' => 45,
-                'visibility' => 'active',
-                'address' => ['address' => 'Jl. Malioboro No. 56', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'postal_code' => '55213', 'maps_url' => null],
-            ],
+        // ==============================
+        // DATA POOL UNTUK GENERATE 50 KONSELOR
+        // ==============================
+        $firstNamesMale = [
+            'Budi',
+            'Andi',
+            'Rizky',
+            'Fajar',
+            'Dedi',
+            'Agus',
+            'Bayu',
+            'Doni',
+            'Eko',
+            'Fadli',
+            'Gilang',
+            'Hendra',
+            'Irfan',
+            'Joko',
+            'Krisna',
+            'Lutfi',
+            'Mario',
+            'Nanda',
+            'Oscar',
+            'Putra',
+            'Rian',
+            'Surya',
+            'Taufik',
+            'Umar',
+            'Wahyu',
         ];
+
+        $firstNamesFemale = [
+            'Siti',
+            'Dewi',
+            'Nadia',
+            'Melati',
+            'Ayu',
+            'Bella',
+            'Citra',
+            'Dinda',
+            'Eka',
+            'Fitri',
+            'Gita',
+            'Hana',
+            'Indah',
+            'Julia',
+            'Kirana',
+            'Laras',
+            'Mira',
+            'Nia',
+            'Olivia',
+            'Putri',
+            'Ratna',
+            'Sinta',
+            'Tania',
+            'Vina',
+            'Wulan',
+        ];
+
+        $lastNames = [
+            'Santoso',
+            'Wijaya',
+            'Anggraini',
+            'Pratama',
+            'Kurniawan',
+            'Setiawan',
+            'Hidayat',
+            'Ramadhan',
+            'Saputra',
+            'Permana',
+            'Nugroho',
+            'Wibowo',
+            'Susanto',
+            'Firmansyah',
+            'Maulana',
+            'Handayani',
+            'Lestari',
+            'Rahmawati',
+            'Susanti',
+            'Yulianto',
+            'Zainuddin',
+            'Wahyudi',
+            'Prasetyo',
+            'Kusuma',
+            'Halim',
+        ];
+
+        $titleBySpecialization = [
+            1 => 'M.Psi.',
+            2 => 'S.Psi.',
+            3 => 'S.Psi.',
+            4 => 'S.Pd.',
+            5 => 'S.Psi.',
+            6 => 'M.Psi.',
+        ];
+
+        $cities = [
+            ['city' => 'Jakarta Pusat',   'province' => 'DKI Jakarta',    'postal_code' => '10220'],
+            ['city' => 'Jakarta Selatan', 'province' => 'DKI Jakarta',    'postal_code' => '12930'],
+            ['city' => 'Bandung',         'province' => 'Jawa Barat',     'postal_code' => '40132'],
+            ['city' => 'Surabaya',        'province' => 'Jawa Timur',     'postal_code' => '60241'],
+            ['city' => 'Semarang',        'province' => 'Jawa Tengah',    'postal_code' => '50132'],
+            ['city' => 'Yogyakarta',      'province' => 'DI Yogyakarta',  'postal_code' => '55281'],
+            ['city' => 'Makassar',        'province' => 'Sulawesi Selatan', 'postal_code' => '90222'],
+            ['city' => 'Medan',           'province' => 'Sumatera Utara', 'postal_code' => '20111'],
+            ['city' => 'Denpasar',        'province' => 'Bali',           'postal_code' => '80111'],
+            ['city' => 'Palembang',       'province' => 'Sumatera Selatan', 'postal_code' => '30111'],
+        ];
+
+        $streetNames = [
+            'Jl. Sudirman',
+            'Jl. Gatot Subroto',
+            'Jl. Diponegoro',
+            'Jl. Ahmad Yani',
+            'Jl. Pahlawan',
+            'Jl. Merdeka',
+            'Jl. Veteran',
+            'Jl. Cendrawasih',
+            'Jl. Melati',
+            'Jl. Kenanga',
+        ];
+
+        $bioTemplates = [
+            '<p>Sebagai <strong>%1$s</strong> dengan <strong>%2$d tahun pengalaman</strong>, saya berdedikasi membantu klien mengatasi berbagai tantangan psikologis di %3$s.</p><p>Saya menggunakan pendekatan yang <em>berbasis bukti (evidence-based)</em> dan disesuaikan dengan kebutuhan masing-masing klien, sehingga proses konseling terasa relevan dan aplikatif.</p><p>Saya percaya setiap orang punya potensi untuk pulih dan berkembang, dan tugas saya adalah mendampingi proses tersebut dengan penuh empati.</p>',
+            '<p>Dengan latar belakang sebagai <strong>%1$s</strong> dan pengalaman <strong>%2$d tahun</strong>, saya telah mendampingi banyak klien di wilayah %3$s dalam menghadapi berbagai persoalan hidup.</p><p>Pendekatan saya bersifat <em>hangat dan tidak menghakimi</em>, menciptakan ruang aman bagi klien untuk terbuka dan menemukan solusi terbaik bagi diri mereka sendiri.</p><p>Saya juga aktif mengikuti pelatihan dan seminar untuk terus memperbarui keilmuan saya di bidang psikologi.</p>',
+            '<p>Saya adalah <strong>%1$s</strong> yang telah berpraktik selama <strong>%2$d tahun</strong>, dengan fokus utama membantu klien di %3$s menemukan keseimbangan hidup yang lebih baik.</p><p>Metode yang saya gunakan menggabungkan teknik konseling modern dengan pemahaman konteks budaya lokal, agar solusi yang diberikan benar-benar relevan.</p><p>Saya percaya proses konseling adalah kolaborasi, bukan sekadar memberi nasihat satu arah.</p>',
+        ];
+
+        $specializationName = [
+            1 => 'Psikolog Klinis',
+            2 => 'Konselor Umum',
+            3 => 'Konselor Remaja',
+            4 => 'Psikolog Pendidikan',
+            5 => 'Konselor Karier',
+            6 => 'Psikolog Industri',
+        ];
+
+        // kategori relevan per spesialisasi (dipakai untuk isi counselor_categories)
+        $categoriesBySpecialization = [
+            1 => [1, 4, 10],
+            2 => [3, 7, 1],
+            3 => [8, 6, 7],
+            4 => [9, 6, 8],
+            5 => [9, 6, 5],
+            6 => [5, 6, 3],
+        ];
+
+        $totalCounselors = 50;
+        $fixedEmails = [
+            1 => 'konselor1@gmail.com',
+            2 => 'konselor2@gmail.com',
+            3 => 'konselor3@gmail.com',
+        ];
+
+        $counselors = [];
+        $usedEmails = [];
+
+        for ($i = 1; $i <= $totalCounselors; $i++) {
+            $isFemale = ($i % 2 === 0);
+            $firstName = $isFemale
+                ? $firstNamesFemale[($i * 3) % count($firstNamesFemale)]
+                : $firstNamesMale[($i * 3) % count($firstNamesMale)];
+            $lastName = $lastNames[($i * 5) % count($lastNames)];
+
+            $specializationId = (($i - 1) % 6) + 1;
+            $title = $titleBySpecialization[$specializationId];
+            $fullName = "{$firstName} {$lastName}, {$title}";
+
+            $cityData = $cities[($i - 1) % count($cities)];
+            $streetName = $streetNames[($i - 1) % count($streetNames)];
+
+            // Email: 3 pertama fixed sesuai request, sisanya digenerate unik
+            if (isset($fixedEmails[$i])) {
+                $email = $fixedEmails[$i];
+            } else {
+                $baseEmail = Str::slug($firstName . '.' . $lastName, '.') . $i . '@konselor.com';
+                $email = $baseEmail;
+            }
+            $usedEmails[] = $email;
+
+            $experienceYears = 2 + ($i % 14); // 2 - 15 tahun
+            $bioTemplate = $bioTemplates[$i % count($bioTemplates)];
+            $bio = sprintf(
+                $bioTemplate,
+                $specializationName[$specializationId],
+                $experienceYears,
+                $cityData['city']
+            );
+
+            // Foto konselor pakai randomuser.me, beda angka = beda foto
+            $photoNumber = ($i - 1) % 100; // randomuser mendukung index 0-99
+            $photoGender = $isFemale ? 'women' : 'men';
+            $photoPath = "https://randomuser.me/api/portraits/{$photoGender}/{$photoNumber}.jpg";
+
+            $isFree = ($i % 3 === 0); // sebagian gratis, sisanya berbayar
+            $pricePerHour = $isFree ? 0 : (100000 + (($i % 15) * 10000));
+            $sessionDurations = [45, 60, 90];
+            $sessionDuration = $sessionDurations[$i % count($sessionDurations)];
+
+            $counselors[] = [
+                'id' => $i,
+                'specialization_id' => $specializationId,
+                'name' => $fullName,
+                'slug' => Str::slug($fullName) . '-' . $i,
+                'email' => $email,
+                'whatsapp' => '0821' . str_pad((string) $i, 8, '0', STR_PAD_LEFT),
+                'experience_years' => $experienceYears,
+                'bio' => $bio,
+                'photo_path' => $photoPath,
+                'pricing_type' => $isFree ? 'free' : 'paid',
+                'price_per_hour' => $pricePerHour,
+                'session_duration_minutes' => $sessionDuration,
+                'visibility' => 'active',
+                'gender' => $isFemale ? 'P' : 'L',
+                'address' => [
+                    'address' => "{$streetName} No. " . (10 + $i),
+                    'city' => $cityData['city'],
+                    'province' => $cityData['province'],
+                    'postal_code' => $cityData['postal_code'],
+                    'maps_url' => null,
+                ],
+            ];
+        }
 
         $addressIds = [];
         $userIds = [];
@@ -255,11 +285,11 @@ class ConseulorSeeder extends Seeder
                 'name'       => $counselor['name'],
                 'email'      => $counselor['email'],
                 'whatsapp'   => $counselor['whatsapp'],
-                'avatar_path'      => null,
-                'age'        => 20,
-                'gender'     => "L",
+                'avatar_path' => null, // foto user dikosongkan, hanya photo konselor yang diisi
+                'age'        => 20 + ($counselor['id'] % 25),
+                'gender'     => $counselor['gender'],
                 'role'       => 'counselor',
-                'password'   => Hash::make('password'), // password default, bisa diganti nanti
+                'password'   => $password,
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
@@ -268,7 +298,7 @@ class ConseulorSeeder extends Seeder
 
         // Insert counselors dengan address_id & user_id
         foreach ($counselors as $counselor) {
-            unset($counselor['address']);
+            unset($counselor['address'], $counselor['gender']);
 
             DB::table('counselors')->insert(array_merge($counselor, [
                 'address_id' => $addressIds[$counselor['id']],
@@ -278,77 +308,53 @@ class ConseulorSeeder extends Seeder
             ]));
         }
 
-        DB::table('counselor_categories')->insert([
-            ['counselor_id' => 1,  'category_id' => 1],
-            ['counselor_id' => 1,  'category_id' => 4],
-            ['counselor_id' => 1,  'category_id' => 10],
-            ['counselor_id' => 2,  'category_id' => 8],
-            ['counselor_id' => 2,  'category_id' => 6],
-            ['counselor_id' => 2,  'category_id' => 7],
-            ['counselor_id' => 3,  'category_id' => 5],
-            ['counselor_id' => 3,  'category_id' => 6],
-            ['counselor_id' => 4,  'category_id' => 3],
-            ['counselor_id' => 4,  'category_id' => 7],
-            ['counselor_id' => 4,  'category_id' => 1],
-            ['counselor_id' => 5,  'category_id' => 9],
-            ['counselor_id' => 5,  'category_id' => 6],
-            ['counselor_id' => 5,  'category_id' => 8],
-            ['counselor_id' => 6,  'category_id' => 2],
-            ['counselor_id' => 6,  'category_id' => 1],
-            ['counselor_id' => 6,  'category_id' => 10],
-            ['counselor_id' => 7,  'category_id' => 9],
-            ['counselor_id' => 7,  'category_id' => 6],
-            ['counselor_id' => 7,  'category_id' => 5],
-            ['counselor_id' => 8,  'category_id' => 4],
-            ['counselor_id' => 8,  'category_id' => 2],
-            ['counselor_id' => 8,  'category_id' => 1],
-            ['counselor_id' => 9,  'category_id' => 8],
-            ['counselor_id' => 9,  'category_id' => 3],
-            ['counselor_id' => 9,  'category_id' => 6],
-            ['counselor_id' => 10, 'category_id' => 5],
-            ['counselor_id' => 10, 'category_id' => 6],
-            ['counselor_id' => 10, 'category_id' => 3],
-            ['counselor_id' => 11, 'category_id' => 3],
-            ['counselor_id' => 11, 'category_id' => 7],
-            ['counselor_id' => 11, 'category_id' => 4],
-            ['counselor_id' => 12, 'category_id' => 9],
-            ['counselor_id' => 12, 'category_id' => 8],
-            ['counselor_id' => 12, 'category_id' => 6],
-        ]);
+        // ==============================
+        // COUNSELOR CATEGORIES (2-3 kategori relevan per konselor)
+        // ==============================
+        $counselorCategoryRows = [];
+        foreach ($counselors as $counselor) {
+            $relevantCategories = $categoriesBySpecialization[$counselor['specialization_id']];
+            foreach ($relevantCategories as $categoryId) {
+                $counselorCategoryRows[] = [
+                    'counselor_id' => $counselor['id'],
+                    'category_id' => $categoryId,
+                ];
+            }
+        }
+        DB::table('counselor_categories')->insert($counselorCategoryRows);
 
-        DB::table('counselor_schedules')->insert([
-            ['counselor_id' => 1,  'day_of_week' => 1, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 1,  'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 1,  'day_of_week' => 5, 'open_time' => '10:00', 'close_time' => '13:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 2,  'day_of_week' => 2, 'open_time' => '14:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 2,  'day_of_week' => 4, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 2,  'day_of_week' => 6, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 3,  'day_of_week' => 1, 'open_time' => '13:00', 'close_time' => '17:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 3,  'day_of_week' => 2, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 3,  'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 4,  'day_of_week' => 3, 'open_time' => '09:00', 'close_time' => '15:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 4,  'day_of_week' => 5, 'open_time' => '13:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 5,  'day_of_week' => 1, 'open_time' => '08:00', 'close_time' => '11:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 5,  'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '16:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 5,  'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 6,  'day_of_week' => 2, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 6,  'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 6,  'day_of_week' => 7, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 7,  'day_of_week' => 1, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 7,  'day_of_week' => 5, 'open_time' => '09:00', 'close_time' => '14:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 8,  'day_of_week' => 2, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 8,  'day_of_week' => 3, 'open_time' => '14:00', 'close_time' => '18:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 8,  'day_of_week' => 4, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 9,  'day_of_week' => 3, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 9,  'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 10, 'day_of_week' => 1, 'open_time' => '09:00', 'close_time' => '13:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 10, 'day_of_week' => 4, 'open_time' => '14:00', 'close_time' => '17:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 10, 'day_of_week' => 5, 'open_time' => '10:00', 'close_time' => '14:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 11, 'day_of_week' => 2, 'open_time' => '13:00', 'close_time' => '18:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 11, 'day_of_week' => 6, 'open_time' => '09:00', 'close_time' => '15:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 12, 'day_of_week' => 1, 'open_time' => '08:00', 'close_time' => '11:00', 'method' => 'online',  'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 12, 'day_of_week' => 3, 'open_time' => '13:00', 'close_time' => '16:00', 'method' => 'both',    'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['counselor_id' => 12, 'day_of_week' => 5, 'open_time' => '09:00', 'close_time' => '12:00', 'method' => 'offline', 'is_active' => true, 'created_at' => $now, 'updated_at' => $now],
-        ]);
+        // ==============================
+        // COUNSELOR SCHEDULES (2 slot jadwal per konselor)
+        // ==============================
+        $methods = ['online', 'offline', 'both'];
+        $scheduleRows = [];
+        foreach ($counselors as $counselor) {
+            $id = $counselor['id'];
+
+            $dayOne = (($id * 2) % 7) + 1;
+            $dayTwo = (($id * 2 + 3) % 7) + 1;
+
+            $scheduleRows[] = [
+                'counselor_id' => $id,
+                'day_of_week' => $dayOne,
+                'open_time' => '09:00',
+                'close_time' => '12:00',
+                'method' => $methods[$id % 3],
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+            $scheduleRows[] = [
+                'counselor_id' => $id,
+                'day_of_week' => $dayTwo,
+                'open_time' => '13:00',
+                'close_time' => '17:00',
+                'method' => $methods[($id + 1) % 3],
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+        DB::table('counselor_schedules')->insert($scheduleRows);
     }
 }

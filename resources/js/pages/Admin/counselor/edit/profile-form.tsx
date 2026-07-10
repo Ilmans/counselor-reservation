@@ -25,7 +25,7 @@ interface ProfileFormData {
     email: string;
     whatsapp: string;
     bio: string;
-    status: 'active' | 'inactive';
+    visibility: 'active' | 'inactive';
     photo: File | null;
 }
 
@@ -42,7 +42,7 @@ function ProfileForm({ counselor }: Props) {
             email: counselor.email,
             whatsapp: counselor.whatsapp,
             bio: counselor.bio,
-            status: counselor.status,
+            visibility: counselor.visibility,
             photo: null,
         });
 
@@ -105,14 +105,14 @@ function ProfileForm({ counselor }: Props) {
                 />
                 <Select
                     label="Status Profil"
-                    value={data.status}
+                    value={data.visibility}
                     onChange={(e) =>
                         setData(
-                            'status',
+                            'visibility',
                             e.target.value as 'active' | 'inactive',
                         )
                     }
-                    error={errors.status}
+                    error={errors.visibility}
                     options={[
                         {
                             label: 'Aktif — tampil di pencarian',

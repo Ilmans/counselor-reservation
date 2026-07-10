@@ -12,9 +12,10 @@ import PageHead from '@/components/page-head';
 type Props = {
     counselors: Paginated<CounselorList>;
     filters: FILTERS;
+    totalCounselors:number;
 };
 
-export default function Index({ counselors, filters }: Props) {
+export default function Index({ counselors, filters ,totalCounselors}: Props) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -29,7 +30,7 @@ export default function Index({ counselors, filters }: Props) {
                 title={filters.search ? filters.search : 'Cari Konselor'}
             />
             <Filter filters={filters} onLoadingChange={setIsLoading} />
-            <CounselorGrid counselors={counselors} isLoading={isLoading} />
+            <CounselorGrid totalCounselors={totalCounselors} counselors={counselors} isLoading={isLoading} />
         </>
     );
 }

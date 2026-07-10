@@ -27,8 +27,10 @@ class CounselorController extends Controller
             'category' => $category,
             'search'   => $search,
         ];
+        $totalCounselors = $this->repo->countAllCounselors(['active'], $category, $search);
 
-        return inertia('counselors/index', compact('counselors', 'filters'));
+
+        return inertia('counselors/index', compact('counselors', 'filters','totalCounselors'));
     }
 
     /* Detail Counselor page - show details conselor */

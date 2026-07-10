@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     Home,
     ClipboardList,
@@ -33,6 +33,9 @@ import AdminReviewController from '@/actions/App/Http/Controllers/Admin/AdminRev
 import AdminInvoiceController from '@/actions/App/Http/Controllers/Admin/AdminInvoiceController';
 import AdminPaymentMethodController from '@/actions/App/Http/Controllers/Admin/AdminPaymentMethodController';
 import FinanceController from '@/actions/App/Http/Controllers/Counselor/FinanceController';
+import WithdrawController from '@/actions/App/Http/Controllers/Admin/WithdrawController';
+import AdminAuthController from '@/actions/App/Http/Controllers/Admin/AdminAuthController';
+import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController';
 
 type NavChild = {
     key: string;
@@ -147,10 +150,10 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
         url: AdminReviewController.index.url(),
     },
     {
-        key: 'keuangan',
-        label: 'Keuangan',
+        key: 'manage-withdrawals',
+        label: 'Kelola Penarikan',
         icon: Wallet,
-        url: '/admin/finance',
+        url: WithdrawController.index.url(),
     },
 ];
 
@@ -312,7 +315,15 @@ export default function DashboardSidebar({
                         </div>
                     </div>
                 )}
-                <button className="mt-1 flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted">
+                <button
+                    onClick={() => {
+                        const url = isAdmin
+                            ? AdminAuthController.AdminLogout.url()
+                            : LoginController.destroy.url();
+                        router.post(url);
+                    }}
+                    className="mt-1 flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
+                >
                     <LogOut size={16} />
                     Keluar
                 </button>

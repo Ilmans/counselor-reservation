@@ -13,12 +13,7 @@ import type { FILTERS } from '@/types/filter';
 import type { Review } from '@/types/review';
 import ReviewFilters from './componen/review-filter';
 import DashboardTitle from '@/layouts/dashboard/dashboard-title';
-
-const breadcumbs = [
-    { label: 'Beranda', href: '/' },
-    { label: 'Konselor', href: '/' },
-    { label: 'Ulasan' },
-];
+import PageHead from '@/components/page-head';
 
 interface Props {
     reviews: PaginatedData<Review>;
@@ -45,6 +40,7 @@ function RatingStars({ rating }: { rating: number }) {
 function Index({ reviews, filters }: Props) {
     return (
         <>
+            <PageHead title="Ulasan" />
             <div className="mb-4">
                 <DashboardTitle
                     title={'Ulasan'}

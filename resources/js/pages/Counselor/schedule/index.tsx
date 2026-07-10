@@ -14,6 +14,7 @@ import type {
     SchedulePageProps,
 } from './schedule-type';
 import { buildWeeklySchedule, toSchedulePayload } from './schedule-type';
+import PageHead from '@/components/page-head';
 
 export default function Index({ schedules, calendar }: SchedulePageProps) {
     const { props } = usePage<{
@@ -62,31 +63,36 @@ export default function Index({ schedules, calendar }: SchedulePageProps) {
     };
 
     return (
-        <div className="min-h-screen bg-background font-sans text-foreground antialiased">
-            <DashboardTitle
-                title="Jadwal Konsultasi"
-                desc="Atur hari dan jam kamu tersedia menerima sesi. Klien hanya
+        <>
+            <PageHead title="Jadwal" />
+            <div className="min-h-screen bg-background font-sans text-foreground antialiased">
+                <DashboardTitle
+                    title="Jadwal Konsultasi"
+                    desc="Atur hari dan jam kamu tersedia menerima sesi. Klien hanya
                       dapat memesan pada rentang waktu ini."
-            />
-            {props.alert && (
-                <div className="mt-6">
-                    <AlertCard variant="success">{props.alert.msg}</AlertCard>
-                </div>
-            )}
-
-            <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-6">
-                <ScheduleSettingsCard
-                    schedule={schedule}
-                    saving={saving}
-                    onToggleActive={toggleActive}
-                    onSetMethod={setMethod}
-                    onSetTime={setTime}
-                    onSave={handleSave}
                 />
+                {props.alert && (
+                    <div className="mt-6">
+                        <AlertCard variant="success">
+                            {props.alert.msg}
+                        </AlertCard>
+                    </div>
+                )}
 
-                <ScheduleCalendarCard calendar={calendar} />
+                <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-6">
+                    <ScheduleSettingsCard
+                        schedule={schedule}
+                        saving={saving}
+                        onToggleActive={toggleActive}
+                        onSetMethod={setMethod}
+                        onSetTime={setTime}
+                        onSave={handleSave}
+                    />
+
+                    <ScheduleCalendarCard calendar={calendar} />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

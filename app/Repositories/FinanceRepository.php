@@ -9,9 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class FinanceRepository
 {
-    /**
-     * Ambil (atau siapkan instance kosong) wallet counselor.
-     */
+   
     public function getWallet(int $counselorId): CounselorWallet
     {
         return CounselorWallet::firstOrNew(['counselor_id' => $counselorId]);
@@ -75,5 +73,62 @@ class FinanceRepository
     public function decrementWalletBalance(CounselorWallet $wallet, float $amount): void
     {
         $wallet->decrement('balance', $amount);
+    }
+
+    /**
+     * Tambah kembali saldo wallet counselor (dipakai saat penarikan ditolak).
+     */
+    public function incrementWalletBalance(CounselorWallet $wallet, float $amount): void
+    {
+        $wallet->increment('balance', $amount);
+    }
+
+    /**
+     * [ADMIN] Semua penarikan dana dari seluruh counselor, sertakan data counselor & user-nya
+     * supaya admin bisa lihat siapa yang mengajukan tanpa query terpisah.
+     */
+    public function getAllWithdrawals(
+        ?array $statuses = null,
+        ?string $search = null,
+        ?string $date = null,
+    ): LengthAwarePaginator {
+        return Withdrawal::query()
+            ->with('counselor.user')
+            ->when($statuses, fn($q) => $q->whereIn('status', $statuses))
+            ->when($search, fn($q) => $q->where('reference', 'like', "%{$search}%"))
+            ->when($date, fn($q) => $q->whereDate('created_at', $date))
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+    }
+
+    /**
+     * [ADMIN] Setujui penarikan dana. Saldo tidak berubah lagi di sini
+     * karena sudah dipotong saat counselor mengajukan penarikan.
+     */
+    public function markWithdrawalAsCompleted(Withdrawal $withdrawal): void
+    {
+        $withdrawal->update([
+            'status' => 'completed',
+            'processed_at' => now(),
+        ]);
+    }
+
+    /**
+     * [ADMIN] Tolak penarikan dana + kembalikan saldo ke wallet counselor.
+     */
+    public function markWithdrawalAsRejected(Withdrawal $withdrawal, string $notes): void
+    {
+        $withdrawal->update([
+            'status' => 'rejected',
+            'notes' => $notes,
+            'processed_at' => now(),
+        ]);
+
+        $wallet = $this->findWalletByCounselorId($withdrawal->counselor_id);
+
+        if ($wallet) {
+            $this->incrementWalletBalance($wallet, (float) $withdrawal->amount);
+        }
     }
 }

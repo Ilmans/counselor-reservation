@@ -20,28 +20,31 @@ class AdminAuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($validated, $request->boolean('remember'))) {
+        if (! Auth::guard('admin')->attempt(
+            $validated,
+            $request->boolean('remember')
+        )) {
             return back()->withErrors([
                 'email' => 'Email atau password salah.',
-            ])->onlyInput('email');
+            ]);
         }
+        if (Auth::guard('admin')->user()->role !== 'admin') {
 
-        if (Auth::user()->role !== 'admin') {
-            Auth::logout();
+            Auth::guard('admin')->logout();
 
             return back()->withErrors([
-                'email' => 'Akun ini tidak memiliki akses admin.',
-            ])->onlyInput('email');
+                'email' => 'Bukan akun admin.',
+            ]);
         }
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->route('admin.dashboard');
     }
 
     public function AdminLogout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

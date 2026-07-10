@@ -18,7 +18,7 @@ Route::middleware('guest')->group(function () {
 });
 
 
-Route::middleware(['auth', 'can:admin'])->group(function () {
+Route::middleware(['auth:admin', 'can:admin'])->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'AdminLogout'])->name('admin.logout');
 
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -76,5 +76,11 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
         Route::put('payment-methods/{paymentMethod}', [AdminPaymentMethodController::class, 'update'])->name('payment-methods.update');
         Route::delete('payment-methods/{paymentMethod}', [AdminPaymentMethodController::class, 'delete'])->name('payment-methods.delete');
     });
+
+
+    Route::get('/admin/withdrawals', [\App\Http\Controllers\Admin\WithdrawController::class, 'index']);
+    Route::post('/admin/withdrawals/{withdrawal}/approve', [\App\Http\Controllers\Admin\WithdrawController::class, 'approve']);
+    Route::post('/admin/withdrawals/{withdrawal}/reject', [\App\Http\Controllers\Admin\WithdrawController::class, 'reject']);
+
     // Route::put('consultations/{consultation}/status', [AdminConsultationController::class, 'updateStatus'])->name('consultations.update-status');
 });

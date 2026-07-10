@@ -51,6 +51,8 @@ class CounselorResource extends JsonResource
             'status'                     => $this->status,
             'created_at'                 => $this->created_at,
             'updated_at'                 => $this->updated_at,
+
+
         ];
     }
 }

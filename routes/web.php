@@ -32,6 +32,8 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::post('/counselor/{counselor}/setting/profile', [CounselorSettingController::class, 'updateProfile']);
     Route::post('/counselor/{counselor}/setting/address', [CounselorSettingController::class, 'updateAddress']);
     Route::post('/counselor/{counselor}/setting/services', [CounselorSettingController::class, 'updateServices']);
+    Route::post('/counselor/{counselor}/setting/bank', [CounselorSettingController::class, 'updateBank']);
+
 
     Route::prefix('counselor/consultations/{consultation}')->group(function () {
         Route::post('/approve', [ManageStatusConsultationController::class, 'approve'])->name('consultation.approve');

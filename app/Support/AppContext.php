@@ -23,6 +23,26 @@ class AppContext
             ],
 
             'greeting' => self::greeting($now),
+            'availableBank' => [
+                ['code' => 'BCA', 'name' => 'Bank Central Asia (BCA)'],
+                ['code' => 'BRI', 'name' => 'Bank Rakyat Indonesia (BRI)'],
+                ['code' => 'BNI', 'name' => 'Bank Negara Indonesia (BNI)'],
+                ['code' => 'MANDIRI', 'name' => 'Bank Mandiri'],
+                ['code' => 'BSI', 'name' => 'Bank Syariah Indonesia (BSI)'],
+                ['code' => 'CIMB', 'name' => 'CIMB Niaga'],
+                ['code' => 'PERMATA', 'name' => 'Bank Permata'],
+                ['code' => 'DANAMON', 'name' => 'Bank Danamon'],
+                ['code' => 'BTN', 'name' => 'Bank Tabungan Negara (BTN)'],
+                ['code' => 'OCBC', 'name' => 'OCBC NISP'],
+                ['code' => 'PANIN', 'name' => 'Bank Panin'],
+                ['code' => 'MAYBANK', 'name' => 'Maybank Indonesia'],
+                ['code' => 'MEGA', 'name' => 'Bank Mega'],
+                ['code' => 'SINARMAS', 'name' => 'Bank Sinarmas'],
+                ['code' => 'BJB', 'name' => 'Bank BJB'],
+                ['code' => 'SEABANK', 'name' => 'SeaBank'],
+                ['code' => 'JAGO', 'name' => 'Bank Jago'],
+                ['code' => 'BLU', 'name' => 'blu by BCA Digital'],
+            ],
         ];
     }
 

@@ -11,7 +11,7 @@ class Counselor extends Model
 {
 
     use SoftDeletes;
-    
+
     protected $guarded = ['id'];
 
     public function user()
@@ -53,5 +53,10 @@ class Counselor extends Model
             'id',
             'id'
         );
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(CounselorWallet::class);
     }
 }

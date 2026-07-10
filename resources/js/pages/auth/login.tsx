@@ -3,7 +3,7 @@ import Wrapper from '@/layouts/wrapper';
 
 import LoginForm from './form/login-form';
 import AuthCard from './components/auth-card';
-
+import Tab from './components/tab';
 import PageHead from '@/components/page-head';
 
 function Login() {

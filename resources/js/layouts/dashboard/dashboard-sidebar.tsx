@@ -32,6 +32,7 @@ import AdminConsultationController from '@/actions/App/Http/Controllers/Admin/Ad
 import AdminReviewController from '@/actions/App/Http/Controllers/Admin/AdminReviewController';
 import AdminInvoiceController from '@/actions/App/Http/Controllers/Admin/AdminInvoiceController';
 import AdminPaymentMethodController from '@/actions/App/Http/Controllers/Admin/AdminPaymentMethodController';
+import FinanceController from '@/actions/App/Http/Controllers/Counselor/FinanceController';
 
 type NavChild = {
     key: string;
@@ -74,7 +75,12 @@ const COUNSELOR_NAV_ITEMS: NavItem[] = [
         icon: Star,
         url: ReviewController.index.url(),
     },
-    { key: 'keuangan', label: 'Keuangan', icon: Wallet },
+    {
+        key: 'finance',
+        label: 'Keuangan',
+        icon: Wallet,
+        url: FinanceController.index.url(),
+    },
     {
         key: 'settings',
         label: 'Profil & Layanan',

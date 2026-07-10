@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultationSummaryController;
 use App\Http\Controllers\Counselor\ConsultationController;
 use App\Http\Controllers\Counselor\CounselorSettingController;
 use App\Http\Controllers\Counselor\DashboardController;
+use App\Http\Controllers\Counselor\FinanceController;
 use App\Http\Controllers\Counselor\ManageStatusConsultationController;
 use App\Http\Controllers\Counselor\ReviewController;
 use App\Http\Controllers\Counselor\ScheduleController;
@@ -34,6 +35,8 @@ Route::middleware(['auth', 'can:counselor'])->group(function () {
     Route::post('/counselor/{counselor}/setting/services', [CounselorSettingController::class, 'updateServices']);
     Route::post('/counselor/{counselor}/setting/bank', [CounselorSettingController::class, 'updateBank']);
 
+    Route::get('/counselor/finance', [FinanceController::class, 'index']);
+    Route::post('/counselor/finance/withdraw', [\App\Http\Controllers\Counselor\FinanceController::class, 'store']);
 
     Route::prefix('counselor/consultations/{consultation}')->group(function () {
         Route::post('/approve', [ManageStatusConsultationController::class, 'approve'])->name('consultation.approve');

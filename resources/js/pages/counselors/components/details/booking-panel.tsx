@@ -63,7 +63,7 @@ function BookingPanel({ counselor }: Props) {
                     )}
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                {/* <div className="overflow-hidden rounded-2xl border border-border bg-card">
                     <div className="border-b border-border px-4 py-3">
                         <h3 className="text-sm font-semibold text-foreground">
                             Lokasi Praktik Offline
@@ -88,7 +88,7 @@ function BookingPanel({ counselor }: Props) {
                             Buka di Google Maps →
                         </a>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

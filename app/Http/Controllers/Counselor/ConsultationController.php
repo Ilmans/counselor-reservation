@@ -37,6 +37,7 @@ class ConsultationController extends Controller
     public function show(Request $request, string $reference)
     {
         $consultation = new ConsultationDetailResource($this->repo->findByReference($reference));
+        abort_if(!$consultation, 404);
         abort_if($consultation->counselor_id != Auth::user()->counselor->id, 403);
         return inertia('Counselor/consultation/show', compact('consultation'));
     }

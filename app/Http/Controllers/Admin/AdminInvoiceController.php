@@ -34,6 +34,7 @@ class AdminInvoiceController extends Controller
 
         $this->invoiceRepo->markAsPaid($invoice);
 
+
         return redirect()->back()->with('toast', [
             'type' => 'success',
             'message' => 'Invoice berhasil ditandai lunas.',

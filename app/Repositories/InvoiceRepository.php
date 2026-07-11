@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Invoice;
 use App\Models\PaymentMethod;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class InvoiceRepository
@@ -96,12 +97,21 @@ class InvoiceRepository
     }
     public function markAsPaid(Invoice $invoice): Invoice
     {
-        $invoice->update([
-            'status' => 'paid',
-            'paid_at' => now(),
-        ]);
+        return DB::transaction(function () use ($invoice) {
+            $invoice->update([
+                'status' => 'paid',
+                'paid_at' => now(), // opsional, kalau kolomnya ada
+            ]);
 
-        return $invoice->fresh();
+            // Update status consultation terkait jadi pending_confirmation
+            if ($invoice->consultation) {
+                $invoice->consultation->update([
+                    'status' => 'pending_confirmation',
+                ]);
+            }
+
+            return $invoice->fresh();
+        });
     }
 
     public function deleteInvoice(Invoice $invoice): void
